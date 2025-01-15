@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "8314997661",
+    "project_id": "wisteria-1c25f",
+    "storage_bucket": "wisteria-1c25f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8314997661:android:f6aee03f5bbac649ec3d74",
+        "android_client_info": {
+          "package_name": "com.example.wisteria"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByW624lK7UKcRb4B15rphZrHAhG31XeGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
