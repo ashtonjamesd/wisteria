@@ -1,6 +1,6 @@
 import 'package:wisteria/utils/result.dart';
 
-import 'auth_service.dart';
+import '../services/auth_service.dart';
 
 final class AuthController {
   final _auth = AuthService();

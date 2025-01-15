@@ -1,5 +1,5 @@
 // import 'package:firebase_auth/firebase_auth.dart';
-import '../../utils/result.dart';
+import '../../../utils/result.dart';
 
 final class AuthService {
   Future<Result<bool?>> registerUser(String email, String password) async {

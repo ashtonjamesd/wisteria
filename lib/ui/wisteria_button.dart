@@ -7,7 +7,7 @@ class WisteriaButton extends StatefulWidget {
   const WisteriaButton({
     super.key,
     this.width,
-    this.height = 40,
+    this.height = 50,
     this.backgroundColor = AppTheme.boxBackgroundColor,
     this.textColor = AppTheme.textColor,
     required this.text,

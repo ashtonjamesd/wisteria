@@ -26,7 +26,7 @@ class _WisteriaTextFieldState extends State<WisteriaTextField> {
       controller: widget.controller,
       obscureText: widget.obscureText,
       style: AppTheme.appFont().copyWith(
-        fontSize: 13
+        fontSize: 14
       ),
       textAlign: TextAlign.left,
       textAlignVertical: TextAlignVertical.top,
@@ -40,21 +40,21 @@ class _WisteriaTextFieldState extends State<WisteriaTextField> {
         filled: true,
         fillColor: Colors.white,
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(4),
           borderSide: const BorderSide(
             color: Color.fromARGB(255, 230, 230, 230),
             width: 2.0,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(4),
           borderSide: const BorderSide(
             color: Color.fromARGB(255, 200, 200, 200),
             width: 2.0,
           ),
         ),
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 12,
+          vertical: 20,
           horizontal: 12,
         ),
       ),

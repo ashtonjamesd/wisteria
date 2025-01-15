@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:wisteria/components/authentication/register_view.dart';
+import 'package:wisteria/components/authentication/views/login_view.dart';
+import 'package:wisteria/components/authentication/views/register_view.dart';
 import 'package:wisteria/ui/wisteria_button.dart';
 import 'package:wisteria/ui/wisteria_text.dart';
 import 'package:wisteria/utils/app_theme.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -31,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 wisteriaInfo(),
                 authButtons(screenWidth, screenHeight),
+
+                const SizedBox(height: 24)
               ],
             ),
           ),
@@ -49,8 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           WisteriaText(
             text: "wisteria",
-            size: 24,
+            size: 30,
             weight: FontWeight.bold,
+            letterSpacing: 1,
           ),
         ],
       ),
@@ -83,12 +87,12 @@ class _HomeScreenState extends State<HomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         WisteriaButton(
-          width: screenWidth * 0.9,
+          width: screenWidth * 0.85,
           text: "Log in", 
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const RegisterView())
+              MaterialPageRoute(builder: (context) => const LoginView())
             );
           }
         ),
@@ -97,10 +101,10 @@ class _HomeScreenState extends State<HomeScreen> {
         WisteriaButton(
           textColor: AppTheme.textColor, 
           backgroundColor: AppTheme.backgroundColor,
-          width: screenWidth * 0.9,
+          width: screenWidth * 0.85,
           text: "Register",
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const RegisterView())
             );

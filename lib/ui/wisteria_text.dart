@@ -7,13 +7,15 @@ class WisteriaText extends StatelessWidget {
     required this.text,
     required this.size,
     this.color = AppTheme.textColor,
-    this.weight = FontWeight.normal
+    this.weight = FontWeight.normal,
+    this.letterSpacing
   });
 
   final String text;
   final double size;
   final Color color;
   final FontWeight weight;
+  final double? letterSpacing;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,8 @@ class WisteriaText extends StatelessWidget {
       style: AppTheme.appFont().copyWith(
         color: color,
         fontSize: size,
-        fontWeight: weight
+        fontWeight: weight,
+        letterSpacing: letterSpacing,
       )
     );
   }
