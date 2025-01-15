@@ -6,11 +6,13 @@ class WisteriaBox extends StatelessWidget {
     super.key, 
     this.width,
     this.height,
+    this.backgroundColor = AppTheme.boxBackgroundColor,
     required this.child
   });
 
   final double? width;
   final double? height;
+  final Color? backgroundColor;
   final Widget child;
 
   @override
@@ -20,7 +22,7 @@ class WisteriaBox extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(color: AppTheme.borderColor),
         borderRadius: BorderRadius.circular(4),
-        color: AppTheme.boxBackgroundColor,
+        color: backgroundColor,
       ),
       child: child,
     );

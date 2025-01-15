@@ -22,7 +22,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    final boxWidth = screenWidth * 0.8;
+    final boxWidth = screenWidth * 0.9;
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
@@ -35,7 +35,7 @@ class _RegisterViewState extends State<RegisterView> {
           registerBox(boxWidth),
 
           const SizedBox(height: 12),
-          _registerButton()
+          _registerButton(boxWidth)
         ],
       ),
     );
@@ -82,8 +82,9 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Widget _registerButton() {
+  Widget _registerButton(double screenWidth) {
     return WisteriaButton(
+      width: screenWidth,
       text: "register",
       onTap: () async {
         var result = await controller.registerUser(emailController.text, passwordController.text);
