@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wisteria/components/authentication/auth_controller.dart';
 import 'package:wisteria/ui/wisteria_box.dart';
 import 'package:wisteria/ui/wisteria_button.dart';
+import 'package:wisteria/ui/wisteria_text.dart';
 import 'package:wisteria/ui/wisteria_text_field.dart';
 import 'package:wisteria/utils/app_theme.dart';
 
@@ -73,12 +74,9 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   Widget pageTitle() {
-    return const Text(
-      "create your account",
-      style: TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.bold
-      ),
+    return const WisteriaText(
+      text: "Create your account",
+      size: 28,
     );
   }
 

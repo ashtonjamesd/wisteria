@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wisteria/utils/app_theme.dart';
 
 class WisteriaTextField extends StatefulWidget {
   const WisteriaTextField({
@@ -24,7 +25,7 @@ class _WisteriaTextFieldState extends State<WisteriaTextField> {
     return TextField(
       controller: widget.controller,
       obscureText: widget.obscureText,
-      style: const TextStyle(
+      style: AppTheme.appFont().copyWith(
         fontSize: 13
       ),
       textAlign: TextAlign.left,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/ui/wisteria_box.dart';
+import 'package:wisteria/ui/wisteria_text.dart';
 import 'package:wisteria/utils/app_theme.dart';
 
 class WisteriaButton extends StatefulWidget {
@@ -31,27 +32,28 @@ class _WisteriaButtonState extends State<WisteriaButton> {
       onTap: widget.onTap,
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
-        child: WisteriaBox(
-          backgroundColor: widget.backgroundColor,
-          width: widget.width,
-          height: widget.height,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-                child: Text(
-                  widget.text,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: widget.textColor
-                  ),
-                ),
-              ),
-            ],
-          )
-        ),
+        child: button()
       ),
+    );
+  }
+
+  Widget button() {
+    return WisteriaBox(
+      backgroundColor: widget.backgroundColor,
+      width: widget.width,
+      height: widget.height,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+            child: WisteriaText(
+              text: widget.text, 
+              size: 14
+            )
+          ),
+        ],
+      )
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
-import 'components/authentication/home_screen.dart';
+import 'components/home/home_screen.dart';
 
 void main() async {
   await Firebase.initializeApp(
