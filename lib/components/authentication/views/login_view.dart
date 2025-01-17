@@ -143,7 +143,7 @@ class _LoginViewState extends State<LoginView> {
 
   Widget pageTitle() {
     return const WisteriaText(
-      text: "Welcome back",
+      text: "Log in",
       size: 28,
     );
   }
@@ -174,7 +174,9 @@ class _LoginViewState extends State<LoginView> {
         }
 
         Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const LauncherView())
+          MaterialPageRoute(builder: (context) => LauncherView(
+            user: result.value!
+          ))
         );
       }
     );

@@ -150,7 +150,7 @@ class _RegisterViewState extends State<RegisterView> {
 
   Widget pageTitle() {
     return const WisteriaText(
-      text: "Create your account",
+      text: "Welcome to Wisteria!",
       size: 28,
     );
   }

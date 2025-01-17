@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wisteria/components/authentication/models/wisteria_user.dart';
+import 'package:wisteria/components/profile/profile_view.dart';
 import 'package:wisteria/constants.dart';
+import 'package:wisteria/ui/wisteria_box.dart';
 import 'package:wisteria/ui/wisteria_button.dart';
+import 'package:wisteria/ui/wisteria_icon_button.dart';
 import 'package:wisteria/ui/wisteria_text.dart';
 import 'package:wisteria/ui/wisteria_window.dart';
 import 'package:wisteria/utils/app_theme.dart';
@@ -8,7 +12,12 @@ import 'package:wisteria/utils/app_theme.dart';
 import '../controllers/launcher_controller.dart';
 
 class LauncherView extends StatefulWidget {
-  const LauncherView({super.key});
+  const LauncherView({
+    super.key, 
+    required this.user
+  });
+
+  final WisteriaUser user;
 
   @override
   State<LauncherView> createState() => _LauncherViewState();
@@ -40,9 +49,34 @@ class _LauncherViewState extends State<LauncherView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.white,
+      backgroundColor: AppTheme.backgroundColor,
+      body: Column(
+        children: [
+          navBar()
+        ],
       )
+    );
+  }
+
+  Widget navBar() {
+    return WisteriaBox(
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: WisteriaIconButton(
+              icon: Icons.person,
+              onTap: () {
+                Navigator.pushReplacement(context, 
+                  MaterialPageRoute(builder: (context) => ProfileView(
+                    user: widget.user,
+                  ))
+                );
+              }
+            ),
+          )
+        ],
+      ) 
     );
   }
 
