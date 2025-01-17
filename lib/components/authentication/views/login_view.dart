@@ -24,7 +24,15 @@ class _LoginViewState extends State<LoginView> {
   final emailOrUsernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-@override
+  String authMessage = "";
+
+  void setAuthMessage(String? message) {
+    setState(() {
+      authMessage = message ?? "";
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -102,9 +110,18 @@ class _LoginViewState extends State<LoginView> {
                 obscureText: true,
               ),
             ),
+
+            errorMessage()
           ],
         )
       ),
+    );
+  }
+
+  Widget errorMessage() {
+    return WisteriaText(
+      text: authMessage,
+      size: 14
     );
   }
 
@@ -118,7 +135,7 @@ class _LoginViewState extends State<LoginView> {
   Widget registerButton(double screenWidth) {
     return WisteriaButton(
       width: screenWidth,
-      text: "Register",
+      text: const WisteriaText(text: "Register", size: 14),
       onTap: () async {
         Navigator.pushReplacement(
           context,
@@ -131,18 +148,18 @@ class _LoginViewState extends State<LoginView> {
   Widget loginButton(double screenWidth) {
     return WisteriaButton(
       backgroundColor: Colors.white,
-      textColor: Colors.black,
       width: screenWidth,
-      text: "Log in",
+      text: const WisteriaText(text: "Log in", size: 14),
       onTap: () async {
         final result = await controller.loginUser(emailOrUsernameController.text, passwordController.text);
-        if (result.isSuccess) {
-          Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LauncherView())
-          );
-
-
+        if (!result.isSuccess) {
+          setAuthMessage(result.error);
+          return;
         }
+
+        Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const LauncherView())
+        );
       }
     );
   }

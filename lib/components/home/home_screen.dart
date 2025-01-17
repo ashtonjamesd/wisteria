@@ -89,7 +89,7 @@ class _HomeViewState extends State<HomeView> {
       children: [
         WisteriaButton(
           width: screenWidth * 0.85,
-          text: "Log in", 
+          text: const WisteriaText(text: "Log in", size: 14), 
           onTap: () {
             Navigator.pushReplacement(
               context,
@@ -100,10 +100,9 @@ class _HomeViewState extends State<HomeView> {
 
         const SizedBox(height: 12),
         WisteriaButton(
-          textColor: AppTheme.textColor, 
           backgroundColor: AppTheme.backgroundColor,
           width: screenWidth * 0.85,
-          text: "Register",
+          text: const WisteriaText(text: "Register", size: 14),
           onTap: () {
             Navigator.pushReplacement(
               context,

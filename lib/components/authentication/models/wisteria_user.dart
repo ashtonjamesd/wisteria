@@ -1,8 +1,8 @@
-final class User {
+final class WisteriaUser {
   final String username;
   final String email;
 
-  User({
+  WisteriaUser({
     required this.username,
     required this.email,
   });

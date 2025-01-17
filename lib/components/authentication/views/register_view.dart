@@ -89,7 +89,6 @@ class _RegisterViewState extends State<RegisterView> {
                 width: 80,
                 controller: usernameController,
                 hintText: "username",
-                obscureText: true,
               ),
             ),
             const SizedBox(height: 4),
@@ -127,11 +126,20 @@ class _RegisterViewState extends State<RegisterView> {
   Widget registerButton(double screenWidth) {
     return WisteriaButton(
       backgroundColor: Colors.white,
-      textColor: Colors.black,
       width: screenWidth,
-      text: "Register",
+      text: const WisteriaText(text: "Register", size: 14),
       onTap: () async {
-        
+        var result = await controller.registerUser(
+          usernameController.text, emailController.text, passwordController.text
+        );
+
+        if (result.isSuccess) {
+          Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginView())
+          );
+        }
+
+
       }
     );
   }
@@ -139,10 +147,9 @@ class _RegisterViewState extends State<RegisterView> {
   Widget loginButton(double screenWidth) {
     return WisteriaButton(
       width: screenWidth,
-      text: "Log in",
+      text: const WisteriaText(text: "Log in", size: 14),
       onTap: () async {
-        Navigator.pushReplacement(
-          context,
+        Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const LoginView())
         );
       }

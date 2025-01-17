@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/ui/wisteria_box.dart';
 import 'package:wisteria/ui/wisteria_icon_button.dart';
+import 'package:wisteria/utils/app_theme.dart';
 
 class WisteriaWindow extends StatefulWidget {
   const WisteriaWindow({
     super.key,
     required this.child,
     required this.width,
-    required this.height
+    required this.height,
+    this.showCloseButton = true
   });
 
   final Widget child;
   final double width;
   final double height;
+  final bool showCloseButton;
 
   @override
   State<WisteriaWindow> createState() => _WisteriaWindowState();
@@ -25,6 +28,7 @@ class _WisteriaWindowState extends State<WisteriaWindow> {
       backgroundColor: Colors.transparent,
       body: Center(
         child: WisteriaBox(
+          backgroundColor: AppTheme.backgroundColor,
           width: widget.width,
           height: widget.height,
           child: child()
@@ -36,7 +40,7 @@ class _WisteriaWindowState extends State<WisteriaWindow> {
   Widget child() {
     return Column(
       children: [
-        windowMenu(),
+        if (widget.showCloseButton) windowMenu(),
         widget.child
       ],
     );
