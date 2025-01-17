@@ -26,7 +26,13 @@ class _LoginViewState extends State<LoginView> {
 
   String authMessage = "";
 
-  void setAuthMessage(String? message) {
+  Future setAuthMessage(String? message) async {
+    setState(() {
+      authMessage = "";
+    });
+
+    await Future.delayed(const Duration(milliseconds: 150));
+
     setState(() {
       authMessage = message ?? "";
     });
@@ -88,6 +94,8 @@ class _LoginViewState extends State<LoginView> {
   Widget registerBox(double boxWidth) {
     return Center(
       child: WisteriaBox(
+        backgroundColor: AppTheme.backgroundColor,
+        hasBorder: false,
         width: boxWidth, height: 300,
         child: Column(
           children: [
@@ -100,7 +108,7 @@ class _LoginViewState extends State<LoginView> {
                 hintText: "email or username",
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: WisteriaTextField(
@@ -119,9 +127,18 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Widget errorMessage() {
-    return WisteriaText(
-      text: authMessage,
-      size: 14
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 12, top: 8),
+          child: WisteriaText(
+            text: authMessage,
+            color: const Color.fromARGB(255, 255, 141, 133),
+            size: 14,
+          ),
+        ),
+      ],
     );
   }
 

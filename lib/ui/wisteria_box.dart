@@ -7,20 +7,22 @@ class WisteriaBox extends StatelessWidget {
     this.width,
     this.height,
     this.backgroundColor = AppTheme.boxBackgroundColor,
-    required this.child
+    required this.child,
+    this.hasBorder = true,
   });
 
   final double? width;
   final double? height;
   final Color? backgroundColor;
   final Widget child;
+  final bool hasBorder;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width, height: height,
       decoration: BoxDecoration(
-        border: Border.all(color: AppTheme.borderColor),
+        border: hasBorder ? Border.all(color: AppTheme.borderColor) : null,
         borderRadius: BorderRadius.circular(4),
         color: backgroundColor,
       ),

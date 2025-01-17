@@ -79,6 +79,8 @@ class _RegisterViewState extends State<RegisterView> {
   Widget registerBox(double boxWidth) {
     return Center(
       child: WisteriaBox(
+        backgroundColor: AppTheme.backgroundColor,
+        hasBorder: false,
         width: boxWidth, height: 300,
         child: Column(
           children: [
@@ -91,7 +93,7 @@ class _RegisterViewState extends State<RegisterView> {
                 hintText: "username",
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: WisteriaTextField(
@@ -100,7 +102,7 @@ class _RegisterViewState extends State<RegisterView> {
                 hintText: "email",
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: WisteriaTextField(
