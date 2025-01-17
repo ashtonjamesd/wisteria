@@ -22,11 +22,27 @@ final class DbService {
     }
   }
 
-  Future<WisteriaUser?> getUser(String email, String password) async {
+  Future<WisteriaUser?> getUserFromUsername(String username) async {
+    try {
+      var query = await _users
+        .where("username", isEqualTo: username)
+        .get();
+
+      if (query.docs.isNotEmpty) {
+        return _userFactory.create(query.docs.first.data() as Map<String, dynamic>);
+      }
+
+      return null;
+    } catch (exception) {
+      print(exception);
+      return null;
+    }
+  }
+
+  Future<WisteriaUser?> getUserFromEmail(String email) async {
     try {
       var query = await _users
         .where("email", isEqualTo: email)
-        .where("password", isEqualTo: password)
         .get();
 
       if (query.docs.isNotEmpty) {

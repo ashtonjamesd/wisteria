@@ -4,7 +4,8 @@ final class WisteriaUserFactory {
   WisteriaUser create(Map<String, dynamic> map) {
     return WisteriaUser(
       username: map["username"],
-      email: map["email"]
+      email: map["email"],
+      password: map["password"]
     );
   }
 }

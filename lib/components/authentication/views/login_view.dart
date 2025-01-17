@@ -24,17 +24,16 @@ class _LoginViewState extends State<LoginView> {
   final emailOrUsernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  String authMessage = "";
 
   Future setAuthMessage(String? message) async {
     setState(() {
-      authMessage = "";
+      controller.authMessage = "";
     });
 
     await Future.delayed(const Duration(milliseconds: 150));
 
     setState(() {
-      authMessage = message ?? "";
+      controller.authMessage = message ?? "";
     });
   }
 
@@ -133,7 +132,7 @@ class _LoginViewState extends State<LoginView> {
         Padding(
           padding: const EdgeInsets.only(left: 12, top: 8),
           child: WisteriaText(
-            text: authMessage,
+            text: controller.authMessage,
             color: const Color.fromARGB(255, 255, 141, 133),
             size: 14,
           ),

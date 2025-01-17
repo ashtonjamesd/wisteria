@@ -28,10 +28,16 @@ final class AuthService {
     }
   }
 
-  Future<Result<WisteriaUser?>> loginUser(String email, String password) async {
+  Future<Result<WisteriaUser?>> loginUser(String emailOrUsername, String password) async {
     try {
-      final user = await _db.getUser(email, password);
+      var user = await _db.getUserFromUsername(emailOrUsername);
+      user ??= await _db.getUserFromEmail(emailOrUsername);
+
       if (user == null) {
+        return Result.err("Invalid login credentials");
+      }
+
+      if (user.password != password) {
         return Result.err("Invalid login credentials");
       }
 
@@ -41,9 +47,11 @@ final class AuthService {
     }
   }
 
-  Future<bool> checkUserExists(String email, String password) async {
+  Future<bool> checkUserExists(String usernameOrEmail) async {
     try {
-      var user = await _db.getUser(email, password);
+      var user = await _db.getUserFromEmail(usernameOrEmail);
+      user ??= await _db.getUserFromUsername(usernameOrEmail);
+
       return user != null;
 
     } catch (exception) {

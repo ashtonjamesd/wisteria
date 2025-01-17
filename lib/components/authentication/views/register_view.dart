@@ -23,6 +23,18 @@ class _RegisterViewState extends State<RegisterView> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  Future setAuthMessage(String? message) async {
+    setState(() {
+      controller.authMessage = "";
+    });
+
+    await Future.delayed(const Duration(milliseconds: 150));
+
+    setState(() {
+      controller.authMessage = message ?? "";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -112,9 +124,27 @@ class _RegisterViewState extends State<RegisterView> {
                 obscureText: true,
               ),
             ),
+
+            errorMessage()
           ],
         )
       ),
+    );
+  }
+
+  Widget errorMessage() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 12, top: 8),
+          child: WisteriaText(
+            text: controller.authMessage,
+            color: const Color.fromARGB(255, 255, 141, 133),
+            size: 14,
+          ),
+        ),
+      ],
     );
   }
 
@@ -135,13 +165,14 @@ class _RegisterViewState extends State<RegisterView> {
           usernameController.text, emailController.text, passwordController.text
         );
 
-        if (result.isSuccess) {
-          Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LoginView())
-          );
+        if (!result.isSuccess) {
+          setAuthMessage(result.error);
+          return;
         }
 
-
+        Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const LoginView())
+        );
       }
     );
   }
