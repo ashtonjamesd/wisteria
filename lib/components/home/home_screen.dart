@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/components/authentication/views/login_view.dart';
 import 'package:wisteria/components/authentication/views/register_view.dart';
+import 'package:wisteria/constants.dart';
 import 'package:wisteria/ui/wisteria_button.dart';
 import 'package:wisteria/ui/wisteria_text.dart';
 import 'package:wisteria/utils/app_theme.dart';
@@ -45,13 +46,13 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget pageTitle() {
-    return const Padding(
-      padding: EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           WisteriaText(
-            text: "wisteria",
+            text: appName.toLowerCase(),
             size: 30,
             weight: FontWeight.bold,
             letterSpacing: 1,
@@ -68,11 +69,11 @@ class _HomeViewState extends State<HomeView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           WisteriaText(
-            text: "An engine in your pocket.",
+            text: appHomeHeader,
             size: 24,
           ),
           WisteriaText(
-            text: "Create, build, and share pixel art games directly on \nyour mobile device.",
+            text: appHomeText,
             size: 14
           ),
           

@@ -6,6 +6,7 @@ final class AppTheme {
   static const Color boxBackgroundColor = Color.fromARGB(255, 226, 226, 226);
   static const Color borderColor = Colors.grey;
   static const Color textColor = Colors.black;
+  
   static const appFont = GoogleFonts.inter;
 
   AppTheme._();

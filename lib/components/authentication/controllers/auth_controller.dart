@@ -10,4 +10,10 @@ final class AuthController {
 
     return result;
   }
+
+  Future<Result<bool?>> loginUser(String email, String password) async {
+    var result = await _auth.loginUser(email, password);
+
+    return result;
+  }
 }

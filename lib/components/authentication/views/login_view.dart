@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/components/authentication/views/register_view.dart';
+import 'package:wisteria/components/launcher/views/launcher_view.dart';
 
 import '../../../ui/wisteria_box.dart';
 import '../../../ui/wisteria_button.dart';
@@ -20,7 +21,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final controller = AuthController();
 
-  final emailController = TextEditingController();
+  final emailOrUsernameController = TextEditingController();
   final passwordController = TextEditingController();
 
 @override
@@ -87,8 +88,8 @@ class _LoginViewState extends State<LoginView> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: WisteriaTextField(
                 width: 80,
-                controller: emailController,
-                hintText: "email",
+                controller: emailOrUsernameController,
+                hintText: "email or username",
               ),
             ),
             const SizedBox(height: 4),
@@ -134,7 +135,14 @@ class _LoginViewState extends State<LoginView> {
       width: screenWidth,
       text: "Log in",
       onTap: () async {
-        
+        final result = await controller.loginUser(emailOrUsernameController.text, passwordController.text);
+        if (result.isSuccess) {
+          Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LauncherView())
+          );
+
+
+        }
       }
     );
   }
