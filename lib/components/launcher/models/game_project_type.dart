@@ -1,4 +1,0 @@
-enum GameProjectType {
-  topdown,
-  platformer
-}
