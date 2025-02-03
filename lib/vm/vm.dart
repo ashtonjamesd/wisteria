@@ -46,7 +46,7 @@ final class VirtualMachine {
 
     isa2 = {
       "hlt": (0x00, _hlt),
-      "nop": (0x01, _nop),
+      "nop": (0x01, _nop)
     };
 
     memory = List.filled(256, 0);
