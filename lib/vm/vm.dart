@@ -33,20 +33,13 @@ final class VirtualMachine {
   bool _running = true;
 
   // instruction set architecture
-  late final Map<(String, int), Function> isa;
+  late final Map<int, Function> isa;
 
-  // an alternate method
-  late final  Map<String, (int, Function)> isa2;
 
   VirtualMachine({required this.program}) {
     isa = {
-      ("hlt", 0x00): _hlt,
-      ("nop", 0x01): _nop,
-    };
-
-    isa2 = {
-      "hlt": (0x00, _hlt),
-      "nop": (0x01, _nop)
+      0x00: _hlt,
+      0x01: _nop,
     };
 
     memory = List.filled(256, 0);
@@ -78,9 +71,9 @@ final class VirtualMachine {
     cir = mdr;
 
     final opcode = cir >> 4;
-    final operand = cir & 0x0F;
 
-    var instruction = isa[(opcode, operand)];
+    final instruction = isa[opcode]!;
+    instruction();
   }
 
   void _hlt() {
