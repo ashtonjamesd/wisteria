@@ -13,12 +13,14 @@ final class Token {
   }
 }
 
+
 enum TokenType {
   nop,
   jump,
   mov,
   add,
   dot,
+  out,
   colon,
   alloc,
   segment,

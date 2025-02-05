@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:wisteria/vm/parser/assembler.dart';
+import 'package:wisteria/vm/assembler/assembler.dart';
 import 'package:wisteria/vm/parser/lexer.dart';
 import 'package:wisteria/vm/vm.dart';
 import 'firebase_options.dart';
@@ -42,20 +42,26 @@ main:
   call
 """;
 
-    x = "mov rax 10";
+x = 
+"""
+mov rax 10
+mov rbx 20
+add rax rbx
+out rax
+""";
 
     final lexer = Lexer(program: x);
     final tokens = lexer.tokenize();
 
-    for (var x in tokens) print(x);
+    // for (var x in tokens) print(x);
 
     final assembler = Assembler(tokens: tokens);
     final program = assembler.assemble();
 
-    for (var x in program) print(x);
+    // for (var x in program) print(x);
 
     var vm = VirtualMachine(program: program);
-    // vm.run();
+    vm.run();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

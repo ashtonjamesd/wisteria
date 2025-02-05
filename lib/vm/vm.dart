@@ -29,12 +29,13 @@ final class VirtualMachine {
   // instruction set architecture
   late final Map<int, Function> isa;
 
-
   VirtualMachine({required this.program}) {
     isa = {
       0x00: _hlt,
       0x01: _nop,
-      0x02: _mov
+      0x02: _mov,
+      0x03: _out,
+      0x04: _add,
     };
 
     memory = List.filled(256, 0);
@@ -60,16 +61,33 @@ final class VirtualMachine {
   }
 
   void _execute() {
-    ir = memory[pc];
+    ir = memory[pc++];
 
-    final opcode = ir >> 4;
+    if (!isa.containsKey(ir)) {
+      print("unknown key: $ir");
+      return;
+    }
 
-    final instruction = isa[opcode]!;
+    final instruction = isa[ir]!;
     instruction();
   }
 
-  void _mov() {
+  void _out() {
+    print(registers[memory[pc++]]);
+  }
 
+  void _add() {
+    final destination = memory[pc++];
+    final source = memory[pc];
+
+    registers[destination] += registers[source];
+  }
+
+  void _mov() {
+    final register = memory[pc++];
+    final literal = memory[pc];
+
+    registers[register] = literal;
   }
 
   void _hlt() {

@@ -1,4 +1,4 @@
-import 'token.dart';
+import '../parser/token.dart';
 
 final class Assembler {
   final List<Token> tokens;
@@ -35,8 +35,10 @@ final class Assembler {
 
   int translateMnemonic(Token mnemonic) {
       final code = switch (mnemonic.type) {
-        TokenType.mov => 2,
-        _ => -1 // unknown mnemonic
+        TokenType.mov => 0x2,
+        TokenType.out => 0x3,
+        TokenType.add => 0x4,
+        _ => error("unknown register ${mnemonic.lexeme}")
       };
 
       return code;
@@ -44,8 +46,11 @@ final class Assembler {
 
   int translateRegister(Token register) {
     final code = switch (register.lexeme) {
-      "RAX" => 1,
-      _ => -1 // unknown register
+      "RAX" => 0x1,
+      "RBX" => 0x2,
+      "RCX" => 0x3,
+      "RDX" => 0x4,
+      _ => error("unknown register ${register.lexeme}")
     };
 
     return code;
@@ -54,5 +59,10 @@ final class Assembler {
   int translateLiteral(Token literal) {
     final val = int.parse(literal.lexeme);
     return val;
+  }
+
+  int error(String message) {
+    print(message);
+    return -1;
   }
 }

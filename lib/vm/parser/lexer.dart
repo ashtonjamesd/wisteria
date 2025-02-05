@@ -16,6 +16,7 @@ final class Lexer {
     "NOP":  TokenType.nop,
     "JUMP": TokenType.jump,
     "MOV":  TokenType.mov,
+    "OUT":  TokenType.out,
     "ADD":  TokenType.add,
   };
 
@@ -25,11 +26,10 @@ final class Lexer {
   };
 
   final registers = [
-    "RAX", // general purpose
-    "RBX", // general purpose
-    "RCX", // general purpose
-    "RDX", // general purpose
-    ""
+    "RAX",
+    "RBX",
+    "RCX",
+    "RDX",
   ];
 
   List<Token> tokenize() {
