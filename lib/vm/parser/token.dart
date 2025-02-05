@@ -19,7 +19,11 @@ enum TokenType {
   mov,
   add,
   dot,
+  colon,
+  alloc,
+  segment,
   literal,
+  string,
   identifier,
   register,
   bad

@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:wisteria/vm/parser/assembler.dart';
 import 'package:wisteria/vm/parser/lexer.dart';
 import 'package:wisteria/vm/vm.dart';
 import 'firebase_options.dart';
@@ -23,16 +24,37 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     String x = 
 """
-section .code
-  mov r1 100 add r1 200
+segment data
+  msg = alloc "Hello, World!"
+
+segment text
+
+main:
+  mov r1 100
+  add r1 200
+
+  mov rax 1
+  mov rbx msg
+  call
+
+  mov rax 2
+  mov rbx 0
+  call
 """;
 
+    x = "mov rax 10";
+
     final lexer = Lexer(program: x);
-    final program = lexer.tokenize();
+    final tokens = lexer.tokenize();
 
+    for (var x in tokens) print(x);
 
+    final assembler = Assembler(tokens: tokens);
+    final program = assembler.assemble();
 
-    // var vm = VirtualMachine(program: program);
+    for (var x in program) print(x);
+
+    var vm = VirtualMachine(program: program);
     // vm.run();
 
     return MaterialApp(

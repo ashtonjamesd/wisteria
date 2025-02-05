@@ -19,29 +19,33 @@ final class Lexer {
     "ADD":  TokenType.add,
   };
 
-  final registers = [
-    "R1", "R2", "R3", "R4",
-    "R5", "R6", "R7", "R8"
-  ];
+  final keywords = {
+    "ALLOC": TokenType.alloc,
+    "SEGMENT": TokenType.segment
+  };
 
-  bool isWhiteSpaceChar(String character) {
-    return character == " " || character == "\n" || character == "\t" || character == "\r";
-  }
+  final registers = [
+    "RAX", // general purpose
+    "RBX", // general purpose
+    "RCX", // general purpose
+    "RDX", // general purpose
+    ""
+  ];
 
   List<Token> tokenize() {
     while (!isEnd()) {
       while (!isEnd() && isWhiteSpaceChar(program[current])) {
-        current++;
+        advance();
+      }
+
+      if (isEnd()) {
+        break;
       }
 
       final token = parseInstruction();
       tokens.add(token);
 
-      current++;
-    }
-
-    for (var token in tokens) {
-      print(token.toString());
+      advance();
     }
     
     return tokens;
@@ -50,16 +54,32 @@ final class Lexer {
   Token parseInstruction() {
     return switch (program[current]) {
       var c when isLetter(c) => parseIdentifier(),
-      var c when isDigit(c) => parseLiteral(),
+      var c when isDigit(c) => parseNumeric(),
+      "\"" => parseString(),
       "." => Token(lexeme: ".", type: TokenType.dot),
+      ":" => Token(lexeme: ":", type: TokenType.colon),
       _ => Token(lexeme: program[current], type: TokenType.bad)
     };
   }
 
-  Token parseLiteral() {
+  Token parseString() {
+    advance();
+
+    int start = current;
+    while (!isEnd() && program[current] != "\"") {
+      advance();
+    }
+
+    current--;
+    final lexeme = program.substring(start, current++);
+
+    return Token(lexeme: lexeme, type: TokenType.string);
+  }
+
+  Token parseNumeric() {
     int start = current;
     while (!isEnd() && isDigit(program[current])) {
-      current++;
+      advance();
     }
 
     final lexeme = program.substring(start, current);
@@ -70,7 +90,7 @@ final class Lexer {
   Token parseIdentifier() {
     int start = current;
     while (!isEnd() && (isLetter(program[current]) || isDigit(program[current]))) {
-      current++;
+      advance();
     }
 
     final lexeme = program.substring(start, current);
@@ -83,7 +103,16 @@ final class Lexer {
       return Token(lexeme: lexeme, type: TokenType.register);
     }
 
+    if (keywords.containsKey(lexeme)) {
+      return Token(lexeme: lexeme, type: keywords[lexeme]!);
+    }
+
     return Token(lexeme: lexeme, type: TokenType.identifier);
+  }
+
+  bool isWhiteSpaceChar(String character) {
+    return character == " " || character == "\n" || 
+      character == "\t" || character == "\r";
   }
 
   bool isLetter(String character) {
@@ -93,6 +122,10 @@ final class Lexer {
 
   bool isDigit(String character) {
     return int.tryParse(character) != null;
+  }
+
+  void advance() {
+    current++;
   }
 
   bool isEnd() {

@@ -11,14 +11,8 @@ final class VirtualMachine {
   // program counter
   int pc = 0;
 
-  // memory address register
-  int mar = 0;
-
-  // memory data register
-  int mdr = 0;
-
-  // current instruction register
-  int cir = 0;
+  // instruction register
+  int ir = 0;
 
   // sign flag
   bool sf = false;
@@ -40,6 +34,7 @@ final class VirtualMachine {
     isa = {
       0x00: _hlt,
       0x01: _nop,
+      0x02: _mov
     };
 
     memory = List.filled(256, 0);
@@ -65,15 +60,16 @@ final class VirtualMachine {
   }
 
   void _execute() {
-    mar = pc;
-    mdr = memory[mar];
+    ir = memory[pc];
 
-    cir = mdr;
-
-    final opcode = cir >> 4;
+    final opcode = ir >> 4;
 
     final instruction = isa[opcode]!;
     instruction();
+  }
+
+  void _mov() {
+
   }
 
   void _hlt() {
