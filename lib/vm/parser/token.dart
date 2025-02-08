@@ -21,6 +21,8 @@ enum TokenType {
   add,
   dot,
   out,
+  inc,
+  dec,
   colon,
   alloc,
   segment,
@@ -28,5 +30,6 @@ enum TokenType {
   string,
   identifier,
   register,
+  whitespace,
   bad
 }

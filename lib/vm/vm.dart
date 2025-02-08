@@ -33,9 +33,12 @@ final class VirtualMachine {
     isa = {
       0x00: _hlt,
       0x01: _nop,
-      0x02: _mov,
-      0x03: _out,
+      0x02: _movLiteral,
+      0x03: _movRegister,
       0x04: _add,
+      0x05: _inc,
+      0x06: _dec,
+      0xff: _out
     };
 
     memory = List.filled(256, 0);
@@ -83,11 +86,28 @@ final class VirtualMachine {
     registers[destination] += registers[source];
   }
 
-  void _mov() {
+  void _inc() {
+    final register = memory[pc++];
+    registers[register]++;
+  }
+
+  void _dec() {
+    final register = memory[pc++];
+    registers[register]--;
+  }
+
+  void _movLiteral() {
     final register = memory[pc++];
     final literal = memory[pc];
 
     registers[register] = literal;
+  }
+
+  void _movRegister() {
+    final register = memory[pc++];
+    final moveFromRegister = memory[pc];
+
+    registers[register] = registers[moveFromRegister];
   }
 
   void _hlt() {

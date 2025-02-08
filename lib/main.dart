@@ -44,10 +44,11 @@ main:
 
 x = 
 """
-mov rax 10
-mov rbx 20
-add rax rbx
+mov rax 20
+mov rbx rax
+
 out rax
+
 """;
 
     final lexer = Lexer(program: x);
@@ -58,9 +59,10 @@ out rax
     final assembler = Assembler(tokens: tokens);
     final program = assembler.assemble();
 
-    // for (var x in program) print(x);
+    print(program.join(" "));
 
-    var vm = VirtualMachine(program: program);
+    program.removeWhere((x) => x == 0);
+    final vm = VirtualMachine(program: program);
     vm.run();
 
     return MaterialApp(

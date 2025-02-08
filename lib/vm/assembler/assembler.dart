@@ -24,41 +24,58 @@ final class Assembler {
   int translateToken() {
     final token = tokens[current];
 
-    final code = switch (token.type) {
+    return switch (token.type) {
       TokenType.literal => translateLiteral(token),
       TokenType.register => translateRegister(token),
+      TokenType.whitespace => 0,
       _ => translateMnemonic(token)
     };
-
-    return code;
   }
 
   int translateMnemonic(Token mnemonic) {
-      final code = switch (mnemonic.type) {
-        TokenType.mov => 0x2,
-        TokenType.out => 0x3,
-        TokenType.add => 0x4,
-        _ => error("unknown register ${mnemonic.lexeme}")
-      };
+    return switch (mnemonic.type) {
+      TokenType.mov => translateMov(),
+      TokenType.add => 0x4,
+      TokenType.inc => 0x5,
+      TokenType.dec => 0x6,
+      TokenType.out => 0xff,
+      _ => error("unknown register ${mnemonic.lexeme}")
+    };
+  }
 
-      return code;
+  int translateMov() {
+    current++;
+    final next = peek();
+
+    current--;
+    return switch (next.type) {
+      TokenType.register => 0x3,
+      TokenType.literal => 0x2,
+      _ => error("invalid source for mov")
+    };
   }
 
   int translateRegister(Token register) {
-    final code = switch (register.lexeme) {
+    return switch (register.lexeme) {
       "RAX" => 0x1,
       "RBX" => 0x2,
       "RCX" => 0x3,
       "RDX" => 0x4,
       _ => error("unknown register ${register.lexeme}")
     };
-
-    return code;
   }
 
   int translateLiteral(Token literal) {
     final val = int.parse(literal.lexeme);
     return val;
+  }
+
+  Token peek() {
+    if (current + 1 >= tokens.length) {
+      return Token(lexeme: "", type: TokenType.bad);
+    }
+
+    return tokens[current + 1];
   }
 
   int error(String message) {

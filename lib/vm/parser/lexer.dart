@@ -18,6 +18,8 @@ final class Lexer {
     "MOV":  TokenType.mov,
     "OUT":  TokenType.out,
     "ADD":  TokenType.add,
+    "INC":  TokenType.inc,
+    "DEC":  TokenType.dec,
   };
 
   final keywords = {
@@ -35,6 +37,10 @@ final class Lexer {
   List<Token> tokenize() {
     while (!isEnd()) {
       while (!isEnd() && isWhiteSpaceChar(program[current])) {
+        if (program[current] == '\n') {
+          tokens.add(Token(lexeme: "", type: TokenType.whitespace));
+        }
+
         advance();
       }
 
@@ -84,6 +90,7 @@ final class Lexer {
 
     final lexeme = program.substring(start, current);
 
+    current--;
     return Token(lexeme: lexeme, type: TokenType.literal);
   }
 
