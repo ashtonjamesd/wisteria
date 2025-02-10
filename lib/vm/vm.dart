@@ -47,12 +47,16 @@ final class VirtualMachine {
       0x01: _nop,
       0x02: _movLiteral,
       0x03: _movRegister,
-      0x04: _add,
-      0x05: _sub,
-      0x06: _inc,
-      0x07: _dec,
-      0x08: _mul,
-      0x09: _div,
+      0x04: _addLiteral,
+      0x05: _addRegister,
+      0x06: _subLiteral,
+      0x07: _subRegister,
+      0x08: _mulLiteral,
+      0x09: _mulRegister,
+      0x0a: _divLiteral,
+      0x0b: _divRegister,
+      // 0x08: _inc,
+      // 0x09: _dec,
 
       0xff: _out
     };
@@ -95,29 +99,64 @@ final class VirtualMachine {
     print(registers[memory[pc]]);
   }
 
-  void _add() {
+  void _addLiteral() {
+    final destination = memory[pc++];
+    final literal = memory[pc];
+
+    registers[destination] += literal;
+  }
+
+  void _addRegister() {
     final destination = memory[pc++];
     final source = memory[pc];
 
     registers[destination] += registers[source];
   }
 
-  void _sub() {
+  void _subLiteral() {
+    final destination = memory[pc++];
+    final literal = memory[pc];
+
+    registers[destination] -= literal;
+  }
+
+  void _subRegister() {
     final destination = memory[pc++];
     final source = memory[pc];
 
     registers[destination] -= registers[source];
   }
 
-  void _mul() {
+  void _mulLiteral() {
+    final destination = memory[pc++];
+    final source = memory[pc];
+
+    registers[destination] *= source;
+  }
+
+  void _mulRegister() {
     final destination = memory[pc++];
     final source = memory[pc];
 
     registers[destination] *= registers[source];
   }
 
-  void _div() {
+  /// divides the value of rax by the given argument
+  ///   - stores the division result in rax
+  ///   - stores the remainder inb rbx
+  void _divLiteral() {
     final divisor = memory[pc];
+
+    final divisionResult = (_rax / divisor).floor();
+    final remainder = _rax % divisor;
+
+    _rax = divisionResult;
+    _rbx = remainder;
+  }
+
+  void _divRegister() {
+    final register = memory[pc];
+    final divisor = registers[register];
 
     final divisionResult = (_rax / divisor).floor();
     final remainder = _rax % divisor;

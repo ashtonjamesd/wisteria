@@ -45,11 +45,10 @@ main:
 x = 
 """
 mov rax 27
-div 4
+mov rbx 2
 
+mul rax 3
 out rax
-out rbx
-
 """;
 
     final lexer = Lexer(program: x);

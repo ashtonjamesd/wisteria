@@ -34,27 +34,33 @@ final class Assembler {
 
   int translateMnemonic(Token mnemonic) {
     return switch (mnemonic.type) {
-      TokenType.mov => translateMov(),
-      TokenType.add => 0x4,
+      TokenType.mov => translateTwoOpInstruction(0x2, 0x3),
+      TokenType.add => translateTwoOpInstruction(0x4, 0x5),
+      TokenType.sub => translateTwoOpInstruction(0x6, 0x7),
+      TokenType.mul => translateTwoOpInstruction(0x8, 0x9),
+      TokenType.div => translateTwoOpInstruction(0xa, 0xb),
       TokenType.inc => 0x5,
       TokenType.dec => 0x6,
-      TokenType.mul => 0x8,
-      TokenType.div => 0x9,
       TokenType.out => 0xff,
       _ => error("unknown register ${mnemonic.lexeme}")
     };
   }
 
-  int translateMov() {
+  int translateTwoOpInstruction(int literalCode, int registerCode) {
     current++;
     final next = peek();
 
     current--;
+
     return switch (next.type) {
-      TokenType.register => 0x3,
-      TokenType.literal  => 0x2,
-      _ => error("invalid source for mov")
+      TokenType.literal  => literalCode,
+      TokenType.register => registerCode,
+      _ => error("invalid source for add")
     };
+  }
+
+  int translateSub() {
+    return -1;
   }
 
   int translateRegister(Token register) {
