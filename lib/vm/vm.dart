@@ -1,4 +1,4 @@
-import 'package:wisteria/constants.dart';
+import 'package:wisteria/vm/constants.dart';
 
 final class VirtualMachine {
   // machine code to be executed

@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:wisteria/app/home.dart';
 import 'package:wisteria/vm/tests/vm_tests.dart';
 import 'firebase_options.dart';
 
@@ -56,9 +57,9 @@ out rax
   Widget build(BuildContext context) {
     run();
 
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold()
+      home: HomeView()
     );
   }
 }

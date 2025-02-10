@@ -1,4 +1,4 @@
-import '../../constants.dart';
+import '../constants.dart';
 import '../parser/token.dart';
 
 final class Assembler {

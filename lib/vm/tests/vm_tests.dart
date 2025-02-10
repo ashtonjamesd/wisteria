@@ -53,7 +53,8 @@ final class VmTests {
   Future testAnything() async {
     const code = 
 """
-halt
+start:
+
 """;
 
     final vm = await _runTest(code, quietMode: false);
