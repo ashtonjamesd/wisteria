@@ -20,8 +20,7 @@ void main() async {
 class App extends StatelessWidget {
   const App({super.key});
 
-  @override
-  Widget build(BuildContext context) {
+  Future run() async {
     String x = 
 """
 segment data
@@ -44,11 +43,13 @@ main:
 
 x = 
 """
-mov rax 27
-mov rbx 2
+mov rax 1
 
-mul rax 3
-out rax
+START:
+  out rax
+  inc rax
+
+  jump START
 """;
 
     final lexer = Lexer(program: x);
@@ -64,6 +65,11 @@ out rax
     // program.removeWhere((x) => x == 0);
     final vm = VirtualMachine(program: program);
     vm.run();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    run();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

@@ -1,3 +1,4 @@
+import '../../constants.dart';
 import '../parser/token.dart';
 
 final class Assembler {
@@ -5,17 +6,36 @@ final class Assembler {
   final List<int> codes = [];
 
   int current = 0;
+  
+  final Map<String, int> labels = {};
 
   Assembler({
     required this.tokens
   });
 
+  void resolve() {
+    while (!isEnd()) {
+      final token = tokens[current];
+
+      if (token.type == TokenType.identifier && peek().type == TokenType.colon) {
+        labels[token.lexeme] = current;
+      }
+
+      advance();
+    }
+  }
+
   List<int> assemble() {
-    while (current < tokens.length) {
+    resolve();
+    // for (var x in labels.entries) print("${x.key}: ${x.value}");
+
+    current = 0;
+
+    while (!isEnd()) {
       final code = translateToken();
       codes.add(code);
 
-      current++;
+      advance();
     }
 
     return codes;
@@ -27,6 +47,7 @@ final class Assembler {
     return switch (token.type) {
       TokenType.literal => translateLiteral(token),
       TokenType.register => translateRegister(token),
+      TokenType.identifier => translateIdentifier(token),
       TokenType.whitespace => 0,
       _ => translateMnemonic(token)
     };
@@ -39,15 +60,52 @@ final class Assembler {
       TokenType.sub => translateTwoOpInstruction(0x6, 0x7),
       TokenType.mul => translateTwoOpInstruction(0x8, 0x9),
       TokenType.div => translateTwoOpInstruction(0xa, 0xb),
-      TokenType.inc => 0x5,
-      TokenType.dec => 0x6,
+      TokenType.inc => 0xc,
+      TokenType.dec => 0xd,
+      TokenType.jump => 0xe,
       TokenType.out => 0xff,
-      _ => error("unknown register ${mnemonic.lexeme}")
+      _ => error("unknown mnemonic ${mnemonic.lexeme}")
     };
   }
 
+  int translateRegister(Token register) {
+    return switch (register.lexeme) {
+      "RAX" => RAX_INDEX,
+      "RBX" => RBX_INDEX,
+      "RCX" => RCX_INDEX,
+      "RDX" => RDX_INDEX,
+      _ => error("unknown register ${register.lexeme}")
+    };
+  }
+
+  int translateIdentifier(Token token) {
+    final next = peek();
+    if (next.type == TokenType.colon) {
+      return translateLabelDefinition();
+    }
+
+    final token = tokens[current];
+    if (labels.containsKey(token.lexeme)) {
+      return labels[token.lexeme]!;
+    }
+
+    return error("unknown identifier ${token.lexeme}");
+  }
+
+  int translateLabelDefinition() {
+    advance();
+
+    codes.add(LABEL_OP);
+    return NO_OP;
+  }
+
+  int translateLiteral(Token literal) {
+    final val = int.parse(literal.lexeme);
+    return val;
+  }
+
   int translateTwoOpInstruction(int literalCode, int registerCode) {
-    current++;
+    advance();
     final next = peek();
 
     current--;
@@ -59,25 +117,6 @@ final class Assembler {
     };
   }
 
-  int translateSub() {
-    return -1;
-  }
-
-  int translateRegister(Token register) {
-    return switch (register.lexeme) {
-      "RAX" => 0x0,
-      "RBX" => 0x1,
-      "RCX" => 0x2,
-      "RDX" => 0x3,
-      _ => error("unknown register ${register.lexeme}")
-    };
-  }
-
-  int translateLiteral(Token literal) {
-    final val = int.parse(literal.lexeme);
-    return val;
-  }
-
   Token peek() {
     if (current + 1 >= tokens.length) {
       return Token(lexeme: "", type: TokenType.bad);
@@ -86,8 +125,16 @@ final class Assembler {
     return tokens[current + 1];
   }
 
+  void advance() {
+    current++;
+  }
+
+  bool isEnd() {
+    return current >= tokens.length;
+  }
+
   int error(String message) {
     print(message);
-    return -1;
+    return UNKNOWN_OP;
   }
 }

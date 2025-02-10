@@ -1,3 +1,5 @@
+import 'package:wisteria/constants.dart';
+
 final class VirtualMachine {
   // machine code to be executed
   final List<int> program;
@@ -29,22 +31,22 @@ final class VirtualMachine {
   // instruction set architecture
   late final Map<int, Function> isa;
 
-  int get _rax => registers[0];
-  set _rax(int value) => registers[0] = value;
+  int get _rax => registers[RAX_INDEX];
+  set _rax(int value) => registers[RAX_INDEX] = value;
 
-  int get _rbx => registers[1];
-  set _rbx(int value) => registers[1] = value;
+  int get _rbx => registers[RBX_INDEX];
+  set _rbx(int value) => registers[RBX_INDEX] = value;
 
-  int get _rcx => registers[2];
-  set _rcx(int value) => registers[2] = value;
+  int get _rcx => registers[RCX_INDEX];
+  set _rcx(int value) => registers[RCX_INDEX] = value;
 
-  int get _rdx => registers[3];
-  set _rdx(int value) => registers[3] = value;
+  int get _rdx => registers[RDX_INDEX];
+  set _rdx(int value) => registers[RDX_INDEX] = value;
 
   VirtualMachine({required this.program}) {
     isa = {
-      0x00: _hlt,
-      0x01: _nop,
+      HLT_OP: _hlt,
+      NO_OP: _nop,
       0x02: _movLiteral,
       0x03: _movRegister,
       0x04: _addLiteral,
@@ -55,9 +57,10 @@ final class VirtualMachine {
       0x09: _mulRegister,
       0x0a: _divLiteral,
       0x0b: _divRegister,
-      // 0x08: _inc,
-      // 0x09: _dec,
-
+      0x0c: _inc,
+      0x0d: _dec,
+      0x0e: _jump,
+      0x14: _label,
       0xff: _out
     };
 
@@ -65,16 +68,19 @@ final class VirtualMachine {
     registers = List.filled(8, 0);
   }
 
-  void run() {
+  Future run() async {
     _load();
 
     while (_running) {
       _execute();
+      await Future.delayed(const Duration(seconds: 1));
 
       pc++;
     }
 
     _running = false;
+
+    print("program execution finished");
   }
 
   void _load() {
@@ -166,13 +172,23 @@ final class VirtualMachine {
   }
 
   void _inc() {
-    final register = memory[pc++];
+    final register = memory[pc];
     registers[register]++;
+
   }
 
   void _dec() {
-    final register = memory[pc++];
+    final register = memory[pc];
     registers[register]--;
+  }
+
+  void _jump() {
+    final destination = memory[pc];
+    pc = destination + 1;
+  }
+
+  void _label() {
+    pc += 2;
   }
 
   void _movLiteral() {

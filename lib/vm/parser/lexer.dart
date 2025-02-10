@@ -103,6 +103,7 @@ final class Lexer {
     }
 
     final lexeme = program.substring(start, current);
+    current--;
 
     if (mnemonics.containsKey(lexeme)) {
       return Token(lexeme: lexeme, type: mnemonics[lexeme]!);
