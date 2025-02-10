@@ -31,17 +31,17 @@ final class VirtualMachine {
   // instruction set architecture
   late final Map<int, Function> isa;
 
-  int get _rax => registers[RAX_INDEX];
-  set _rax(int value) => registers[RAX_INDEX] = value;
+  int get rax => registers[RAX_INDEX];
+  set rax(int value) => registers[RAX_INDEX] = value;
 
-  int get _rbx => registers[RBX_INDEX];
-  set _rbx(int value) => registers[RBX_INDEX] = value;
+  int get rbx => registers[RBX_INDEX];
+  set rbx(int value) => registers[RBX_INDEX] = value;
 
-  int get _rcx => registers[RCX_INDEX];
-  set _rcx(int value) => registers[RCX_INDEX] = value;
+  int get rcx => registers[RCX_INDEX];
+  set rcx(int value) => registers[RCX_INDEX] = value;
 
-  int get _rdx => registers[RDX_INDEX];
-  set _rdx(int value) => registers[RDX_INDEX] = value;
+  int get rdx => registers[RDX_INDEX];
+  set rdx(int value) => registers[RDX_INDEX] = value;
 
   VirtualMachine({required this.program}) {
     isa = {
@@ -61,6 +61,13 @@ final class VirtualMachine {
       DEC_OP: _dec,
       JUMP_OP: _jump,
       CMP_LIT_LIT_OP: _cmpLitLit,
+      NEG_OP: _neg,
+      JNE_OP: _jne,
+      JE_OP: _je,
+      AND_OP: _andLiteral,
+      OR_OP: _orLiteral,
+      XOR_OP: _xorLiteral,
+      NOT_OP: _notLiteral,
       OUT_OP: _out
     };
 
@@ -69,23 +76,17 @@ final class VirtualMachine {
   }
 
   Future run() async {
-    _load();
+    _load(program);
 
     while (_running) {
       _execute();
-      await Future.delayed(const Duration(milliseconds: 250));
-
       pc++;
     }
-
-    _running = false;
-
-    print("program execution finished");
   }
 
-  void _load() {
+  void _load(List<int> code) {
     for (int i = 0; i < program.length; i++) {
-      memory[i] = program[i];
+      memory[i] = code[i];
     }
   }
 
@@ -101,8 +102,18 @@ final class VirtualMachine {
     instruction();
   }
 
-  void _out() {
-    print(registers[memory[pc]]);
+  void _movLiteral() {
+    final register = memory[pc++];
+    final literal = memory[pc];
+
+    registers[register] = literal;
+  }
+
+  void _movRegister() {
+    final register = memory[pc++];
+    final moveFromRegister = memory[pc];
+
+    registers[register] = registers[moveFromRegister];
   }
 
   void _addLiteral() {
@@ -153,28 +164,27 @@ final class VirtualMachine {
   void _divLiteral() {
     final divisor = memory[pc];
 
-    final divisionResult = (_rax / divisor).floor();
-    final remainder = _rax % divisor;
+    final divisionResult = (rax / divisor).floor();
+    final remainder = rax % divisor;
 
-    _rax = divisionResult;
-    _rbx = remainder;
+    rax = divisionResult;
+    rbx = remainder;
   }
 
   void _divRegister() {
     final register = memory[pc];
     final divisor = registers[register];
 
-    final divisionResult = (_rax / divisor).floor();
-    final remainder = _rax % divisor;
+    final divisionResult = (rax / divisor).floor();
+    final remainder = rax % divisor;
 
-    _rax = divisionResult;
-    _rbx = remainder;
+    rax = divisionResult;
+    rbx = remainder;
   }
 
   void _inc() {
     final register = memory[pc];
     registers[register]++;
-
   }
 
   void _dec() {
@@ -189,31 +199,69 @@ final class VirtualMachine {
 
   void _cmpLitLit() {
     final a = memory[pc++];
-    final b = memory[pc++];
+    final b = memory[pc];
 
     zf = a == b;
   }
 
-  void _movLiteral() {
+  void _jne() {
+    if (!zf) {
+      final destination = memory[pc];
+      pc = destination;
+    }
+  }
+
+  void _je() {
+    if (zf) {
+      final destination = memory[pc];
+      pc = destination;
+    }
+  }
+
+  void _neg() {
+    final register = memory[pc];
+    registers[register] = -registers[register];
+  }
+
+  void _andLiteral() {
     final register = memory[pc++];
     final literal = memory[pc];
 
-    registers[register] = literal;
+    final result = registers[register] & literal;
+    registers[register] = result;
   }
 
-  void _movRegister() {
+  void _orLiteral() {
     final register = memory[pc++];
-    final moveFromRegister = memory[pc];
+    final literal = memory[pc];
 
-    registers[register] = registers[moveFromRegister];
+    final result = registers[register] | literal;
+    registers[register] = result;
+  }
+
+  void _xorLiteral() {
+    final register = memory[pc++];
+    final literal = memory[pc];
+
+    final result = registers[register] ^ literal;
+    registers[register] = result;
+  }
+
+  void _notLiteral() {
+    final register = memory[pc];
+    registers[register] = ~registers[register];
   }
 
   void _hlt() {
     _running = false;
   }
 
+  void _out() {
+    print(registers[memory[pc]]);
+  }
+
+  // this is used as a location to jump to when a label is found
   void _nop() {
-    // this is used as a location to jump to when a label is found
     pc--;
   }
 }

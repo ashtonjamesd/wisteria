@@ -1,8 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:wisteria/vm/assembler/assembler.dart';
-import 'package:wisteria/vm/parser/lexer.dart';
-import 'package:wisteria/vm/vm.dart';
+import 'package:wisteria/vm/tests/vm_tests.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -43,30 +41,15 @@ main:
 
 x = 
 """
-start:
-  inc rax
-  out rax
+mov rax 10
+and rax 2
 
-  CMP 1 4
+out rax
 
-  halt
-  jump start
 """;
 
-
-    final lexer = Lexer(program: x);
-    final tokens = lexer.tokenize();
-
-    // for (var x in tokens) print(x);
-
-    final assembler = Assembler(tokens: tokens);
-    final program = assembler.assemble();
-
-    print(program.join(" "));
-
-    // program.removeWhere((x) => x == 0);
-    final vm = VirtualMachine(program: program);
-    vm.run();
+    final vmTester = VmTests();
+    vmTester.runAllTests();
   }
 
   @override

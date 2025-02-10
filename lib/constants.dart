@@ -26,5 +26,12 @@ const JUMP_OP = 14;
 const CMP_LIT_LIT_OP = 15;
 const JNE_OP = 16;
 const JE_OP = 17;
+const NEG_OP = 18;
+
+const AND_OP = 19;
+const OR_OP = 20;
+const XOR_OP = 21;
+const NOT_OP = 22;
+
 
 const OUT_OP = 255;

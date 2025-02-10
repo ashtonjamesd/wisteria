@@ -29,11 +29,17 @@ enum TokenType {
   je,
   jne,
   out,
+  neg,
+  and,
+  or,
+  xor,
+  not,
   
   register,
 
   dot,
   colon,
+  semicolon,
   
   alloc,
   segment,

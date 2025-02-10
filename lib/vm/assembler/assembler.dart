@@ -68,6 +68,11 @@ final class Assembler {
       TokenType.cmp => translateTwoOpInstruction(CMP_LIT_LIT_OP, CMP_LIT_LIT_OP),
       TokenType.jne => JNE_OP,
       TokenType.je => JE_OP,
+      TokenType.neg => NEG_OP,
+      TokenType.and => AND_OP,
+      TokenType.or => OR_OP,
+      TokenType.xor => XOR_OP,
+      TokenType.not => NOT_OP,
       TokenType.out => 0xff,
       _ => error("unknown mnemonic ${mnemonic.lexeme}")
     };

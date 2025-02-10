@@ -26,6 +26,17 @@ final class Lexer {
     "CMP":  TokenType.cmp,
     "JNE":  TokenType.jne,
     "JE":   TokenType.je,
+    "NEG":  TokenType.neg,
+    "AND":  TokenType.and,
+    "OR":   TokenType.or,
+    "XOR":  TokenType.xor,
+    "NOT":  TokenType.not,
+  };
+
+  final symbolMap = {
+    ".": TokenType.dot,
+    ":": TokenType.colon,
+    ";": TokenType.semicolon,
   };
 
   final keywords = {
@@ -68,10 +79,17 @@ final class Lexer {
       var c when isLetter(c) => parseIdentifier(),
       var c when isDigit(c) => parseNumeric(),
       "\"" => parseString(),
-      "." => Token(lexeme: ".", type: TokenType.dot),
-      ":" => Token(lexeme: ":", type: TokenType.colon),
-      _ => Token(lexeme: program[current], type: TokenType.bad)
+      _ => parseSymbol()
     };
+  }
+
+  Token parseSymbol() {
+    final symbol = program[current];
+    if (symbolMap.containsKey(symbol)) {
+      return Token(lexeme: symbol, type: symbolMap[symbol]!);
+    }
+
+    return Token(lexeme: program[current], type: TokenType.bad);
   }
 
   Token parseString() {
