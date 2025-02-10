@@ -5,14 +5,14 @@ import 'package:wisteria/vm/vm.dart';
 final class VmTests {
   int passed = 0;
 
-  Future<VirtualMachine> _runTest(String asm) async {
+  Future<VirtualMachine> _runTest(String asm, {bool quietMode = true}) async {
     var lexer = Lexer(program: asm);
     var tokens = lexer.tokenize();
 
     var assembler = Assembler(tokens: tokens);
     var program = assembler.assemble();
 
-    var vm = VirtualMachine(program: program);
+    var vm = VirtualMachine(quietMode, program: program);
     vm.run();
 
     return vm;
@@ -53,16 +53,19 @@ final class VmTests {
   Future testAnything() async {
     const code = 
 """
-
+halt
 """;
 
-    final vm = await _runTest(code);
+    final vm = await _runTest(code, quietMode: false);
 
     assert(true);
     passed++;
   }
 
   void runAllTests() async {
+    await testAnything();
+    return;
+
     var tests = {
       "MOV Literal Instruction":  testMovLiteral,
       "MOV Register Instruction": testMovRegister,

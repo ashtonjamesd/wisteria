@@ -28,6 +28,13 @@ final class VirtualMachine {
   // execution flag for the virtual machine
   bool _running = true;
 
+  // will display no messages if true
+  bool _quietMode = true;
+
+  // the last error to occur in the vm
+  // will return at the earliest point when not null
+  String? errorMessage;
+
   // instruction set architecture
   late final Map<int, Function> isa;
 
@@ -43,7 +50,7 @@ final class VirtualMachine {
   int get rdx => registers[RDX_INDEX];
   set rdx(int value) => registers[RDX_INDEX] = value;
 
-  VirtualMachine({required this.program}) {
+  VirtualMachine(bool quietMode, {required this.program}) {
     isa = {
       HLT_OP: _hlt,
       NO_OP: _nop,
@@ -71,8 +78,11 @@ final class VirtualMachine {
       OUT_OP: _out
     };
 
+    // 256 * 64(bits) = 2(KiloBytes)
     memory = List.filled(256, 0);
     registers = List.filled(8, 0);
+
+    _quietMode = quietMode;
   }
 
   Future run() async {
@@ -81,6 +91,10 @@ final class VirtualMachine {
     while (_running) {
       _execute();
       pc++;
+    }
+
+    if (!_quietMode) {
+      print("program execution finished");
     }
   }
 
@@ -94,12 +108,20 @@ final class VirtualMachine {
     ir = memory[pc++];
 
     if (!isa.containsKey(ir)) {
-      print("unknown opcode: $ir");
+      error("unknown opcode: $ir");
       return;
     }
 
     final instruction = isa[ir]!;
     instruction();
+  }
+
+  void error(String message) {
+    if (!_quietMode) {
+      print(message);
+    }
+
+    errorMessage = message;
   }
 
   void _movLiteral() {
