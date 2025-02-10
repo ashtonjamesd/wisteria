@@ -47,28 +47,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCQLVllH_Sof8eqYLxsybcapNzcuxEVobQ',
-    appId: '1:8314997661:web:3a04c3b25ffed4c8ec3d74',
-    messagingSenderId: '8314997661',
-    projectId: 'wisteria-1c25f',
-    authDomain: 'wisteria-1c25f.firebaseapp.com',
-    storageBucket: 'wisteria-1c25f.firebasestorage.app',
+    apiKey: 'AIzaSyBJwf6dbjwmXDQM_hQeJPcrtzewIM3LOw4',
+    appId: '1:107474434419:web:96e6c454329d264ac7ed06',
+    messagingSenderId: '107474434419',
+    projectId: 'wisteria-f4db4',
+    authDomain: 'wisteria-f4db4.firebaseapp.com',
+    storageBucket: 'wisteria-f4db4.firebasestorage.app',
+    measurementId: 'G-LH9YEKKBGL',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyByW624lK7UKcRb4B15rphZrHAhG31XeGI',
-    appId: '1:8314997661:android:f6aee03f5bbac649ec3d74',
-    messagingSenderId: '8314997661',
-    projectId: 'wisteria-1c25f',
-    storageBucket: 'wisteria-1c25f.firebasestorage.app',
+    apiKey: 'AIzaSyD0g6cAFiQFRr5uEljO7mOj3wq1nsG14Tw',
+    appId: '1:107474434419:android:aa74078dec8c59e0c7ed06',
+    messagingSenderId: '107474434419',
+    projectId: 'wisteria-f4db4',
+    storageBucket: 'wisteria-f4db4.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBcYzeO_JW5XxOoLlfBv0tCaJR6-WPMGkM',
-    appId: '1:8314997661:ios:26a797b89a4636a0ec3d74',
-    messagingSenderId: '8314997661',
-    projectId: 'wisteria-1c25f',
-    storageBucket: 'wisteria-1c25f.firebasestorage.app',
+    apiKey: 'AIzaSyD8L-67H2U16KcpBmhRty-2BMCQpaj59QQ',
+    appId: '1:107474434419:ios:261f0807f267b4d8c7ed06',
+    messagingSenderId: '107474434419',
+    projectId: 'wisteria-f4db4',
+    storageBucket: 'wisteria-f4db4.firebasestorage.app',
     iosBundleId: 'com.example.wisteria',
   );
 }

@@ -65,13 +65,12 @@ start:
 
   void runAllTests() async {
     await testAnything();
-    return;
 
     var tests = {
-      "MOV Literal Instruction":  testMovLiteral,
-      "MOV Register Instruction": testMovRegister,
-      "ADD Literal Instruction":  testAddLiteral,
-      "ADD Register Instruction": testAddLiteral,
+      // "MOV Literal Instruction":  testMovLiteral,
+      // "MOV Register Instruction": testMovRegister,
+      // "ADD Literal Instruction":  testAddLiteral,
+      // "ADD Register Instruction": testAddLiteral,
     };
 
     print("Virtual Machine Tests:");

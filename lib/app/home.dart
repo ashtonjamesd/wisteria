@@ -1,52 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/common/wisteria_box.dart';
+import 'package:wisteria/app/constants.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final screen = MediaQuery.sizeOf(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: homeView(),
+      body: homeView(screen),
     );
   }
 
-  Widget homeView() {
-    return Column(
-      children: [
-        Row(
+  Widget homeView(Size screen) {
+    return Center(
+      child: Container(
+        width: (screen.width / memoryWidthRatio + screen.width / cpuInterfaceWidthRatio) + boxPadding * 6,
+        height: (cpuInterfaceHeight + consoleHeight) + boxPadding * 6,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(boxBorderRadius),
+          color: Colors.grey,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            processorInterface(),
-            memoryBox()
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                processorInterface(screen),
+                memoryBox(screen)
+              ],
+            ),
+        
+            vmConsole(screen)
           ],
         ),
-
-        vmConsole()
-      ],
+      ),
     );
   }
 
-  Widget processorInterface() {
+  Widget processorInterface(Size screen) {
     return WisteriaBox(
-      width: 600,
-      height: 500,
+      width: screen.width / cpuInterfaceWidthRatio,
+      height: cpuInterfaceHeight,
       child: SizedBox()
     );
   }
 
-  Widget vmConsole() {
+  Widget memoryBox(Size screen) {
     return WisteriaBox(
-      width: 800,
-      height: 200,
+      width: screen.width / memoryWidthRatio,
+      height: cpuInterfaceHeight,
       child: SizedBox()
     );
   }
 
-  Widget memoryBox() {
+  Widget vmConsole(Size screen) {
     return WisteriaBox(
-      width: 200,
-      height: 500,
+      width: (screen.width / memoryWidthRatio + screen.width / cpuInterfaceWidthRatio) + boxPadding * 2,
+      height: consoleHeight,
       child: SizedBox()
     );
   }

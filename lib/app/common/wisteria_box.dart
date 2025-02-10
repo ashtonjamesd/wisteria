@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+
 class WisteriaBox extends StatelessWidget {
   const WisteriaBox({
     super.key, 
@@ -14,14 +16,17 @@ class WisteriaBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(4)
+    return Padding(
+      padding: const EdgeInsets.all(boxPadding),
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(boxBorderRadius)
+        ),
+        child: child,
       ),
-      child: child,
     );
   }
 }
