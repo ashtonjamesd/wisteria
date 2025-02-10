@@ -4,9 +4,9 @@ import '../constants.dart';
 
 class WisteriaBox extends StatelessWidget {
   const WisteriaBox({
-    super.key, 
-    required this.width, 
-    required this.height, 
+    super.key,
+    required this.width,
+    required this.height,
     required this.child
   });
 
@@ -22,7 +22,7 @@ class WisteriaBox extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: primaryWhite,
           borderRadius: BorderRadius.circular(boxBorderRadius)
         ),
         child: child,

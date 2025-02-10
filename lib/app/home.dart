@@ -1,9 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/common/wisteria_box.dart';
+import 'package:wisteria/app/common/wisteria_button.dart';
 import 'package:wisteria/app/constants.dart';
+import 'package:wisteria/vm/vm.dart';
 
-class HomeView extends StatelessWidget {
+import '../vm/assembler/assembler.dart';
+import '../vm/parser/lexer.dart';
+
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  late VirtualMachine vm;
+
+  @override
+  void initState() {
+    super.initState();
+    vm = VirtualMachine(program: []);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +40,7 @@ class HomeView extends StatelessWidget {
         height: (cpuInterfaceHeight + consoleHeight) + boxPadding * 6,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(boxBorderRadius),
-          color: Colors.grey,
+          color: primaryGrey,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -47,7 +65,33 @@ class HomeView extends StatelessWidget {
     return WisteriaBox(
       width: screen.width / cpuInterfaceWidthRatio,
       height: cpuInterfaceHeight,
-      child: SizedBox()
+      child: Row(
+        children: [
+          executeButton(),
+        ],
+      )
+    );
+  }
+
+  Widget executeButton() {
+    return WisteriaButton(
+      width: 64,
+      color: primaryGrey,
+      text: "execute",
+      onTap: () {
+        final lexer = Lexer(program: "mov rax 10 out rax");
+        final tokens = lexer.tokenize();
+
+        final assembler = Assembler(tokens: tokens);
+        final program = assembler.assemble();
+
+        vm = VirtualMachine(program: program);
+        vm.run(() {
+          setState(() {
+            
+          });
+        });
+      }
     );
   }
 
@@ -55,7 +99,35 @@ class HomeView extends StatelessWidget {
     return WisteriaBox(
       width: screen.width / memoryWidthRatio,
       height: cpuInterfaceHeight,
-      child: SizedBox()
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 8,
+            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 4.0,
+            childAspectRatio: 1.0,
+          ),
+          itemCount: vm.memory.length,
+          itemBuilder: (context, index) {
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4.0),
+                color: primaryGrey,
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                vm.memory[index].toRadixString(16).padLeft(2, '0').toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 

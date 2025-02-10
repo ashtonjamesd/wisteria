@@ -33,5 +33,4 @@ const OR_OP = 20;
 const XOR_OP = 21;
 const NOT_OP = 22;
 
-
 const OUT_OP = 255;

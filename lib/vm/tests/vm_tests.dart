@@ -6,14 +6,14 @@ final class VmTests {
   int passed = 0;
 
   Future<VirtualMachine> _runTest(String asm, {bool quietMode = true}) async {
-    var lexer = Lexer(program: asm);
-    var tokens = lexer.tokenize();
+    final lexer = Lexer(program: asm);
+    final tokens = lexer.tokenize();
 
-    var assembler = Assembler(tokens: tokens);
-    var program = assembler.assemble();
+    final assembler = Assembler(tokens: tokens);
+    final program = assembler.assemble();
 
-    var vm = VirtualMachine(quietMode, program: program);
-    vm.run();
+    final vm = VirtualMachine(quietMode: quietMode, program: program);
+    vm.run(() {});
 
     return vm;
   }

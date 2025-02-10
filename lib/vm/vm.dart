@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:wisteria/vm/constants.dart';
 
 final class VirtualMachine {
@@ -50,7 +51,7 @@ final class VirtualMachine {
   int get rdx => registers[RDX_INDEX];
   set rdx(int value) => registers[RDX_INDEX] = value;
 
-  VirtualMachine(bool quietMode, {required this.program}) {
+  VirtualMachine({required this.program, bool quietMode = false}) {
     isa = {
       HLT_OP: _hlt,
       NO_OP: _nop,
@@ -85,11 +86,13 @@ final class VirtualMachine {
     _quietMode = quietMode;
   }
 
-  Future run() async {
+  Future run(VoidCallback update) async {
     _load(program);
+    update();
 
     while (_running) {
       _execute();
+      update();
       pc++;
     }
 
