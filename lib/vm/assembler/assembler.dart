@@ -38,6 +38,8 @@ final class Assembler {
       TokenType.add => 0x4,
       TokenType.inc => 0x5,
       TokenType.dec => 0x6,
+      TokenType.mul => 0x8,
+      TokenType.div => 0x9,
       TokenType.out => 0xff,
       _ => error("unknown register ${mnemonic.lexeme}")
     };
@@ -50,17 +52,17 @@ final class Assembler {
     current--;
     return switch (next.type) {
       TokenType.register => 0x3,
-      TokenType.literal => 0x2,
+      TokenType.literal  => 0x2,
       _ => error("invalid source for mov")
     };
   }
 
   int translateRegister(Token register) {
     return switch (register.lexeme) {
-      "RAX" => 0x1,
-      "RBX" => 0x2,
-      "RCX" => 0x3,
-      "RDX" => 0x4,
+      "RAX" => 0x0,
+      "RBX" => 0x1,
+      "RCX" => 0x2,
+      "RDX" => 0x3,
       _ => error("unknown register ${register.lexeme}")
     };
   }

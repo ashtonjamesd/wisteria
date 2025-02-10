@@ -29,6 +29,18 @@ final class VirtualMachine {
   // instruction set architecture
   late final Map<int, Function> isa;
 
+  int get _rax => registers[0];
+  set _rax(int value) => registers[0] = value;
+
+  int get _rbx => registers[1];
+  set _rbx(int value) => registers[1] = value;
+
+  int get _rcx => registers[2];
+  set _rcx(int value) => registers[2] = value;
+
+  int get _rdx => registers[3];
+  set _rdx(int value) => registers[3] = value;
+
   VirtualMachine({required this.program}) {
     isa = {
       0x00: _hlt,
@@ -36,8 +48,12 @@ final class VirtualMachine {
       0x02: _movLiteral,
       0x03: _movRegister,
       0x04: _add,
-      0x05: _inc,
-      0x06: _dec,
+      0x05: _sub,
+      0x06: _inc,
+      0x07: _dec,
+      0x08: _mul,
+      0x09: _div,
+
       0xff: _out
     };
 
@@ -76,7 +92,7 @@ final class VirtualMachine {
   }
 
   void _out() {
-    print(registers[memory[pc++]]);
+    print(registers[memory[pc]]);
   }
 
   void _add() {
@@ -84,6 +100,30 @@ final class VirtualMachine {
     final source = memory[pc];
 
     registers[destination] += registers[source];
+  }
+
+  void _sub() {
+    final destination = memory[pc++];
+    final source = memory[pc];
+
+    registers[destination] -= registers[source];
+  }
+
+  void _mul() {
+    final destination = memory[pc++];
+    final source = memory[pc];
+
+    registers[destination] *= registers[source];
+  }
+
+  void _div() {
+    final divisor = memory[pc];
+
+    final divisionResult = (_rax / divisor).floor();
+    final remainder = _rax % divisor;
+
+    _rax = divisionResult;
+    _rbx = remainder;
   }
 
   void _inc() {

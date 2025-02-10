@@ -44,10 +44,11 @@ main:
 
 x = 
 """
-mov rax 20
-mov rbx rax
+mov rax 27
+div 4
 
 out rax
+out rbx
 
 """;
 
@@ -61,7 +62,7 @@ out rax
 
     print(program.join(" "));
 
-    program.removeWhere((x) => x == 0);
+    // program.removeWhere((x) => x == 0);
     final vm = VirtualMachine(program: program);
     vm.run();
 
