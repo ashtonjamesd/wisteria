@@ -15,25 +15,32 @@ final class Token {
 
 
 enum TokenType {
+  halt,
   nop,
-  jump,
   mov,
   add,
   sub,
   mul,
   div,
-  dot,
-  out,
   inc,
   dec,
-  halt,
+  jump,
+  cmp,
+  je,
+  jne,
+  out,
+  
+  register,
+
+  dot,
   colon,
+  
   alloc,
   segment,
+  
   literal,
   string,
   identifier,
-  register,
   whitespace,
   bad
 }

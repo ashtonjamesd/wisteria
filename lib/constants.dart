@@ -23,5 +23,8 @@ const DIV_REG_OP = 11;
 const INC_OP = 12;
 const DEC_OP = 13;
 const JUMP_OP = 14;
+const CMP_LIT_LIT_OP = 15;
+const JNE_OP = 16;
+const JE_OP = 17;
 
 const OUT_OP = 255;

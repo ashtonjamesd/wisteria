@@ -60,6 +60,7 @@ final class VirtualMachine {
       INC_OP: _inc,
       DEC_OP: _dec,
       JUMP_OP: _jump,
+      CMP_LIT_LIT_OP: _cmpLitLit,
       OUT_OP: _out
     };
 
@@ -184,6 +185,13 @@ final class VirtualMachine {
   void _jump() {
     final destination = memory[pc];
     pc = destination;
+  }
+
+  void _cmpLitLit() {
+    final a = memory[pc++];
+    final b = memory[pc++];
+
+    zf = a == b;
   }
 
   void _movLiteral() {

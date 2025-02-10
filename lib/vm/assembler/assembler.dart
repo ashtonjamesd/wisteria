@@ -54,16 +54,20 @@ final class Assembler {
 
   int translateMnemonic(Token mnemonic) {
     return switch (mnemonic.type) {
-      TokenType.halt => 0x0,
-      TokenType.nop => 0x1,
-      TokenType.mov => translateTwoOpInstruction(0x2, 0x3),
-      TokenType.add => translateTwoOpInstruction(0x4, 0x5),
-      TokenType.sub => translateTwoOpInstruction(0x6, 0x7),
-      TokenType.mul => translateTwoOpInstruction(0x8, 0x9),
-      TokenType.div => translateTwoOpInstruction(0xa, 0xb),
-      TokenType.inc => 0xc,
-      TokenType.dec => 0xd,
-      TokenType.jump => 0xe,
+      TokenType.halt => HLT_OP,
+      TokenType.nop => NO_OP,
+      TokenType.mov => translateTwoOpInstruction(MOV_LIT_OP, MOV_REG_OP),
+      TokenType.add => translateTwoOpInstruction(ADD_LIT_OP, ADD_REG_OP),
+      TokenType.sub => translateTwoOpInstruction(SUB_LIT_OP, SUB_REG_OP),
+      TokenType.mul => translateTwoOpInstruction(MUL_LIT_OP, MUL_REG_OP),
+      TokenType.div => translateTwoOpInstruction(DIV_LIT_OP, DIV_REG_OP),
+      TokenType.inc => INC_OP,
+      TokenType.dec => DEC_OP,
+      TokenType.jump => JUMP_OP,
+      // temporarily
+      TokenType.cmp => translateTwoOpInstruction(CMP_LIT_LIT_OP, CMP_LIT_LIT_OP),
+      TokenType.jne => JNE_OP,
+      TokenType.je => JE_OP,
       TokenType.out => 0xff,
       _ => error("unknown mnemonic ${mnemonic.lexeme}")
     };

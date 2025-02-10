@@ -22,7 +22,10 @@ final class Lexer {
     "DEC":  TokenType.dec,
     "MUL":  TokenType.mul,
     "DIV":  TokenType.div,
-    "HALT":  TokenType.halt,
+    "HALT": TokenType.halt,
+    "CMP":  TokenType.cmp,
+    "JNE":  TokenType.jne,
+    "JE":   TokenType.je,
   };
 
   final keywords = {

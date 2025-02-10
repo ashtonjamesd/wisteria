@@ -47,9 +47,12 @@ start:
   inc rax
   out rax
 
+  CMP 1 4
+
   halt
   jump start
 """;
+
 
     final lexer = Lexer(program: x);
     final tokens = lexer.tokenize();
