@@ -26,6 +26,7 @@ enum TokenType {
   out,
   inc,
   dec,
+  halt,
   colon,
   alloc,
   segment,

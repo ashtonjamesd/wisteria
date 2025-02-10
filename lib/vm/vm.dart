@@ -47,21 +47,20 @@ final class VirtualMachine {
     isa = {
       HLT_OP: _hlt,
       NO_OP: _nop,
-      0x02: _movLiteral,
-      0x03: _movRegister,
-      0x04: _addLiteral,
-      0x05: _addRegister,
-      0x06: _subLiteral,
-      0x07: _subRegister,
-      0x08: _mulLiteral,
-      0x09: _mulRegister,
-      0x0a: _divLiteral,
-      0x0b: _divRegister,
-      0x0c: _inc,
-      0x0d: _dec,
-      0x0e: _jump,
-      0x14: _label,
-      0xff: _out
+      MOV_LIT_OP: _movLiteral,
+      MOV_REG_OP: _movRegister,
+      ADD_LIT_OP: _addLiteral,
+      ADD_REG_OP: _addRegister,
+      SUB_LIT_OP: _subLiteral,
+      SUB_REG_OP: _subRegister,
+      MUL_LIT_OP: _mulLiteral,
+      MUL_REG_OP: _mulRegister,
+      DIV_LIT_OP: _divLiteral,
+      DIV_REG_OP: _divRegister,
+      INC_OP: _inc,
+      DEC_OP: _dec,
+      JUMP_OP: _jump,
+      OUT_OP: _out
     };
 
     memory = List.filled(256, 0);
@@ -73,7 +72,7 @@ final class VirtualMachine {
 
     while (_running) {
       _execute();
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 250));
 
       pc++;
     }
@@ -93,7 +92,7 @@ final class VirtualMachine {
     ir = memory[pc++];
 
     if (!isa.containsKey(ir)) {
-      print("unknown key: $ir");
+      print("unknown opcode: $ir");
       return;
     }
 
@@ -184,11 +183,7 @@ final class VirtualMachine {
 
   void _jump() {
     final destination = memory[pc];
-    pc = destination + 1;
-  }
-
-  void _label() {
-    pc += 2;
+    pc = destination;
   }
 
   void _movLiteral() {
@@ -211,5 +206,6 @@ final class VirtualMachine {
 
   void _nop() {
     // this is used as a location to jump to when a label is found
+    pc--;
   }
 }

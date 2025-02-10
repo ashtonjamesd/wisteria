@@ -27,7 +27,6 @@ final class Assembler {
 
   List<int> assemble() {
     resolve();
-    // for (var x in labels.entries) print("${x.key}: ${x.value}");
 
     current = 0;
 
@@ -55,6 +54,8 @@ final class Assembler {
 
   int translateMnemonic(Token mnemonic) {
     return switch (mnemonic.type) {
+      TokenType.halt => 0x0,
+      TokenType.nop => 0x1,
       TokenType.mov => translateTwoOpInstruction(0x2, 0x3),
       TokenType.add => translateTwoOpInstruction(0x4, 0x5),
       TokenType.sub => translateTwoOpInstruction(0x6, 0x7),
@@ -94,8 +95,6 @@ final class Assembler {
 
   int translateLabelDefinition() {
     advance();
-
-    codes.add(LABEL_OP);
     return NO_OP;
   }
 

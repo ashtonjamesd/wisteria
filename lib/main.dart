@@ -43,13 +43,12 @@ main:
 
 x = 
 """
-mov rax 1
-
-START:
-  out rax
+start:
   inc rax
+  out rax
 
-  jump START
+  halt
+  jump start
 """;
 
     final lexer = Lexer(program: x);
