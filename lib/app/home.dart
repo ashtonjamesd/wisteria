@@ -99,11 +99,22 @@ class _HomeViewState extends State<HomeView> {
         color: primaryGrey,
         text: "execute",
         onTap: () {
-          final lexer = Lexer(program: "mov rax 10 out rax");
+          final lexer = Lexer(program: """
+mov rax 11
+
+start:
+  dec rax
+  cmp 1 rax
+
+  out rax
+  jne start
+""");
           final tokens = lexer.tokenize();
       
           final assembler = Assembler(tokens: tokens);
           final program = assembler.assemble();
+
+          print(program.join(" "));
       
           vm = VirtualMachine(program: program);
           vm.run(() {
@@ -182,7 +193,7 @@ class _HomeViewState extends State<HomeView> {
               ),
               alignment: Alignment.center,
               child: Text(
-                vm.memory[index].toRadixString(16).padLeft(2, '0').toUpperCase(),
+                "0x${vm.memory[index].toRadixString(16).padLeft(2, '0').toUpperCase()}",
                 style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.bold,

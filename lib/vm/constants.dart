@@ -24,13 +24,14 @@ const INC_OP = 12;
 const DEC_OP = 13;
 const JUMP_OP = 14;
 const CMP_LIT_LIT_OP = 15;
-const JNE_OP = 16;
-const JE_OP = 17;
-const NEG_OP = 18;
+const CMP_REG_LIT_OP = 16;
+const JNE_OP = 17;
+const JE_OP = 18;
+const NEG_OP = 19;
 
-const AND_OP = 19;
-const OR_OP = 20;
-const XOR_OP = 21;
-const NOT_OP = 22;
+const AND_OP = 20;
+const OR_OP = 21;
+const XOR_OP = 22;
+const NOT_OP = 23;
 
 const OUT_OP = 255;

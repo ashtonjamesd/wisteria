@@ -65,7 +65,7 @@ final class Assembler {
       TokenType.dec => DEC_OP,
       TokenType.jump => JUMP_OP,
       // temporarily
-      TokenType.cmp => translateTwoOpInstruction(CMP_LIT_LIT_OP, CMP_LIT_LIT_OP),
+      TokenType.cmp => translateTwoOpInstruction(CMP_LIT_LIT_OP, CMP_REG_LIT_OP),
       TokenType.jne => JNE_OP,
       TokenType.je => JE_OP,
       TokenType.neg => NEG_OP,
@@ -121,7 +121,7 @@ final class Assembler {
     return switch (next.type) {
       TokenType.literal  => literalCode,
       TokenType.register => registerCode,
-      _ => error("invalid source for add")
+      _ => error("invalid source for instruction")
     };
   }
 

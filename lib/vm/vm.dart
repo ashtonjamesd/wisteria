@@ -69,6 +69,7 @@ final class VirtualMachine {
       DEC_OP: _dec,
       JUMP_OP: _jump,
       CMP_LIT_LIT_OP: _cmpLitLit,
+      CMP_REG_LIT_OP: _cmpRegLit,
       NEG_OP: _neg,
       JNE_OP: _jne,
       JE_OP: _je,
@@ -225,6 +226,14 @@ final class VirtualMachine {
   void _cmpLitLit() {
     final a = memory[pc++];
     final b = memory[pc];
+
+    zf = a == b;
+  }
+
+  // register must be the second argument to work as intended
+  void _cmpRegLit() {
+    final a = memory[pc++];
+    final b = registers[memory[pc]];
 
     zf = a == b;
   }
