@@ -54,9 +54,9 @@ final class Lexer {
   List<Token> tokenize() {
     while (!isEnd()) {
       while (!isEnd() && isWhiteSpaceChar(program[current])) {
-        if (program[current] == '\n') {
-          // tokens.add(Token(lexeme: "", type: TokenType.whitespace));
-        }
+        // if (program[current] == '\n') {
+        //   tokens.add(Token(lexeme: "", type: TokenType.whitespace));
+        // }
 
         advance();
       }

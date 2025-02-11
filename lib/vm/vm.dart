@@ -14,7 +14,7 @@ final class VirtualMachine {
   // list of strings to display in the console
   final List<String> consoleOutput = [];
 
-  // called to update vm state
+  // called when updating the vm state
   final VoidCallback _update;
 
   // program counter
@@ -95,26 +95,30 @@ final class VirtualMachine {
 
   Future run() async {
     _load(program);
-    output("loading program into memory.");
-    output("loaded ${program.length} bytes.");
+    _output("loading program into memory.");
+    _output("loaded ${program.length} bytes.");
 
     _update();
 
-    output("executing program.");
+    _output("executing program.");
     while (_running) {
-      await Future.delayed(Duration(seconds: 1));
+      await _delay(1000);
 
       _execute();
       _update();
 
-      tick();
+      _tick();
     }
 
     if (!_quietMode) {
       print("program execution finished");
     }
 
-    output("program execution finished.");
+    _output("program execution finished.");
+  }
+
+  Future<void> _delay(int ms) async {
+    await Future.delayed(Duration(milliseconds: ms));
   }
 
   void _load(List<int> code) {
@@ -123,18 +127,18 @@ final class VirtualMachine {
     }
   }
 
-  void output(String message) {
+  void _output(String message) {
     consoleOutput.add(message);
   }
 
   void _execute() {
     ir = memory[pc];
-    tick();
+    _tick();
 
     _update();
 
     if (!isa.containsKey(ir)) {
-      error("unknown opcode: $ir");
+      _error("unknown opcode: $ir");
       return;
     }
 
@@ -142,7 +146,7 @@ final class VirtualMachine {
     instruction();
   }
 
-  void error(String message) {
+  void _error(String message) {
     if (!_quietMode) {
       print(message);
     }
@@ -152,7 +156,7 @@ final class VirtualMachine {
 
   void _movLiteral() {
     final register = memory[pc];
-    tick();
+    _tick();
 
     final literal = memory[pc];
 
@@ -161,7 +165,7 @@ final class VirtualMachine {
 
   void _movRegister() {
     final register = memory[pc];
-    tick();
+    _tick();
 
     final moveFromRegister = memory[pc];
 
@@ -170,7 +174,7 @@ final class VirtualMachine {
 
   void _addLiteral() {
     final destination = memory[pc];
-    tick();
+    _tick();
 
     final literal = memory[pc];
 
@@ -179,7 +183,7 @@ final class VirtualMachine {
 
   void _addRegister() {
     final destination = memory[pc];
-    tick();
+    _tick();
 
     final source = memory[pc];
 
@@ -188,7 +192,7 @@ final class VirtualMachine {
 
   void _subLiteral() {
     final destination = memory[pc];
-    tick();
+    _tick();
 
     final literal = memory[pc];
 
@@ -197,7 +201,7 @@ final class VirtualMachine {
 
   void _subRegister() {
     final destination = memory[pc];
-    tick();
+    _tick();
 
     final source = memory[pc];
 
@@ -206,7 +210,7 @@ final class VirtualMachine {
 
   void _mulLiteral() {
     final destination = memory[pc];
-    tick();
+    _tick();
 
     final source = memory[pc];
 
@@ -215,7 +219,7 @@ final class VirtualMachine {
 
   void _mulRegister() {
     final destination = memory[pc];
-    tick();
+    _tick();
 
     final source = memory[pc];
 
@@ -263,7 +267,7 @@ final class VirtualMachine {
 
   void _cmpLitLit() {
     final a = memory[pc];
-    tick();
+    _tick();
 
     final b = memory[pc];
 
@@ -273,7 +277,7 @@ final class VirtualMachine {
   // register must be the second argument to work as intended
   void _cmpRegLit() {
     final a = memory[pc];
-    tick();
+    _tick();
 
     final b = registers[memory[pc]];
 
@@ -305,7 +309,7 @@ final class VirtualMachine {
 
   void _andLiteral() {
     final register = memory[pc];
-    tick();
+    _tick();
 
     final literal = memory[pc];
 
@@ -315,7 +319,7 @@ final class VirtualMachine {
 
   void _orLiteral() {
     final register = memory[pc];
-    tick();
+    _tick();
 
     final literal = memory[pc];
 
@@ -325,7 +329,7 @@ final class VirtualMachine {
 
   void _xorLiteral() {
     final register = memory[pc];
-    tick();
+    _tick();
 
     final literal = memory[pc];
 
@@ -352,7 +356,7 @@ final class VirtualMachine {
     pc--;
   }
 
-  void tick() {
+  void _tick() {
     pc++;
     _update();
   }
