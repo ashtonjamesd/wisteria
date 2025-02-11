@@ -14,6 +14,9 @@ final class VirtualMachine {
   // list of strings to display in the console
   final List<String> consoleOutput = [];
 
+  // stdout for the virtual machine
+  final List<String> stdout = [];
+
   // called when updating the vm state
   final VoidCallback _update;
 
@@ -102,7 +105,7 @@ final class VirtualMachine {
 
     _output("executing program.");
     while (_running) {
-      await _delay(1000);
+      await _delay(250);
 
       _execute();
       _update();
@@ -125,10 +128,6 @@ final class VirtualMachine {
     for (int i = 0; i < program.length; i++) {
       memory[i] = code[i];
     }
-  }
-
-  void _output(String message) {
-    consoleOutput.add(message);
   }
 
   void _execute() {
@@ -348,7 +347,13 @@ final class VirtualMachine {
   }
 
   void _out() {
-    print(registers[memory[pc]]);
+    stdout.add(registers[memory[pc]].toString());
+    _update();
+  }
+
+  void _output(String message) {
+    String timestamp = DateTime.now().toLocal().toString().split(' ')[1].split('.')[0];
+    consoleOutput.add("[$timestamp] $message");
   }
 
   // this is used as a location to jump to when a label is found

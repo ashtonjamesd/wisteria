@@ -20,6 +20,8 @@ class _HomeViewState extends State<HomeView> {
   final codeController = TextEditingController();
   late VirtualMachine vm;
 
+  int selectedMemoryIdx = -1;
+
   @override
   void initState() {
     super.initState();
@@ -38,27 +40,30 @@ class _HomeViewState extends State<HomeView> {
 
   Widget homeView(Size screen) {
     return Center(
-      child: Container(
-        width: (screen.width / memoryWidthRatio + screen.width / cpuInterfaceWidthRatio) + boxPadding * 6,
-        height: (cpuInterfaceHeight + consoleHeight) + boxPadding * 6,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(boxBorderRadius),
-          color: primaryGrey,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                processorInterface(screen),
-                memoryBox(screen)
-              ],
-            ),
-        
-            vmConsole(screen)
-          ],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: (screen.width / memoryWidthRatio + screen.width / cpuInterfaceWidthRatio) + boxPadding * 6,
+          height: (cpuInterfaceHeight + consoleHeight) + boxPadding * 6,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(boxBorderRadius),
+            color: primaryGrey,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  processorInterface(screen),
+                  memoryBox(screen)
+                ],
+              ),
+          
+              vmConsole(screen)
+            ],
+          ),
         ),
       ),
     );
@@ -74,25 +79,64 @@ class _HomeViewState extends State<HomeView> {
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              stdoutBox(),
               executeButton(),
               codeEditorButton(),
             ],
           ),
 
-          machineCodeBox(),
+          programCounter(),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              vmRegister("rax", vm.rax),
-              vmRegister("rbx", vm.rbx),
-              vmRegister("rcx", vm.rcx),
-              vmRegister("rdx", vm.rdx),
-              vmRegister("pc",  vm.pc),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  vmRegister("rax", vm.rax, 80, 32),
+                  vmRegister("rbx", vm.rbx, 80, 32),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  vmRegister("rcx", vm.rcx, 80, 32),
+                  vmRegister("rdx", vm.rdx, 80, 32),
+                ],
+              ),
             ],
           )
         ],
       )
+    );
+  }
+
+  Widget programCounter() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: boxPadding),
+      child: WisteriaBox(
+        width: 60, 
+        height: 32,
+        color: primaryGrey,
+        child: Row(
+          children: [
+            const SizedBox(width: 8),
+            WisteriaText(
+              text: "pc", 
+              color: primaryWhite, 
+              size: 14
+            ),
+
+            const SizedBox(width: 4),
+            WisteriaText(
+              text: vm.pc.toString(), 
+              color: primaryWhite, 
+              size: 14
+            ),
+          ],
+        )
+      ),
     );
   }
 
@@ -186,12 +230,25 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget vmRegister(String name, int val) {
+  Widget stdoutBox() {
+    return WisteriaBox(
+      width: 80, 
+      height: 100, 
+      color: primaryGrey,
+      child: WisteriaText(
+        text: vm.stdout.join("\n"), 
+        color: primaryWhite, 
+        size: 14
+      )
+    );
+  }
+
+  Widget vmRegister(String name, int val, double width, double height) {
     return Padding(
       padding: const EdgeInsets.only(bottom: boxPadding),
       child: WisteriaBox(
-        width: 80,
-        height: 30,
+        width: width,
+        height: height,
         color: primaryGrey,
         child: Row(
           children: [
@@ -223,25 +280,33 @@ class _HomeViewState extends State<HomeView> {
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 8,
+            crossAxisCount: 4,
             crossAxisSpacing: 4.0,
             mainAxisSpacing: 4.0,
             childAspectRatio: 1.0,
           ),
           itemCount: vm.memory.length,
           itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4.0),
-                color: primaryGrey,
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                "0x${vm.memory[index].toRadixString(16).padLeft(2, '0').toUpperCase()}",
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedMemoryIdx = index;
+                });
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                  border: selectedMemoryIdx != index ? null : Border.all(color: const Color.fromARGB(255, 138, 138, 138)),
+                  color: primaryGrey,
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  "0x${vm.memory[index].toRadixString(16).padLeft(2, '0').toUpperCase()}",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             );
