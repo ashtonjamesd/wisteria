@@ -60,6 +60,7 @@ class _WisteriaButtonState extends State<WisteriaButton> {
             child: WisteriaText(
               text: widget.text,
               color: Colors.white,
+              size: 14,
             ),
           ),
         ),

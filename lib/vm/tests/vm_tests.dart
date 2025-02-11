@@ -12,8 +12,8 @@ final class VmTests {
     final assembler = Assembler(tokens: tokens);
     final program = assembler.assemble();
 
-    final vm = VirtualMachine(quietMode: quietMode, program: program);
-    vm.run(() {});
+    final vm = VirtualMachine(() {}, quietMode: quietMode, program: program);
+    vm.run();
 
     return vm;
   }

@@ -23,7 +23,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    vm = VirtualMachine(program: []);
+    vm = VirtualMachine(() {}, program: []);
   }
 
   @override
@@ -75,12 +75,22 @@ class _HomeViewState extends State<HomeView> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               executeButton(),
-              codeEditorButton()
+              codeEditorButton(),
             ],
           ),
 
+          machineCodeBox(),
 
-          machineCodeBox()
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              vmRegister("rax", vm.rax),
+              vmRegister("rbx", vm.rbx),
+              vmRegister("rcx", vm.rcx),
+              vmRegister("rdx", vm.rdx),
+              vmRegister("pc",  vm.pc),
+            ],
+          )
         ],
       )
     );
@@ -100,26 +110,30 @@ class _HomeViewState extends State<HomeView> {
         text: "execute",
         onTap: () {
           final lexer = Lexer(program: """
-mov rax 11
+            mov rax 10
+            start:
+              out rax
+              dec rax
+              cmp 0 rax
 
-start:
-  dec rax
-  cmp 1 rax
+              jne start
 
-  out rax
-  jne start
-""");
+          """);
+
           final tokens = lexer.tokenize();
       
           final assembler = Assembler(tokens: tokens);
           final program = assembler.assemble();
 
-          print(program.join(" "));
-      
-          vm = VirtualMachine(program: program);
-          vm.run(() {
+          vm = VirtualMachine(() {
             setState(() {});
-          });
+          },
+            program: program
+          );
+
+          // print(vm.program.map((e) => e.toRadixString(16).padLeft(2, '0').toUpperCase()).join(""));
+
+          vm.run();
         }
       ),
     );
@@ -165,7 +179,37 @@ start:
           child: WisteriaText(
             text: vm.program.map((e) => e.toRadixString(2).padLeft(8, '0')).join(" "),
             color: primaryWhite,
+            size: 14,
           ),
+        )
+      ),
+    );
+  }
+
+  Widget vmRegister(String name, int val) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: boxPadding),
+      child: WisteriaBox(
+        width: 80,
+        height: 30,
+        color: primaryGrey,
+        child: Row(
+          children: [
+            const SizedBox(width: 8),
+            WisteriaText(
+              text: name,
+              color: Colors.white,
+              size: 14,
+            ),
+      
+            const Spacer(),
+            WisteriaText(
+              text: val.toString(),
+              color: Colors.white,
+              size: 12,
+            ),
+            const SizedBox(width: 8),
+          ],
         )
       ),
     );
@@ -211,7 +255,14 @@ start:
     return WisteriaBox(
       width: (screen.width / memoryWidthRatio + screen.width / cpuInterfaceWidthRatio) + boxPadding * 2,
       height: consoleHeight,
-      child: SizedBox()
+      child: Padding(
+        padding: const EdgeInsets.all(boxPadding),
+        child: WisteriaText(
+          text: vm.consoleOutput.join("\n"),
+          color: Colors.black,
+          size: 14,
+        ),
+      )
     );
   }
 }

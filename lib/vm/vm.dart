@@ -11,6 +11,12 @@ final class VirtualMachine {
   // cpu registers
   late final List<int> registers;
 
+  // list of strings to display in the console
+  final List<String> consoleOutput = [];
+
+  // called to update vm state
+  final VoidCallback _update;
+
   // program counter
   int pc = 0;
 
@@ -51,7 +57,7 @@ final class VirtualMachine {
   int get rdx => registers[RDX_INDEX];
   set rdx(int value) => registers[RDX_INDEX] = value;
 
-  VirtualMachine({required this.program, bool quietMode = false}) {
+  VirtualMachine(this._update, {required this.program, bool quietMode = false}) {
     isa = {
       HLT_OP: _hlt,
       NO_OP: _nop,
@@ -87,19 +93,28 @@ final class VirtualMachine {
     _quietMode = quietMode;
   }
 
-  Future run(VoidCallback update) async {
+  Future run() async {
     _load(program);
-    update();
+    output("loading program into memory.");
+    output("loaded ${program.length} bytes.");
 
+    _update();
+
+    output("executing program.");
     while (_running) {
+      await Future.delayed(Duration(seconds: 1));
+
       _execute();
-      update();
-      pc++;
+      _update();
+
+      tick();
     }
 
     if (!_quietMode) {
       print("program execution finished");
     }
+
+    output("program execution finished.");
   }
 
   void _load(List<int> code) {
@@ -108,8 +123,15 @@ final class VirtualMachine {
     }
   }
 
+  void output(String message) {
+    consoleOutput.add(message);
+  }
+
   void _execute() {
-    ir = memory[pc++];
+    ir = memory[pc];
+    tick();
+
+    _update();
 
     if (!isa.containsKey(ir)) {
       error("unknown opcode: $ir");
@@ -129,56 +151,72 @@ final class VirtualMachine {
   }
 
   void _movLiteral() {
-    final register = memory[pc++];
+    final register = memory[pc];
+    tick();
+
     final literal = memory[pc];
 
     registers[register] = literal;
   }
 
   void _movRegister() {
-    final register = memory[pc++];
+    final register = memory[pc];
+    tick();
+
     final moveFromRegister = memory[pc];
 
     registers[register] = registers[moveFromRegister];
   }
 
   void _addLiteral() {
-    final destination = memory[pc++];
+    final destination = memory[pc];
+    tick();
+
     final literal = memory[pc];
 
     registers[destination] += literal;
   }
 
   void _addRegister() {
-    final destination = memory[pc++];
+    final destination = memory[pc];
+    tick();
+
     final source = memory[pc];
 
     registers[destination] += registers[source];
   }
 
   void _subLiteral() {
-    final destination = memory[pc++];
+    final destination = memory[pc];
+    tick();
+
     final literal = memory[pc];
 
     registers[destination] -= literal;
   }
 
   void _subRegister() {
-    final destination = memory[pc++];
+    final destination = memory[pc];
+    tick();
+
     final source = memory[pc];
 
     registers[destination] -= registers[source];
   }
 
   void _mulLiteral() {
-    final destination = memory[pc++];
+    final destination = memory[pc];
+    tick();
+
     final source = memory[pc];
 
     registers[destination] *= source;
   }
 
   void _mulRegister() {
-    final destination = memory[pc++];
+    final destination = memory[pc];
+    tick();
+
     final source = memory[pc];
 
     registers[destination] *= registers[source];
@@ -224,7 +262,9 @@ final class VirtualMachine {
   }
 
   void _cmpLitLit() {
-    final a = memory[pc++];
+    final a = memory[pc];
+    tick();
+
     final b = memory[pc];
 
     zf = a == b;
@@ -232,7 +272,9 @@ final class VirtualMachine {
 
   // register must be the second argument to work as intended
   void _cmpRegLit() {
-    final a = memory[pc++];
+    final a = memory[pc];
+    tick();
+
     final b = registers[memory[pc]];
 
     zf = a == b;
@@ -243,6 +285,8 @@ final class VirtualMachine {
       final destination = memory[pc];
       pc = destination;
     }
+
+    _update();
   }
 
   void _je() {
@@ -250,6 +294,8 @@ final class VirtualMachine {
       final destination = memory[pc];
       pc = destination;
     }
+
+    _update();
   }
 
   void _neg() {
@@ -258,7 +304,9 @@ final class VirtualMachine {
   }
 
   void _andLiteral() {
-    final register = memory[pc++];
+    final register = memory[pc];
+    tick();
+
     final literal = memory[pc];
 
     final result = registers[register] & literal;
@@ -266,7 +314,9 @@ final class VirtualMachine {
   }
 
   void _orLiteral() {
-    final register = memory[pc++];
+    final register = memory[pc];
+    tick();
+
     final literal = memory[pc];
 
     final result = registers[register] | literal;
@@ -274,7 +324,9 @@ final class VirtualMachine {
   }
 
   void _xorLiteral() {
-    final register = memory[pc++];
+    final register = memory[pc];
+    tick();
+
     final literal = memory[pc];
 
     final result = registers[register] ^ literal;
@@ -288,6 +340,7 @@ final class VirtualMachine {
 
   void _hlt() {
     _running = false;
+    _update();
   }
 
   void _out() {
@@ -297,5 +350,10 @@ final class VirtualMachine {
   // this is used as a location to jump to when a label is found
   void _nop() {
     pc--;
+  }
+
+  void tick() {
+    pc++;
+    _update();
   }
 }
