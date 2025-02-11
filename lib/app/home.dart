@@ -7,6 +7,7 @@ import 'package:wisteria/vm/vm.dart';
 
 import '../vm/assembler/assembler.dart';
 import '../vm/parser/lexer.dart';
+import 'code_editor.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -16,6 +17,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final codeController = TextEditingController();
   late VirtualMachine vm;
 
   @override
@@ -125,7 +127,11 @@ class _HomeViewState extends State<HomeView> {
         color: primaryGrey,
         text: "edit code",
         onTap: () {
-          
+          showDialog(context: context, builder: (context) {
+            return StackCodeEditor(
+              controller: codeController
+            );
+          });
         }
       ),
     );
