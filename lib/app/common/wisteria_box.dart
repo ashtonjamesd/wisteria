@@ -7,11 +7,13 @@ class WisteriaBox extends StatelessWidget {
     super.key,
     required this.width,
     required this.height,
+    this.color = primaryWhite,
     required this.child
   });
 
   final double width;
   final double height;
+  final Color color;
   final Widget child;
 
   @override
@@ -22,7 +24,7 @@ class WisteriaBox extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: primaryWhite,
+          color: color,
           borderRadius: BorderRadius.circular(boxBorderRadius)
         ),
         child: child,

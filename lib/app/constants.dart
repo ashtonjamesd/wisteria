@@ -10,7 +10,7 @@ const double memoryWidthRatio = 5;
 const double boxPadding = 2;
 const double boxBorderRadius = 2;
 
-const Color primaryGrey = Color.fromARGB(255, 230, 230, 230);
+const Color primaryGrey = Color.fromARGB(255, 219, 219, 219);
 const Color primaryWhite = Colors.white;
 
 // TextStyle appFont = GoogleFonts.roboto();

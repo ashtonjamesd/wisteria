@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/common/wisteria_box.dart';
 import 'package:wisteria/app/common/wisteria_button.dart';
+import 'package:wisteria/app/common/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/vm/vm.dart';
 
@@ -66,32 +67,90 @@ class _HomeViewState extends State<HomeView> {
       width: screen.width / cpuInterfaceWidthRatio,
       height: cpuInterfaceHeight,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          executeButton(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              executeButton(),
+              codeEditorButton()
+            ],
+          ),
+
+
+          machineCodeBox()
         ],
       )
     );
   }
 
   Widget executeButton() {
-    return WisteriaButton(
-      width: 64,
-      color: primaryGrey,
-      text: "execute",
-      onTap: () {
-        final lexer = Lexer(program: "mov rax 10 out rax");
-        final tokens = lexer.tokenize();
-
-        final assembler = Assembler(tokens: tokens);
-        final program = assembler.assemble();
-
-        vm = VirtualMachine(program: program);
-        vm.run(() {
-          setState(() {
-            
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: boxPadding * 2,
+        right: boxPadding,
+        bottom: boxPadding * 2,
+        top: boxPadding
+      ),
+      child: WisteriaButton(
+        width: 80,
+        color: primaryGrey,
+        text: "execute",
+        onTap: () {
+          final lexer = Lexer(program: "mov rax 10 out rax");
+          final tokens = lexer.tokenize();
+      
+          final assembler = Assembler(tokens: tokens);
+          final program = assembler.assemble();
+      
+          vm = VirtualMachine(program: program);
+          vm.run(() {
+            setState(() {});
           });
-        });
-      }
+        }
+      ),
+    );
+  }
+
+  Widget codeEditorButton() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: boxPadding * 2,
+        right: boxPadding,
+        bottom: boxPadding * 2,
+        top: boxPadding
+      ),
+      child: WisteriaButton(
+        width: 80,
+        color: primaryGrey,
+        text: "edit code",
+        onTap: () {
+          
+        }
+      ),
+    );
+  }
+
+  Widget machineCodeBox() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: boxPadding / 2,
+        right: boxPadding,
+        bottom: boxPadding,
+        top: boxPadding
+      ),
+      child: WisteriaBox(
+        width: 200,
+        height: 70,
+        color: primaryGrey,
+        child: Padding(
+          padding: const EdgeInsets.all(boxPadding),
+          child: WisteriaText(
+            text: vm.program.map((e) => e.toRadixString(2).padLeft(8, '0')).join(" "),
+            color: primaryWhite,
+          ),
+        )
+      ),
     );
   }
 

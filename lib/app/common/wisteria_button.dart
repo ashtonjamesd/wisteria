@@ -57,7 +57,10 @@ class _WisteriaButtonState extends State<WisteriaButton> {
             borderRadius: BorderRadius.circular(boxBorderRadius),
           ),
           child: Center(
-            child: WisteriaText(text: widget.text),
+            child: WisteriaText(
+              text: widget.text,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
