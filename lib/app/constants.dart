@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 const String helpMessage = 
 """
-Wisteria is an app designed to help you learn the inner workings of a CPU.
+Wisteria is an app designed to help you learn assembly code and the inner workings of a CPU.
 
 The app will allow you to experiment with a virtual machine that reads assembly and executes machine code just like a real processor.
 
@@ -17,6 +17,7 @@ const double userInterfaceHeight = 130;
 const double cpuInterfaceHeight = 240;
 
 const double asmBoxWidth = 70;
+const double infoWidgetHeight = 100;
 
 const double widthFactor = 1.1;
 

@@ -6,6 +6,7 @@ import 'package:wisteria/app/common/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/views/vm/help_button.dart';
 import 'package:wisteria/app/views/vm/stdout_box.dart';
+import 'package:wisteria/app/views/vm/utils/vm_view_controller.dart';
 import 'package:wisteria/vm/vm.dart';
 import 'code_editor.dart';
 
@@ -17,38 +18,57 @@ class VmView extends StatefulWidget {
 }
 
 class _VmViewState extends State<VmView> {
-  final codeController = TextEditingController();
-  late VirtualMachine vm;
-
-  int selectedMemoryIdx = -1;
-
-  // the reset button can be pressed many times in quick succession.
-  // this will build up messages in the terminal which is not desirable.
-  // to prevent this, this flag is set to true until the reset process has finished,
-  // during which the user cannot press reset again.
-  //
-  // finally, it is set to false to allow the user to tap the reset button again.
-  bool resetIsPressed = false;
+  final controller = VmViewController();
 
   @override
   void initState() {
     super.initState();
-    vm = VirtualMachine(() {}, programString: "");
+    controller.vm = VirtualMachine(() {}, programString: "");
 
     initVm();
   }
 
-  Future initVm() async {
-    await vm.delay(250);
+  Future<void> initVm() async {
+    await controller.initVm();
+    setState(() {});
+  }
 
-    setState(() {
-      vm.output("initialised virtual machine");
-    });
+  void setInitialInfoWidget(Size screen) {
+    // the infoWidget is by default set to a SizedBox at the beginning, therefore
+    // this code will run once at the beginning.
+    //
+    // this is to prevent this from being set every time setState is called as
+    // this method is called in build()
+    if (controller.infoWidget is SizedBox) {
+      controller.infoWidget = WisteriaBox(
+        width: screen.width / widthFactor + 12, 
+        height: infoWidgetHeight,
+        color: primaryGrey,
+        child: Padding(
+          padding: const EdgeInsets.all(boxPadding),
+          child: defaultInfoWidget(screen)
+        ),
+      );
+      
+    }
+  }
+
+  void setInfoWidget(Widget infoWidget, Size screen) {
+    controller.infoWidget = WisteriaBox(
+        width: screen.width / widthFactor + 12, 
+        height: infoWidgetHeight,
+        color: primaryGrey,
+        child: Padding(
+          padding: const EdgeInsets.all(boxPadding),
+          child: infoWidget
+        ),
+      );
   }
 
   @override
   Widget build(BuildContext context) {
     final screen = MediaQuery.sizeOf(context);
+    setInitialInfoWidget(screen);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -70,9 +90,28 @@ class _VmViewState extends State<VmView> {
             ],
           ),
 
-
           homeView(screen),
+
+          const SizedBox(height: 32),
+
+          Padding(
+            padding: EdgeInsets.only(left: (screen.width - (screen.width / widthFactor)) / 2 - 8),
+            child: controller.infoWidget,
+          )
         ],
+      ),
+    );
+  }
+
+  Widget defaultInfoWidget(Size screen) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(boxPadding),
+        child: WisteriaText(
+          text: "try tapping on a component to find out more about it", 
+          color: primaryWhite, 
+          size: 14
+        ),
       ),
     );
   }
@@ -125,7 +164,7 @@ class _VmViewState extends State<VmView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            StdoutBox(screen: screen, vm: vm),
+            StdoutBox(screen: screen, vm: controller.vm),
         
             Row(
               children: [
@@ -200,7 +239,7 @@ class _VmViewState extends State<VmView> {
 
             const SizedBox(width: 4),
             WisteriaText(
-              text: vm.pc.toString(), 
+              text: controller.vm.pc.toString(), 
               color: primaryWhite, 
               size: 14
             ),
@@ -220,23 +259,8 @@ class _VmViewState extends State<VmView> {
         color: primaryGrey,
         text: "reset",
         onTap: () async {
-          if (resetIsPressed) return;
-          resetIsPressed = true;
-
-          vm.output("virtual machine reset. resetting all processes.");
-          await vm.delay(1000);
-
-          vm = VirtualMachine(() {
-            setState(() {});
-          },
-            programString: codeController.text
-          );
-
-          initVm();
-
-          setState(() {
-            resetIsPressed = false;
-          });
+          controller.onReset(setState);
+          setState(() {});
         }
       ),
     );
@@ -252,13 +276,7 @@ class _VmViewState extends State<VmView> {
         color: primaryGrey,
         text: "halt",
         onTap: () async {
-          if (!vm.isRunning) return;
-
-          vm.output("virtual machine forcibly halted. all processes stopped.");
-          await vm.delay(500);
-
-          vm.isRunning = false;
-
+          controller.onHalt();
           setState(() {});
         }
       ),
@@ -274,12 +292,11 @@ class _VmViewState extends State<VmView> {
         width: 32, 
         height: 32,
         color: primaryGrey, 
-        showBorder: vm.isPaused,
-        icon: vm.isPaused ? Icons.pause : Icons.play_arrow,
+        showBorder: controller.vm.isPaused,
+        icon: controller.vm.isPaused ? Icons.pause : Icons.play_arrow,
         onTap: () {
-          setState(() {
-            vm.isPaused = !vm.isPaused;
-          });
+          controller.onPause();
+          setState(() {});
         }
       ),
     );
@@ -295,13 +312,8 @@ class _VmViewState extends State<VmView> {
         color: primaryGrey,
         text: "execute",
         onTap: () {
-          vm = VirtualMachine(() {
-            setState(() {});
-          },
-            programString: codeController.text
-          );
-
-          vm.run();
+          controller.onExecute(setState);
+          setState(() {});
         }
       ),
     );
@@ -319,7 +331,7 @@ class _VmViewState extends State<VmView> {
         onTap: () {
           showDialog(context: context, builder: (context) {
             return StackCodeEditor(
-              controller: codeController
+              controller: controller.asmCodeController
             );
           });
         }
@@ -346,7 +358,7 @@ class _VmViewState extends State<VmView> {
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: WisteriaText(
-                text: codeController.text,
+                text: controller.asmCodeController.text,
                 color: primaryWhite,
                 size: 12,
               ),
@@ -374,7 +386,7 @@ class _VmViewState extends State<VmView> {
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: WisteriaText(
-              text: vm.program.map((e) => e.toRadixString(2).padLeft(8, '0')).join(" "),
+              text: controller.vm.program.map((e) => e.toRadixString(2).padLeft(8, '0')).join(" "),
               color: primaryWhite,
               size: 12,
             ),
@@ -390,24 +402,14 @@ class _VmViewState extends State<VmView> {
       child: WisteriaBox(
         width: width,
         height: height,
+        header: name,
         color: primaryGrey,
-        child: Row(
-          children: [
-            const SizedBox(width: 8),
-            WisteriaText(
-              text: name,
-              color: Colors.white,
-              size: 14,
-            ),
-      
-            const Spacer(),
-            WisteriaText(
-              text: val.toString(),
-              color: Colors.white,
-              size: 12,
-            ),
-            const SizedBox(width: 8),
-          ],
+        child: Center(
+          child: WisteriaText(
+            text: val.toString(),
+            color: Colors.white,
+            size: 13,
+          ),
         )
       ),
     );
@@ -415,47 +417,50 @@ class _VmViewState extends State<VmView> {
 
   Widget memoryBox(Size screen) {
     return Padding(
-      padding: const EdgeInsets.only(top: boxPadding),
+      padding: const EdgeInsets.all(boxPadding),
       child: WisteriaBox(
         width: 160,
         height: 120,
         header: "memory",
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              crossAxisSpacing: 4.0,
-              mainAxisSpacing: 4.0,
-              childAspectRatio: 1.0,
-            ),
-            itemCount: vm.memory.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedMemoryIdx = index;
-                  });
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4.0),
-                    border: selectedMemoryIdx != index ? null : Border.all(color: const Color.fromARGB(255, 138, 138, 138)),
-                    color: primaryGrey,
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    "0x${vm.memory[index].toRadixString(16).padLeft(2, '0').toUpperCase()}",
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 4.0,
+            childAspectRatio: 1.0
+          ),
+          itemCount: controller.vm.memory.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                controller.onMemoryCellClicked(index);
+                if (controller.selectedMemoryIdx == -1) {
+                  setState(() {});
+                  return;
+                }
+
+                setInfoWidget(memoryCellInfoWidget(screen), screen);
+
+                setState(() {});
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                  border: controller.selectedMemoryIdx != index ? null : Border.all(color: const Color.fromARGB(255, 138, 138, 138)),
+                  color: primaryGrey,
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  controller.decimalToHex(controller.vm.memory[index]),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -468,7 +473,7 @@ class _VmViewState extends State<VmView> {
       child: Padding(
         padding: const EdgeInsets.all(boxPadding),
         child: WisteriaText(
-          text: vm.consoleOutput.join("\n"),
+          text: controller.vm.consoleOutput.join("\n"),
           color: const Color.fromARGB(255, 52, 52, 52),
           size: 12,
         ),
@@ -506,15 +511,15 @@ class _VmViewState extends State<VmView> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        vmRegister("rax", vm.rax, 50, 32),
-                        vmRegister("rbx", vm.rbx, 50, 32),
+                        vmRegister("rax", controller.vm.rax, 50, 32),
+                        vmRegister("rbx", controller.vm.rbx, 50, 32),
                       ],
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        vmRegister("rcx", vm.rcx, 50, 32),
-                        vmRegister("rdx", vm.rdx, 50, 32),
+                        vmRegister("rcx", controller.vm.rcx, 50, 32),
+                        vmRegister("rdx", controller.vm.rdx, 50, 32),
                       ],
                     ),
                   ],
@@ -529,5 +534,36 @@ class _VmViewState extends State<VmView> {
         ),
       ),
     );
+  }
+
+  Widget memoryCellInfoWidget(Size screen) {
+    final cell = controller.vm.memory[controller.selectedMemoryIdx];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        WisteriaText(
+          text: "Memory Cell", 
+          color: primaryWhite,
+          size: 18
+        ),
+        const SizedBox(height: 16),
+
+        WisteriaText(
+          text: "Memory Value  ${cell.toString()} (${controller.decimalToHex(cell)})", 
+          color: primaryWhite,
+          size: 14
+        ),
+        WisteriaText(
+          text: "Memory Location  ${controller.decimalToHex(controller.selectedMemoryIdx)}", 
+          color: primaryWhite,
+          size: 14
+        ),
+      ],
+    );
+  }
+
+  Widget registerCellInfoWidget() {
+    return SizedBox();
   }
 }
