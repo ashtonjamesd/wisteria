@@ -105,6 +105,8 @@ class _HomeViewState extends State<HomeView> {
                   vmRegister("rdx", vm.rdx, 80, 32),
                 ],
               ),
+
+              asmBox()
             ],
           )
         ],
@@ -153,16 +155,17 @@ class _HomeViewState extends State<HomeView> {
         color: primaryGrey,
         text: "execute",
         onTap: () {
-          final lexer = Lexer(program: """
-            mov rax 10
-            start:
-              out rax
-              dec rax
-              cmp 0 rax
+          codeController.text = """
+mov rax 10 
+mov rbx 5
 
-              jne start
+add rax rbx
+out rax
 
-          """);
+
+          """;
+          
+          final lexer = Lexer(program: codeController.text);
 
           final tokens = lexer.tokenize();
       
@@ -202,6 +205,33 @@ class _HomeViewState extends State<HomeView> {
             );
           });
         }
+      ),
+    );
+  }
+
+  Widget asmBox() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: boxPadding / 2,
+          right: boxPadding,
+          bottom: boxPadding,
+          top: boxPadding
+        ),
+        child: WisteriaBox(
+          width: 100,
+          height: 70,
+          color: primaryGrey,
+          child: Padding(
+            padding: const EdgeInsets.all(boxPadding),
+            child: WisteriaText(
+              text: codeController.text,
+              color: primaryWhite,
+              size: 14,
+            ),
+          )
+        ),
       ),
     );
   }

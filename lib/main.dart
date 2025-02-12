@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:wisteria/app/home.dart';
 import 'firebase_options.dart';
 
@@ -11,6 +12,10 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
+    await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.landscapeLeft]
+    ); 
+    
     runApp(const App());
   } catch (exception) {
     print(exception);

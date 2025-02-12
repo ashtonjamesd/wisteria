@@ -99,11 +99,11 @@ final class VirtualMachine {
   Future run() async {
     _load(program);
     _output("loading program into memory.");
+    await _delay(1000);
+
     _output("loaded ${program.length} bytes.");
-
-    _update();
-
-    _output("executing program.");
+    _output("executing program..");
+    
     while (_running) {
       await _delay(250);
 
@@ -118,10 +118,6 @@ final class VirtualMachine {
     }
 
     _output("program execution finished.");
-  }
-
-  Future<void> _delay(int ms) async {
-    await Future.delayed(Duration(milliseconds: ms));
   }
 
   void _load(List<int> code) {
@@ -143,6 +139,16 @@ final class VirtualMachine {
 
     final instruction = isa[ir]!;
     instruction();
+  }
+
+  Future<void> _delay(int ms) async {
+    await Future.delayed(Duration(milliseconds: ms));
+  }
+
+  void _output(String message) {
+    String timestamp = DateTime.now().toLocal().toString().split(' ')[1].split('.')[0];
+    consoleOutput.add("[$timestamp] $message");
+    _update();
   }
 
   void _error(String message) {
@@ -349,11 +355,6 @@ final class VirtualMachine {
   void _out() {
     stdout.add(registers[memory[pc]].toString());
     _update();
-  }
-
-  void _output(String message) {
-    String timestamp = DateTime.now().toLocal().toString().split(' ')[1].split('.')[0];
-    consoleOutput.add("[$timestamp] $message");
   }
 
   // this is used as a location to jump to when a label is found
