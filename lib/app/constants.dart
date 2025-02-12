@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 const double consoleHeight = 120;
-const double cpuInterfaceHeight = 200;
+const double userInterfaceHeight = 130;
+const double cpuInterfaceHeight = 240;
 
-const double cpuInterfaceWidthRatio = 1.8;
-const double memoryWidthRatio = 5;
+const double asmBoxWidth = 70;
+
+const double widthFactor = 1.1;
 
 const double boxPadding = 2;
 const double boxBorderRadius = 2;

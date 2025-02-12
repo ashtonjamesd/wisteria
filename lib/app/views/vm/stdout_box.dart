@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/vm/vm.dart';
 
-import '../common/wisteria_box.dart';
-import '../common/wisteria_text.dart';
-import '../constants.dart';
+import '../../common/wisteria_box.dart';
+import '../../common/wisteria_text.dart';
+import '../../constants.dart';
 
 class StdoutBox extends StatefulWidget {
   const StdoutBox({
@@ -40,8 +40,7 @@ class _StdoutBoxState extends State<StdoutBox> {
       padding: const EdgeInsets.all(boxPadding),
       child: WisteriaBox(
         header: "standard output",
-        width: widget.screen.width / memoryWidthRatio +
-            widget.screen.width / cpuInterfaceWidthRatio -
+        width: widget.screen.width / widthFactor -
             boxPadding * 4,
         height: 60,
         color: primaryGrey,
