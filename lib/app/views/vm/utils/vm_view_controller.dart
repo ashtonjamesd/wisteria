@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../vm/constants.dart';
 import '../../../../vm/vm.dart';
 
 final class VmViewController {
@@ -19,6 +20,16 @@ final class VmViewController {
   bool resetIsPressed = false;
   
   Widget infoWidget = const SizedBox();
+
+  int getRegisterValue(String name) {
+    return switch (name) {
+      R1_NAME => vm.r1,
+      R2_NAME => vm.r2,
+      R3_NAME => vm.r3,
+      R4_NAME => vm.r4,
+      _ => -1
+    };
+  }
 
   Future<void> onHalt() async {
     if (!vm.isRunning) return;
@@ -70,13 +81,32 @@ final class VmViewController {
     vm.output("initialised virtual machine");
   }
 
-  void onMemoryCellClicked(int index) {
+  void resetSelectedItems() {
+    selectedMemoryIdx = -1;
+    selectedRegisterName = "";
+  }
+
+  void onMemoryCellClicked(int index) {    
     if (selectedMemoryIdx == index) {
       infoWidget = const SizedBox();
       selectedMemoryIdx = -1;
       return;
     }
 
+    resetSelectedItems();
+
     selectedMemoryIdx = index;
+  }
+
+  void onRegisterClicked(String name) {
+    if (selectedRegisterName == name) {
+      infoWidget = const SizedBox();
+      selectedRegisterName = "";
+      return;
+    }
+
+    resetSelectedItems();
+    
+    selectedRegisterName = name;
   }
 }

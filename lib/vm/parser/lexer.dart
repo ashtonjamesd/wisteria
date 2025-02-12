@@ -1,3 +1,5 @@
+import 'package:wisteria/vm/constants.dart';
+
 import 'token.dart';
 
 final class Lexer {
@@ -45,10 +47,10 @@ final class Lexer {
   };
 
   final registers = [
-    "RAX",
-    "RBX",
-    "RCX",
-    "RDX",
+    R1_NAME,
+    R2_NAME,
+    R3_NAME,
+    R4_NAME,
   ];
 
   List<Token> tokenize() {

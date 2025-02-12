@@ -9,6 +9,7 @@ class WisteriaBox extends StatelessWidget {
     required this.width,
     required this.height,
     this.header,
+    this.showBorder = false,
     this.color = primaryWhite,
     required this.child
   });
@@ -17,6 +18,7 @@ class WisteriaBox extends StatelessWidget {
   final double height;
   final Color color;
   final String? header;
+  final bool showBorder;
   final Widget child;
 
   @override
@@ -38,7 +40,8 @@ class WisteriaBox extends StatelessWidget {
             height: height,
             decoration: BoxDecoration(
               color: color,
-              borderRadius: BorderRadius.circular(boxBorderRadius)
+              borderRadius: BorderRadius.circular(boxBorderRadius),
+              border: showBorder ? Border.all(color: const Color.fromARGB(255, 72, 72, 72)) : null,
             ),
             child: child,
           ),

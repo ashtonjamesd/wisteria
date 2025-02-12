@@ -79,10 +79,10 @@ final class Assembler {
 
   int translateRegister(Token register) {
     return switch (register.lexeme) {
-      "RAX" => RAX_INDEX,
-      "RBX" => RBX_INDEX,
-      "RCX" => RCX_INDEX,
-      "RDX" => RDX_INDEX,
+      R1_NAME => R1_INDEX,
+      R2_NAME => R2_INDEX,
+      R3_NAME => R3_INDEX,
+      R4_NAME => R4_INDEX,
       _ => error("unknown register ${register.lexeme}")
     };
   }

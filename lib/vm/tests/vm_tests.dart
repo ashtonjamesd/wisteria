@@ -14,7 +14,7 @@ final class VmTests {
     const code = "mov rax 10";
     final vm = await _runTest(code);
 
-    assert(vm.rax == 10);
+    assert(vm.r1 == 10);
     passed++;
   }
 
@@ -22,7 +22,7 @@ final class VmTests {
     const code = "mov rbx 10 mov rax rbx";
     final vm = await _runTest(code);
 
-    assert(vm.rax == 10);
+    assert(vm.r1 == 10);
     passed++;
   }
 
@@ -30,7 +30,7 @@ final class VmTests {
     const code = "add rax 5";
     final vm = await _runTest(code);
 
-    assert(vm.rax == 5);
+    assert(vm.r1 == 5);
     passed++;
   }
 
@@ -38,7 +38,7 @@ final class VmTests {
     const code = "mov rbx 10 mov rax 5 add rax rbx";
     final vm = await _runTest(code);
 
-    assert(vm.rax == 15);
+    assert(vm.r1 == 15);
     passed++;
   }
 

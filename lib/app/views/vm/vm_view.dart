@@ -7,6 +7,7 @@ import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/views/vm/help_button.dart';
 import 'package:wisteria/app/views/vm/stdout_box.dart';
 import 'package:wisteria/app/views/vm/utils/vm_view_controller.dart';
+import 'package:wisteria/vm/constants.dart';
 import 'package:wisteria/vm/vm.dart';
 import 'code_editor.dart';
 
@@ -399,18 +400,33 @@ class _VmViewState extends State<VmView> {
   Widget vmRegister(String name, int val, double width, double height) {
     return Padding(
       padding: const EdgeInsets.only(bottom: boxPadding),
-      child: WisteriaBox(
-        width: width,
-        height: height,
-        header: name,
-        color: primaryGrey,
-        child: Center(
-          child: WisteriaText(
-            text: val.toString(),
-            color: Colors.white,
-            size: 13,
-          ),
-        )
+      child: GestureDetector(
+        onTap: () {
+          controller.onRegisterClicked(name);
+          if (controller.selectedRegisterName == "") {
+            setState(() {});
+            return;
+          }
+
+          final screen = MediaQuery.sizeOf(context);
+          setInfoWidget(registerInfoWidget(), screen);
+
+          setState(() {});
+        },
+        child: WisteriaBox(
+          width: width,
+          height: height,
+          header: name,
+          showBorder: controller.selectedRegisterName == name,
+          color: primaryGrey,
+          child: Center(
+            child: WisteriaText(
+              text: val.toString(),
+              color: Colors.white,
+              size: 13,
+            ),
+          )
+        ),
       ),
     );
   }
@@ -511,15 +527,15 @@ class _VmViewState extends State<VmView> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        vmRegister("rax", controller.vm.rax, 50, 32),
-                        vmRegister("rbx", controller.vm.rbx, 50, 32),
+                        vmRegister(R1_NAME, controller.vm.r1, 50, 32),
+                        vmRegister(R2_NAME, controller.vm.r2, 50, 32),
                       ],
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        vmRegister("rcx", controller.vm.rcx, 50, 32),
-                        vmRegister("rdx", controller.vm.rdx, 50, 32),
+                        vmRegister(R3_NAME, controller.vm.r3, 50, 32),
+                        vmRegister(R4_NAME, controller.vm.r4, 50, 32),
                       ],
                     ),
                   ],
@@ -563,7 +579,23 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget registerCellInfoWidget() {
-    return SizedBox();
+  Widget registerInfoWidget() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        WisteriaText(
+          text: "Register ${controller.selectedRegisterName}", 
+          color: primaryWhite,
+          size: 18
+        ),
+        const SizedBox(height: 16),
+
+        WisteriaText(
+          text: "Register Value ${controller.getRegisterValue(controller.selectedRegisterName)}", 
+          color: primaryWhite,
+          size: 14
+        ),
+      ],
+    );
   }
 }

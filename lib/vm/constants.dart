@@ -1,9 +1,14 @@
 // ignore_for_file: constant_identifier_names
 
-const RAX_INDEX = 0;
-const RBX_INDEX = 1;
-const RCX_INDEX = 2;
-const RDX_INDEX = 3;
+const R1_NAME = "RA";
+const R2_NAME = "RB";
+const R3_NAME = "RC";
+const R4_NAME = "RD";
+
+const R1_INDEX = 0;
+const R2_INDEX = 1;
+const R3_INDEX = 2;
+const R4_INDEX = 3;
 
 const UNKNOWN_OP = -1;
 

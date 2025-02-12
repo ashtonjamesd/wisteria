@@ -57,17 +57,17 @@ final class VirtualMachine {
   // instruction set architecture
   late final Map<int, Function> isa;
 
-  int get rax => registers[RAX_INDEX];
-  set rax(int value) => registers[RAX_INDEX] = value;
+  int get r1 => registers[R1_INDEX];
+  set r1(int value) => registers[R1_INDEX] = value;
 
-  int get rbx => registers[RBX_INDEX];
-  set rbx(int value) => registers[RBX_INDEX] = value;
+  int get r2 => registers[R2_INDEX];
+  set r2(int value) => registers[R2_INDEX] = value;
 
-  int get rcx => registers[RCX_INDEX];
-  set rcx(int value) => registers[RCX_INDEX] = value;
+  int get r3 => registers[R3_INDEX];
+  set r3(int value) => registers[R3_INDEX] = value;
 
-  int get rdx => registers[RDX_INDEX];
-  set rdx(int value) => registers[RDX_INDEX] = value;
+  int get r4 => registers[R4_INDEX];
+  set r4(int value) => registers[R4_INDEX] = value;
 
   VirtualMachine(this._update, {required this.programString, bool quietMode = false}) {
     isa = {
@@ -260,28 +260,28 @@ final class VirtualMachine {
     registers[destination] *= registers[source];
   }
 
-  /// divides the value of rax by the given argument
-  ///   - stores the division result in rax
-  ///   - stores the remainder inb rbx
+  /// divides the value of r1 by the given argument
+  ///   - stores the division result in r1
+  ///   - stores the remainder inb r2
   void _divLiteral() {
     final divisor = memory[pc];
 
-    final divisionResult = (rax / divisor).floor();
-    final remainder = rax % divisor;
+    final divisionResult = (r1 / divisor).floor();
+    final remainder = r1 % divisor;
 
-    rax = divisionResult;
-    rbx = remainder;
+    r1 = divisionResult;
+    r2 = remainder;
   }
 
   void _divRegister() {
     final register = memory[pc];
     final divisor = registers[register];
 
-    final divisionResult = (rax / divisor).floor();
-    final remainder = rax % divisor;
+    final divisionResult = (r1 / divisor).floor();
+    final remainder = r1 % divisor;
 
-    rax = divisionResult;
-    rbx = remainder;
+    r1 = divisionResult;
+    r2 = remainder;
   }
 
   void _inc() {
