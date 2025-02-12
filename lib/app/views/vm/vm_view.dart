@@ -1,3 +1,4 @@
+import 'package:simple_icons/simple_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/common/wisteria_box.dart';
 import 'package:wisteria/app/common/wisteria_button.dart';
@@ -20,6 +21,14 @@ class _VmViewState extends State<VmView> {
   late VirtualMachine vm;
 
   int selectedMemoryIdx = -1;
+
+  // the reset button can be pressed many times in quick succession.
+  // this will build up messages in the terminal which is not desirable.
+  // to prevent this, this flag is set to true until the reset process has finished,
+  // during which the user cannot press reset again.
+  //
+  // finally, it is set to false to allow the user to tap the reset button again.
+  bool resetIsPressed = false;
 
   @override
   void initState() {
@@ -53,6 +62,7 @@ class _VmViewState extends State<VmView> {
 
               const Spacer(),
 
+              githubLinkIcon(),
               Padding(
                 padding: const EdgeInsets.only(right: 24, bottom: 8),
                 child: HelpButton(),
@@ -72,8 +82,8 @@ class _VmViewState extends State<VmView> {
       padding: const EdgeInsets.only(left: 24),
       child: WisteriaText(
         text: "virtual machine",
-        color: primaryGrey, 
-        size: 18
+        color: textColor, 
+        size: 20
       ),
     );
   }
@@ -121,36 +131,54 @@ class _VmViewState extends State<VmView> {
               children: [
                 executeButton(),
                 codeEditorButton(),
-                pauseButton()
+                pauseButton(),
+                haltButton(),
+                resetButton()
               ],
             ),
-
-            
-            // programCounter(),
-      
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   crossAxisAlignment: CrossAxisAlignment.end,
-            //   children: [
-            //     Column(
-            //       mainAxisAlignment: MainAxisAlignment.end,
-            //       children: [
-            //         vmRegister("rax", vm.rax, 50, 32),
-            //         vmRegister("rbx", vm.rbx, 50, 32),
-            //       ],
-            //     ),
-            //     Column(
-            //       mainAxisAlignment: MainAxisAlignment.end,
-            //       children: [
-            //         vmRegister("rcx", vm.rcx, 50, 32),
-            //         vmRegister("rdx", vm.rdx, 50, 32),
-            //       ],
-            //     ),
-            //   ],
-            // )
           ],
         )
       ),
+    );
+  }
+
+  Widget githubLinkIcon() {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            bottom: boxPadding * 4, 
+            right: boxPadding
+          ),
+          child: WisteriaText(
+            text: "view the code: ", 
+            color: textColor, 
+            size: 12
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            // final Uri url = Uri.parse(githubUrl);
+            
+            // if (await canLaunchUrl(url)) {
+            //   await launchUrl(url, mode: LaunchMode.externalApplication);
+            // } else {
+            //   throw 'Could not launch $githubUrl';
+            // }
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(
+              bottom: boxPadding * 4,
+              right: boxPadding * 4
+            ),
+            child: Icon(
+              SimpleIcons.github,
+              color: textColor,
+              size: 28,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -178,6 +206,61 @@ class _VmViewState extends State<VmView> {
             ),
           ],
         )
+      ),
+    );
+  }
+
+  Widget resetButton() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: boxPadding * 2
+      ),
+      child: WisteriaButton(
+        width: 78,
+        color: primaryGrey,
+        text: "reset",
+        onTap: () async {
+          if (resetIsPressed) return;
+          resetIsPressed = true;
+
+          vm.output("virtual machine reset. resetting all processes.");
+          await vm.delay(1000);
+
+          vm = VirtualMachine(() {
+            setState(() {});
+          },
+            programString: codeController.text
+          );
+
+          initVm();
+
+          setState(() {
+            resetIsPressed = false;
+          });
+        }
+      ),
+    );
+  }
+
+  Widget haltButton() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: boxPadding * 2
+      ),
+      child: WisteriaButton(
+        width: 80,
+        color: primaryGrey,
+        text: "halt",
+        onTap: () async {
+          if (!vm.isRunning) return;
+
+          vm.output("virtual machine forcibly halted. all processes stopped.");
+          await vm.delay(500);
+
+          vm.isRunning = false;
+
+          setState(() {});
+        }
       ),
     );
   }
@@ -411,7 +494,37 @@ class _VmViewState extends State<VmView> {
               ],
             ),
       
-            memoryBox(screen)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                programCounter(),
+      
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        vmRegister("rax", vm.rax, 50, 32),
+                        vmRegister("rbx", vm.rbx, 50, 32),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        vmRegister("rcx", vm.rcx, 50, 32),
+                        vmRegister("rdx", vm.rdx, 50, 32),
+                      ],
+                    ),
+                  ],
+                ),
+                
+                const Spacer(),
+
+                memoryBox(screen),
+              ],
+            )
           ],
         ),
       ),

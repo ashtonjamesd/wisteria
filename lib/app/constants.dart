@@ -10,6 +10,8 @@ The app will allow you to experiment with a virtual machine that reads assembly 
 A good place to start would be the exercises tab.
 """;
 
+const String githubUrl = "https://github.com/rxgq/wisteria";
+
 const double consoleHeight = 120;
 const double userInterfaceHeight = 130;
 const double cpuInterfaceHeight = 240;

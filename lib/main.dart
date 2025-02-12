@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:wisteria/app/views/exercises/exercises_view.dart';
 import 'package:wisteria/app/views/profile/profile_view.dart';
 import 'package:wisteria/app/views/settings/settings_view.dart';
@@ -13,6 +14,10 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp
+    ]);
 
     runApp(const App());
   } catch (exception) {

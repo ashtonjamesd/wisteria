@@ -4,9 +4,11 @@ import 'package:wisteria/vm/constants.dart';
 import 'package:wisteria/vm/parser/lexer.dart';
 
 final class VirtualMachine {
-  // machine code to be executed
+
+  // assembly code to be compiled
   final String programString;
 
+  // machine code to be executed
   List<int> program = [];
 
   // memory for the virtual machine
@@ -40,11 +42,12 @@ final class VirtualMachine {
   bool pf = false;
 
   // execution flag for the virtual machine
-  bool _running = true;
+  bool isRunning = true;
 
   // will display no messages if true
   bool _quietMode = true;
 
+  // will wait after completing the current instruction instead
   bool isPaused = false;
 
   // the last error to occur in the vm
@@ -122,9 +125,11 @@ final class VirtualMachine {
     await delay(1000);
 
     output("loaded ${program.length} bytes.");
+    await delay(250);
+
     output("executing program..");
     
-    while (_running) {
+    while (isRunning) {
       await delay(250);
 
       while (isPaused) {
@@ -372,7 +377,7 @@ final class VirtualMachine {
   }
 
   void _hlt() {
-    _running = false;
+    isRunning = false;
     _update();
   }
 
