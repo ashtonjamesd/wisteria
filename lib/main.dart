@@ -5,6 +5,7 @@ import 'package:wisteria/app/views/exercises/exercises_view.dart';
 import 'package:wisteria/app/views/profile/profile_view.dart';
 import 'package:wisteria/app/views/settings/settings_view.dart';
 import 'package:wisteria/app/views/vm/vm_view.dart';
+import 'app/constants.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -55,32 +56,42 @@ class _AppState extends State<App> {
       home: Scaffold(
         body: _pages[_selectedIndex],
         bottomNavigationBar: BottomAppBar(
-          color: Colors.white,
+          height: 90,
+          color: const Color.fromARGB(255, 245, 245, 245),
           shape: const CircularNotchedRectangle(),
-          notchMargin: 6.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              IconButton(
-                icon: const Icon(Icons.code),
-                onPressed: () => _onItemTapped(0),
-              ),
-              IconButton(
-                icon: const Icon(Icons.extension),
-                onPressed: () => _onItemTapped(1),
-              ),
-              IconButton(
-                icon: const Icon(Icons.person),
-                onPressed: () => _onItemTapped(2),
-              ),
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () => _onItemTapped(3),
-              ),
+              _buildBottomNavItem(0, Icons.code, "vm"),
+              _buildBottomNavItem(1, Icons.extension, "exercises"),
+              _buildBottomNavItem(2, Icons.person, "profile"),
+              _buildBottomNavItem(3, Icons.settings, "settings"),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBottomNavItem(int index, IconData icon, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          icon: Icon(
+            icon,
+            color: _selectedIndex == index ? selectedIconColor : Colors.grey,
+          ),
+          onPressed: () => _onItemTapped(index),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            color: _selectedIndex == index ? selectedIconColor : Colors.grey,
+            fontSize: 12,
+          ),
+        ),
+      ],
     );
   }
 }

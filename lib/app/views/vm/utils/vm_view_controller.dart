@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wisteria/app/utils/app_controller.dart';
 
 import '../../../../vm/constants.dart';
 import '../../../../vm/vm.dart';
@@ -21,6 +22,8 @@ final class VmViewController {
   bool resetIsPressed = false;
   
   Widget infoWidget = const SizedBox();
+
+  bool shouldShowDialogue = AppController.instance.settings.showInfoDialogs;
 
   int getRegisterValue(String name) {
     return switch (name) {

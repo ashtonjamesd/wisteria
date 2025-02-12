@@ -43,4 +43,7 @@ const Color primaryGrey = Color.fromARGB(255, 219, 219, 219);
 const Color primaryWhite = Colors.white;
 const Color textColor = Color.fromARGB(255, 95, 95, 95);
 
+const Color selectedIconColor = Color.fromARGB(255, 53, 53, 53);
+
+
 // TextStyle appFont = GoogleFonts.roboto();

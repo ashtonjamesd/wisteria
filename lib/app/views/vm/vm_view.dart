@@ -50,7 +50,10 @@ class _VmViewState extends State<VmView> {
           child: defaultInfoWidget(screen)
         ),
       );
-      
+    }
+
+    if (!controller.shouldShowDialogue) {
+      controller.infoWidget = const SizedBox();
     }
   }
 
@@ -266,7 +269,7 @@ class _VmViewState extends State<VmView> {
         left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: 36, 
+        width: 36,
         height: 32,
         color: primaryGrey, 
         showBorder: controller.vm.isPaused,
