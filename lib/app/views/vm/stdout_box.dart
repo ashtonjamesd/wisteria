@@ -41,7 +41,7 @@ class _StdoutBoxState extends State<StdoutBox> {
       child: WisteriaBox(
         header: "standard output",
         width: widget.screen.width / widthFactor -
-            boxPadding * 4,
+            boxPadding * 2,
         height: 60,
         color: primaryGrey,
         child: Padding(

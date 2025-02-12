@@ -10,6 +10,7 @@ final class VmViewController {
 
   int selectedMemoryIdx = -1;
   String selectedRegisterName = "";
+  bool programCounterSelected = false;
 
   // the reset button can be pressed many times in quick succession.
   // this will build up messages in the terminal which is not desirable.
@@ -84,6 +85,7 @@ final class VmViewController {
   void resetSelectedItems() {
     selectedMemoryIdx = -1;
     selectedRegisterName = "";
+    programCounterSelected = false;
   }
 
   void onMemoryCellClicked(int index) {    
@@ -108,5 +110,17 @@ final class VmViewController {
     resetSelectedItems();
     
     selectedRegisterName = name;
+  }
+
+  void onProgramCounterTapped() {
+    if (programCounterSelected) {
+      infoWidget = const SizedBox();
+      programCounterSelected = false;
+      return;
+    }
+
+    resetSelectedItems();
+
+    programCounterSelected = true;
   }
 }

@@ -54,16 +54,20 @@ class _VmViewState extends State<VmView> {
     }
   }
 
-  void setInfoWidget(Widget infoWidget, Size screen) {
+  void setInfoWidget(Widget infoWidget) {
+    final screen = MediaQuery.sizeOf(context);
+
     controller.infoWidget = WisteriaBox(
-        width: screen.width / widthFactor + 12, 
-        height: infoWidgetHeight,
-        color: primaryGrey,
-        child: Padding(
-          padding: const EdgeInsets.all(boxPadding),
-          child: infoWidget
-        ),
-      );
+      width: screen.width / widthFactor + 12, 
+      height: infoWidgetHeight,
+      color: primaryGrey,
+      child: Padding(
+        padding: const EdgeInsets.all(boxPadding),
+        child: infoWidget
+      ),
+    );
+
+    setState(() {});
   }
 
   @override
@@ -93,7 +97,7 @@ class _VmViewState extends State<VmView> {
 
           homeView(screen),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 8),
 
           Padding(
             padding: EdgeInsets.only(left: (screen.width - (screen.width / widthFactor)) / 2 - 8),
@@ -191,7 +195,7 @@ class _VmViewState extends State<VmView> {
             right: boxPadding
           ),
           child: WisteriaText(
-            text: "view the code: ", 
+            text: "view the code > ", 
             color: textColor, 
             size: 12
           ),
@@ -214,39 +218,11 @@ class _VmViewState extends State<VmView> {
             child: Icon(
               SimpleIcons.github,
               color: textColor,
-              size: 28,
+              size: 24,
             ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget programCounter() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: boxPadding),
-      child: WisteriaBox(
-        width: 60, 
-        height: 32,
-        color: primaryGrey,
-        child: Row(
-          children: [
-            const SizedBox(width: 8),
-            WisteriaText(
-              text: "pc", 
-              color: primaryWhite, 
-              size: 14
-            ),
-
-            const SizedBox(width: 4),
-            WisteriaText(
-              text: controller.vm.pc.toString(), 
-              color: primaryWhite, 
-              size: 14
-            ),
-          ],
-        )
-      ),
     );
   }
 
@@ -290,7 +266,7 @@ class _VmViewState extends State<VmView> {
         left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: 32, 
+        width: 36, 
         height: 32,
         color: primaryGrey, 
         showBorder: controller.vm.isPaused,
@@ -408,10 +384,7 @@ class _VmViewState extends State<VmView> {
             return;
           }
 
-          final screen = MediaQuery.sizeOf(context);
-          setInfoWidget(registerInfoWidget(), screen);
-
-          setState(() {});
+          setInfoWidget(registerInfoWidget());
         },
         child: WisteriaBox(
           width: width,
@@ -455,9 +428,7 @@ class _VmViewState extends State<VmView> {
                   return;
                 }
 
-                setInfoWidget(memoryCellInfoWidget(screen), screen);
-
-                setState(() {});
+                setInfoWidget(memoryCellInfoWidget());
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -552,7 +523,36 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget memoryCellInfoWidget(Size screen) {
+  Widget programCounter() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: boxPadding, 
+        left: boxPadding
+      ),
+      child: GestureDetector(
+        onTap: () {
+          controller.onProgramCounterTapped();
+          setInfoWidget(programCounterInfoWidget());
+        },
+        child: WisteriaBox(
+          width: 60, 
+          height: 32,
+          color: primaryGrey,
+          header: "pc",
+          showBorder: controller.programCounterSelected,
+          child: Center(
+            child: WisteriaText(
+              text: controller.vm.pc.toString(), 
+              color: primaryWhite, 
+              size: 14
+            ),
+          )
+        ),
+      ),
+    );
+  }
+
+  Widget memoryCellInfoWidget() {
     final cell = controller.vm.memory[controller.selectedMemoryIdx];
 
     return Column(
@@ -575,6 +575,13 @@ class _VmViewState extends State<VmView> {
           color: primaryWhite,
           size: 14
         ),
+
+        const SizedBox(height: 16),
+        WisteriaText(
+          text: memoryDescription, 
+          color: primaryWhite,
+          size: 12
+        ),
       ],
     );
   }
@@ -594,6 +601,40 @@ class _VmViewState extends State<VmView> {
           text: "Register Value ${controller.getRegisterValue(controller.selectedRegisterName)}", 
           color: primaryWhite,
           size: 14
+        ),
+
+        const SizedBox(height: 16),
+        WisteriaText(
+          text: registerDescription, 
+          color: primaryWhite,
+          size: 12
+        ),
+      ],
+    );
+  }
+
+  Widget programCounterInfoWidget() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        WisteriaText(
+          text: "Program Counter", 
+          color: primaryWhite,
+          size: 18
+        ),
+        const SizedBox(height: 16),
+
+        WisteriaText(
+          text: "Value ${controller.vm.pc}", 
+          color: primaryWhite,
+          size: 14
+        ),
+
+        const SizedBox(height: 16),
+        WisteriaText(
+          text: programCounterDescription, 
+          color: primaryWhite,
+          size: 12
         ),
       ],
     );
