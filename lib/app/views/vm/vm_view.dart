@@ -83,7 +83,9 @@ class _VmViewState extends State<VmView> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [          
+        children: [
+          const SizedBox(height: 40),
+
           Row(
             children: [
               title(),
@@ -97,10 +99,14 @@ class _VmViewState extends State<VmView> {
               ),
             ],
           ),
+              
+          const Spacer(),
 
+          const SizedBox(height: 16),
           homeView(screen),
-
           const SizedBox(height: 8),
+            
+          const Spacer(),
 
           Padding(
             padding: EdgeInsets.only(left: (screen.width - (screen.width / widthFactor)) / 2 - 8),
@@ -130,7 +136,7 @@ class _VmViewState extends State<VmView> {
       child: WisteriaText(
         text: "virtual machine",
         color: textColor, 
-        size: 20
+        size: 24
       ),
     );
   }
@@ -192,17 +198,25 @@ class _VmViewState extends State<VmView> {
   Widget githubLinkIcon() {
     return Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            bottom: boxPadding * 4, 
-            right: boxPadding
-          ),
-          child: WisteriaText(
-            text: "view the code > ", 
-            color: textColor, 
-            size: 12
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.only(
+        //     bottom: boxPadding * 2, 
+        //     right: boxPadding
+        //   ),
+        //   child: Row(
+        //     children: [
+        //       WisteriaText(
+        //         text: "view code ", 
+        //         color: textColor, 
+        //         size: 12
+        //       ),
+        //       Icon(
+        //         Icons.arrow_right_alt,
+        //         size: 14,
+        //       )
+        //     ],
+        //   ),
+        // ),
         GestureDetector(
           onTap: () {
             // final Uri url = Uri.parse(githubUrl);

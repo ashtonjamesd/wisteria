@@ -22,13 +22,24 @@ class _SettingsViewState extends State<SettingsView> {
 
   Widget settingsView() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        WisteriaText(
-          text: "Settings", 
-          color: primaryGrey, 
-          size: 28,
+        const SizedBox(height: 40),
+
+        Padding(
+          padding: const EdgeInsets.only(left: 32),
+          child: WisteriaText(
+            text: "settings", 
+            color: textColor,
+            size: 24,
+          ),
         ),
-        settingsBox(),
+
+        const SizedBox(height: 28),
+
+        Center(
+          child: settingsBox()
+        ),
       ],
     );
   }
@@ -48,39 +59,35 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Widget trueOrFalseSetting(String name, String desc, Function(bool) onChanged) {
+    final screen = MediaQuery.sizeOf(context);
     bool value = AppController.instance.settings.showInfoDialogs;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0, 
-        horizontal: 24.0
+    return Container(
+      width: screen.width / widthFactor ,
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 240, 240, 240),
+        borderRadius: BorderRadius.circular(boxBorderRadius),
       ),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 240, 240, 240),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            WisteriaText(
-              text: name, 
-              color: textColor, 
-              size: 16,
-            ),
-            WisteriaText(
-              text: desc, 
-              color: textColor.withOpacity(0.8),
-              size: 12,
-            ),
-
-            const SizedBox(height: 16),
-            WisteriaSlider(value: value, onChanged: (value) {
-              onChanged(value);
-            }),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          WisteriaText(
+            text: name, 
+            color: textColor, 
+            size: 16,
+          ),
+          WisteriaText(
+            text: desc, 
+            color: textColor.withOpacity(0.8),
+            size: 12,
+          ),
+    
+          const SizedBox(height: 16),
+          WisteriaSlider(value: value, onChanged: (value) {
+            onChanged(value);
+          }),
+        ],
       ),
     );
   }
