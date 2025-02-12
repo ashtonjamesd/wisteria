@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
 
+import '../../common/wisteria_text.dart';
+
 class ExercisesView extends StatefulWidget {
   const ExercisesView({super.key});
 
@@ -13,6 +15,35 @@ class _ExercisesViewState extends State<ExercisesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryWhite,
+      body: exercisesView(),
     );
+  }
+
+  Widget exercisesView() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 40),
+
+        Padding(
+          padding: const EdgeInsets.only(left: 32),
+          child: WisteriaText(
+            text: "exercises", 
+            color: textColor,
+            size: 24,
+          ),
+        ),
+
+        const SizedBox(height: 28),
+
+        Center(
+          child: exercisesBox()
+        ),
+      ],
+    );
+  }
+
+  Widget exercisesBox() {
+    return SizedBox();
   }
 }

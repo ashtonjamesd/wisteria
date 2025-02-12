@@ -48,8 +48,8 @@ class _SettingsViewState extends State<SettingsView> {
     return Column(
       children: [
         trueOrFalseSetting(
-          "Show Help Dialogues", 
-          "Show information about components when clicked", 
+          "show help dialogues", 
+          "show information about components when tapped", 
           (value) {
             AppController.instance.settings.showInfoDialogs = value;
           }
