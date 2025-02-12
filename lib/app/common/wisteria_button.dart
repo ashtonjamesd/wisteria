@@ -7,16 +7,20 @@ class WisteriaButton extends StatefulWidget {
     super.key,
     required this.width,
     this.height = 32,
+    this.icon,
     required this.color,
-    required this.text,
+    this.text,
+    this.showBorder = false,
     required this.onTap,
   });
 
   final double width;
   final double height;
   final Color color;
-  final String text;
+  final String? text;
+  final IconData? icon;
   final VoidCallback onTap;
+  final bool showBorder;
 
   @override
   State<WisteriaButton> createState() => _WisteriaButtonState();
@@ -55,13 +59,18 @@ class _WisteriaButtonState extends State<WisteriaButton> {
           decoration: BoxDecoration(
             color: _getButtonColor(),
             borderRadius: BorderRadius.circular(boxBorderRadius),
+            border: widget.showBorder ? Border.all(color: const Color.fromARGB(255, 76, 76, 76)) : null,
           ),
           child: Center(
-            child: WisteriaText(
-              text: widget.text,
+            child: widget.icon == null ? WisteriaText(
+              text: widget.text!,
               color: Colors.white,
               size: 14,
-            ),
+            ) : Icon(
+              widget.icon!,
+              size: 14,
+              color: primaryWhite,
+            )
           ),
         ),
       ),

@@ -45,6 +45,8 @@ final class VirtualMachine {
   // will display no messages if true
   bool _quietMode = true;
 
+  bool isPaused = false;
+
   // the last error to occur in the vm
   // will return at the earliest point when not null
   String? errorMessage;
@@ -101,29 +103,33 @@ final class VirtualMachine {
   }
 
   Future run() async {
-    _output("parsing assembly code.");
-    await _delay(1500);
+    output("parsing assembly code.");
+    await delay(1500);
     
     final lexer = Lexer(program: programString);
     final tokens = lexer.tokenize();
     _update();
 
-    _output("assembling into machine code.");
-    await _delay(3000);
+    output("assembling into machine code.");
+    await delay(3000);
 
     final assembler = Assembler(tokens: tokens);
     program = assembler.assemble();
     _update();
 
     _load(program);
-    _output("loading program into memory..");
-    await _delay(1000);
+    output("loading program into memory.");
+    await delay(1000);
 
-    _output("loaded ${program.length} bytes.");
-    _output("executing program..");
+    output("loaded ${program.length} bytes.");
+    output("executing program..");
     
     while (_running) {
-      await _delay(250);
+      await delay(250);
+
+      while (isPaused) {
+        await delay(1000);
+      }
 
       _execute();
       _update();
@@ -135,7 +141,7 @@ final class VirtualMachine {
       print("program execution finished");
     }
 
-    _output("program execution finished.");
+    output("program execution finished.");
   }
 
   void _load(List<int> code) {
@@ -159,11 +165,11 @@ final class VirtualMachine {
     instruction();
   }
 
-  Future<void> _delay(int ms) async {
+  Future<void> delay(int ms) async {
     await Future.delayed(Duration(milliseconds: ms));
   }
 
-  void _output(String message) {
+  void output(String message) {
     String timestamp = DateTime.now().toLocal().toString().split(' ')[1].split('.')[0];
     consoleOutput.add("[$timestamp] $message");
     _update();

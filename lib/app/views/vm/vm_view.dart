@@ -25,6 +25,16 @@ class _VmViewState extends State<VmView> {
   void initState() {
     super.initState();
     vm = VirtualMachine(() {}, programString: "");
+
+    initVm();
+  }
+
+  Future initVm() async {
+    await vm.delay(250);
+
+    setState(() {
+      vm.output("initialised virtual machine");
+    });
   }
 
   @override
@@ -111,6 +121,7 @@ class _VmViewState extends State<VmView> {
               children: [
                 executeButton(),
                 codeEditorButton(),
+                pauseButton()
               ],
             ),
 
@@ -171,36 +182,41 @@ class _VmViewState extends State<VmView> {
     );
   }
 
+  Widget pauseButton() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: boxPadding * 2
+      ),
+      child: WisteriaButton(
+        width: 32, 
+        height: 32,
+        color: primaryGrey, 
+        showBorder: vm.isPaused,
+        icon: vm.isPaused ? Icons.pause : Icons.play_arrow,
+        onTap: () {
+          setState(() {
+            vm.isPaused = !vm.isPaused;
+          });
+        }
+      ),
+    );
+  }
+
   Widget executeButton() {
     return Padding(
       padding: const EdgeInsets.only(
-        left: boxPadding * 2,
-        right: boxPadding,
-        bottom: boxPadding * 2,
-        top: boxPadding
+        left: boxPadding * 2
       ),
       child: WisteriaButton(
         width: 80,
         color: primaryGrey,
         text: "execute",
         onTap: () {
-          codeController.text = """
-mov rax 10 
-start:
-  out rax
-  dec rax
-  cmp 0 rax
-  jne start
-          """;
-          
-
           vm = VirtualMachine(() {
             setState(() {});
           },
             programString: codeController.text
           );
-
-          // print(vm.program.map((e) => e.toRadixString(16).padLeft(2, '0').toUpperCase()).join(""));
 
           vm.run();
         }
@@ -211,10 +227,7 @@ start:
   Widget codeEditorButton() {
     return Padding(
       padding: const EdgeInsets.only(
-        left: boxPadding * 2,
-        right: boxPadding,
-        bottom: boxPadding * 2,
-        top: boxPadding
+        left: boxPadding * 2
       ),
       child: WisteriaButton(
         width: 80,

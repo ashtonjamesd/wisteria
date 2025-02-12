@@ -31,7 +31,7 @@ class _HelpButtonState extends State<HelpButton> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         WisteriaBox(
-          width: 200, 
+          width: 240, 
           height: 320, 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

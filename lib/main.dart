@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:wisteria/app/views/exercises/exercises_view.dart';
 import 'package:wisteria/app/views/profile/profile_view.dart';
 import 'package:wisteria/app/views/settings/settings_view.dart';
 import 'package:wisteria/app/views/vm/vm_view.dart';
@@ -31,6 +32,7 @@ class _AppState extends State<App> {
 
   final List<Widget> _pages = [
     const VmView(),
+    const ExercisesView(),
     const ProfileView(),
     const SettingsView(),
   ];
@@ -59,12 +61,16 @@ class _AppState extends State<App> {
                 onPressed: () => _onItemTapped(0),
               ),
               IconButton(
-                icon: const Icon(Icons.person),
+                icon: const Icon(Icons.extension),
                 onPressed: () => _onItemTapped(1),
               ),
               IconButton(
-                icon: const Icon(Icons.settings),
+                icon: const Icon(Icons.person),
                 onPressed: () => _onItemTapped(2),
+              ),
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () => _onItemTapped(3),
               ),
             ],
           ),
