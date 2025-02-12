@@ -3,6 +3,7 @@ import 'package:wisteria/app/common/wisteria_box.dart';
 import 'package:wisteria/app/common/wisteria_button.dart';
 import 'package:wisteria/app/common/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
+import 'package:wisteria/app/vm/stdout_box.dart';
 import 'package:wisteria/vm/vm.dart';
 
 import '../vm/assembler/assembler.dart';
@@ -25,7 +26,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    vm = VirtualMachine(() {}, program: []);
+    vm = VirtualMachine(() {}, programString: "");
   }
 
   @override
@@ -42,75 +43,92 @@ class _HomeViewState extends State<HomeView> {
     return Center(
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Container(
-          width: (screen.width / memoryWidthRatio + screen.width / cpuInterfaceWidthRatio) + boxPadding * 6,
-          height: (cpuInterfaceHeight + consoleHeight) + boxPadding * 6,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(boxBorderRadius),
-            color: primaryGrey,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  processorInterface(screen),
-                  memoryBox(screen)
-                ],
-              ),
-          
-              vmConsole(screen)
-            ],
+        child: Padding(
+          padding: const EdgeInsets.only(top: 24),
+          child: Container(
+            width: (screen.width / memoryWidthRatio + screen.width / cpuInterfaceWidthRatio) + boxPadding * 6,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(boxBorderRadius),
+              color: primaryGrey,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                userInterface(screen),
+                vmConsole(screen),
+                cpuInterface(screen)
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget processorInterface(Size screen) {
+  Widget cpuInterface(Size screen) {
     return WisteriaBox(
-      width: screen.width / cpuInterfaceWidthRatio,
+      width: (screen.width / memoryWidthRatio + screen.width / cpuInterfaceWidthRatio) + boxPadding * 2,
       height: cpuInterfaceHeight,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              stdoutBox(),
-              executeButton(),
-              codeEditorButton(),
-            ],
-          ),
-
-          programCounter(),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  vmRegister("rax", vm.rax, 80, 32),
-                  vmRegister("rbx", vm.rbx, 80, 32),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  vmRegister("rcx", vm.rcx, 80, 32),
-                  vmRegister("rdx", vm.rdx, 80, 32),
-                ],
-              ),
-
-              asmBox()
-            ],
-          )
+          asmBox(),
+          machineCodeBox(),
         ],
-      )
+      ),
+    );
+  }
+
+  Widget userInterface(Size screen) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: boxPadding,
+        left: boxPadding,
+        right: boxPadding
+      ),
+      child: WisteriaBox(
+        width: screen.width,
+        height: cpuInterfaceHeight,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            StdoutBox(screen: screen, vm: vm),
+        
+            Row(
+              children: [
+                executeButton(),
+                codeEditorButton(),
+              ],
+            ),
+
+            
+            // programCounter(),
+      
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   crossAxisAlignment: CrossAxisAlignment.end,
+            //   children: [
+            //     Column(
+            //       mainAxisAlignment: MainAxisAlignment.end,
+            //       children: [
+            //         vmRegister("rax", vm.rax, 50, 32),
+            //         vmRegister("rbx", vm.rbx, 50, 32),
+            //       ],
+            //     ),
+            //     Column(
+            //       mainAxisAlignment: MainAxisAlignment.end,
+            //       children: [
+            //         vmRegister("rcx", vm.rcx, 50, 32),
+            //         vmRegister("rdx", vm.rdx, 50, 32),
+            //       ],
+            //     ),
+            //   ],
+            // )
+          ],
+        )
+      ),
     );
   }
 
@@ -157,25 +175,18 @@ class _HomeViewState extends State<HomeView> {
         onTap: () {
           codeController.text = """
 mov rax 10 
-mov rbx 5
-
-add rax rbx
-out rax
-
-
+start:
+  out rax
+  dec rax
+  cmp 0 rax
+  jne start
           """;
           
-          final lexer = Lexer(program: codeController.text);
-
-          final tokens = lexer.tokenize();
-      
-          final assembler = Assembler(tokens: tokens);
-          final program = assembler.assemble();
 
           vm = VirtualMachine(() {
             setState(() {});
           },
-            program: program
+            programString: codeController.text
           );
 
           // print(vm.program.map((e) => e.toRadixString(16).padLeft(2, '0').toUpperCase()).join(""));
@@ -212,26 +223,31 @@ out rax
   Widget asmBox() {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: boxPadding / 2,
-          right: boxPadding,
-          bottom: boxPadding,
-          top: boxPadding
-        ),
-        child: WisteriaBox(
-          width: 100,
-          height: 70,
-          color: primaryGrey,
-          child: Padding(
-            padding: const EdgeInsets.all(boxPadding),
-            child: WisteriaText(
-              text: codeController.text,
-              color: primaryWhite,
-              size: 14,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: boxPadding / 2,
+              right: boxPadding,
+              bottom: boxPadding,
+              top: boxPadding
             ),
-          )
-        ),
+            child: WisteriaBox(
+              header: "assembly",
+              width: 100,
+              height: 70,
+              color: primaryGrey,
+              child: Padding(
+                padding: const EdgeInsets.all(boxPadding),
+                child: WisteriaText(
+                  text: codeController.text,
+                  color: primaryWhite,
+                  size: 14,
+                ),
+              )
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -245,6 +261,7 @@ out rax
         top: boxPadding
       ),
       child: WisteriaBox(
+        header: "machine code",
         width: 200,
         height: 70,
         color: primaryGrey,
@@ -257,19 +274,6 @@ out rax
           ),
         )
       ),
-    );
-  }
-
-  Widget stdoutBox() {
-    return WisteriaBox(
-      width: 80, 
-      height: 100, 
-      color: primaryGrey,
-      child: WisteriaText(
-        text: vm.stdout.join("\n"), 
-        color: primaryWhite, 
-        size: 14
-      )
     );
   }
 
@@ -303,44 +307,47 @@ out rax
   }
 
   Widget memoryBox(Size screen) {
-    return WisteriaBox(
-      width: screen.width / memoryWidthRatio,
-      height: cpuInterfaceHeight,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            crossAxisSpacing: 4.0,
-            mainAxisSpacing: 4.0,
-            childAspectRatio: 1.0,
-          ),
-          itemCount: vm.memory.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedMemoryIdx = index;
-                });
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0),
-                  border: selectedMemoryIdx != index ? null : Border.all(color: const Color.fromARGB(255, 138, 138, 138)),
-                  color: primaryGrey,
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  "0x${vm.memory[index].toRadixString(16).padLeft(2, '0').toUpperCase()}",
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+    return Padding(
+      padding: const EdgeInsets.only(top: boxPadding),
+      child: WisteriaBox(
+        width: screen.width / memoryWidthRatio,
+        height: cpuInterfaceHeight,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 4.0,
+              mainAxisSpacing: 4.0,
+              childAspectRatio: 1.0,
+            ),
+            itemCount: vm.memory.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selectedMemoryIdx = index;
+                  });
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4.0),
+                    border: selectedMemoryIdx != index ? null : Border.all(color: const Color.fromARGB(255, 138, 138, 138)),
+                    color: primaryGrey,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "0x${vm.memory[index].toRadixString(16).padLeft(2, '0').toUpperCase()}",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -354,8 +361,8 @@ out rax
         padding: const EdgeInsets.all(boxPadding),
         child: WisteriaText(
           text: vm.consoleOutput.join("\n"),
-          color: Colors.black,
-          size: 14,
+          color: const Color.fromARGB(255, 52, 52, 52),
+          size: 12,
         ),
       )
     );

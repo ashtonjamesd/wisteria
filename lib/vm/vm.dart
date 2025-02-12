@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:wisteria/vm/assembler/assembler.dart';
 import 'package:wisteria/vm/constants.dart';
+import 'package:wisteria/vm/parser/lexer.dart';
 
 final class VirtualMachine {
   // machine code to be executed
-  final List<int> program;
+  final String programString;
+
+  List<int> program = [];
 
   // memory for the virtual machine
   late final List<int> memory;
@@ -60,7 +64,7 @@ final class VirtualMachine {
   int get rdx => registers[RDX_INDEX];
   set rdx(int value) => registers[RDX_INDEX] = value;
 
-  VirtualMachine(this._update, {required this.program, bool quietMode = false}) {
+  VirtualMachine(this._update, {required this.programString, bool quietMode = false}) {
     isa = {
       HLT_OP: _hlt,
       NO_OP: _nop,
@@ -97,8 +101,22 @@ final class VirtualMachine {
   }
 
   Future run() async {
+    _output("parsing assembly code.");
+    await _delay(1500);
+    
+    final lexer = Lexer(program: programString);
+    final tokens = lexer.tokenize();
+    _update();
+
+    _output("assembling into machine code.");
+    await _delay(3000);
+
+    final assembler = Assembler(tokens: tokens);
+    program = assembler.assemble();
+    _update();
+
     _load(program);
-    _output("loading program into memory.");
+    _output("loading program into memory..");
     await _delay(1000);
 
     _output("loaded ${program.length} bytes.");

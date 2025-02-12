@@ -1,18 +1,10 @@
-import 'package:wisteria/vm/assembler/assembler.dart';
-import 'package:wisteria/vm/parser/lexer.dart';
 import 'package:wisteria/vm/vm.dart';
 
 final class VmTests {
   int passed = 0;
 
   Future<VirtualMachine> _runTest(String asm, {bool quietMode = true}) async {
-    final lexer = Lexer(program: asm);
-    final tokens = lexer.tokenize();
-
-    final assembler = Assembler(tokens: tokens);
-    final program = assembler.assemble();
-
-    final vm = VirtualMachine(() {}, quietMode: quietMode, program: program);
+    final vm = VirtualMachine(() {}, quietMode: quietMode, programString: asm);
     vm.run();
 
     return vm;

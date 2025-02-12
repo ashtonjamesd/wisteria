@@ -12,9 +12,9 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
 
-    await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.landscapeLeft]
-    ); 
+    // await SystemChrome.setPreferredOrientations(
+    //   [DeviceOrientation.landscapeLeft]
+    // ); 
     
     runApp(const App());
   } catch (exception) {
