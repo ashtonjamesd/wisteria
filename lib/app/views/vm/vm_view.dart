@@ -3,6 +3,7 @@ import 'package:wisteria/app/common/wisteria_box.dart';
 import 'package:wisteria/app/common/wisteria_button.dart';
 import 'package:wisteria/app/common/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
+import 'package:wisteria/app/views/vm/help_button.dart';
 import 'package:wisteria/app/views/vm/stdout_box.dart';
 import 'package:wisteria/vm/vm.dart';
 import 'code_editor.dart';
@@ -35,8 +36,21 @@ class _VmViewState extends State<VmView> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          title(),
+        children: [          
+          Row(
+            children: [
+              title(),
+
+              const Spacer(),
+
+              Padding(
+                padding: const EdgeInsets.only(right: 24, bottom: 8),
+                child: HelpButton(),
+              ),
+            ],
+          ),
+
+
           homeView(screen),
         ],
       ),
