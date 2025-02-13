@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
 
-import '../../common/wisteria_text.dart';
+import '../../widgets/wisteria_text.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});

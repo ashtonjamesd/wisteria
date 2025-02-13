@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/vm/vm.dart';
 
-import '../../common/wisteria_box.dart';
-import '../../common/wisteria_text.dart';
+import '../../widgets/wisteria_box.dart';
+import '../../widgets/wisteria_text.dart';
 import '../../constants.dart';
 
 class StdoutBox extends StatefulWidget {

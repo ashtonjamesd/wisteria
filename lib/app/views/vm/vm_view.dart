@@ -1,8 +1,8 @@
 import 'package:simple_icons/simple_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:wisteria/app/common/wisteria_box.dart';
-import 'package:wisteria/app/common/wisteria_button.dart';
-import 'package:wisteria/app/common/wisteria_text.dart';
+import 'package:wisteria/app/widgets/wisteria_box.dart';
+import 'package:wisteria/app/widgets/wisteria_button.dart';
+import 'package:wisteria/app/widgets/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/views/vm/help_button.dart';
 import 'package:wisteria/app/views/vm/stdout_box.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wisteria/app/common/wisteria_text.dart';
+import 'package:wisteria/app/widgets/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
 
 class WisteriaButton extends StatefulWidget {

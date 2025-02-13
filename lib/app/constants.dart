@@ -25,7 +25,6 @@ const String programCounterDescription =
 The program counter (PC) tracks the address of the next instruction to execute, ensuring the CPU processes instructions in the correct sequence.
 """;
 
-
 // 10th fibonacci counter
 const String exampleProgramOne = 
 """
@@ -44,7 +43,7 @@ fib:
 
   dec rc
   cmp rc 0
-  
+
   jne fib
 
   halt
@@ -69,6 +68,5 @@ const Color primaryWhite = Colors.white;
 const Color textColor = Color.fromARGB(255, 95, 95, 95);
 
 const Color selectedIconColor = Color.fromARGB(255, 53, 53, 53);
-
 
 // TextStyle appFont = GoogleFonts.roboto();

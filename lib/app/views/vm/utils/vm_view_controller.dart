@@ -91,7 +91,7 @@ final class VmViewController {
     programCounterSelected = false;
   }
 
-  void onMemoryCellClicked(int index) {    
+  void onMemoryCellClicked(int index) {
     if (selectedMemoryIdx == index) {
       infoWidget = const SizedBox();
       selectedMemoryIdx = -1;
