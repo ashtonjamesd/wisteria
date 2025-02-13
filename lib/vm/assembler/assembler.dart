@@ -64,7 +64,7 @@ final class Assembler {
       TokenType.inc  => INC_OP,
       TokenType.dec  => DEC_OP,
       TokenType.jump => JUMP_OP,
-      TokenType.cmp  => translateTwoOpInstruction(CMP_LIT_LIT_OP, CMP_REG_LIT_OP),
+      TokenType.cmp  => translateTwoOpInstruction(CMP_REG_LIT_OP, CMP_REG_REG_OP),
       TokenType.jne  => JNE_OP,
       TokenType.je   => JE_OP,
       TokenType.neg  => NEG_OP,

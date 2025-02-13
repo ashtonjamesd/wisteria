@@ -86,8 +86,8 @@ final class VirtualMachine {
       INC_OP: _inc,
       DEC_OP: _dec,
       JUMP_OP: _jump,
-      CMP_LIT_LIT_OP: _cmpLitLit,
       CMP_REG_LIT_OP: _cmpRegLit,
+      CMP_REG_REG_OP: _cmpRegReg,
       NEG_OP: _neg,
       JNE_OP: _jne,
       JE_OP: _je,
@@ -299,8 +299,8 @@ final class VirtualMachine {
     pc = destination;
   }
 
-  void _cmpLitLit() {
-    final a = memory[pc];
+  void _cmpRegLit() {
+    final a = registers[memory[pc]];
     _tick();
 
     final b = memory[pc];
@@ -308,9 +308,8 @@ final class VirtualMachine {
     zf = a == b;
   }
 
-  // register must be the second argument to work as intended
-  void _cmpRegLit() {
-    final a = memory[pc];
+  void _cmpRegReg() {
+    final a = registers[memory[pc]];
     _tick();
 
     final b = registers[memory[pc]];
