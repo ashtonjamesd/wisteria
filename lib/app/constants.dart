@@ -25,6 +25,31 @@ const String programCounterDescription =
 The program counter (PC) tracks the address of the next instruction to execute, ensuring the CPU processes instructions in the correct sequence.
 """;
 
+
+// 10th fibonacci counter
+const String exampleProgramOne = 
+"""
+mov ra 0
+mov rb 1
+mov rc 10
+
+fib:
+  out ra
+  
+  mov rd ra
+  add rd rb
+  
+  mov ra rb
+  mov rb rd
+
+  dec rc
+  cmp rc 0
+  
+  jne fib
+
+  halt
+""";
+
 const String githubUrl = "https://github.com/rxgq/wisteria";
 
 const double consoleHeight = 120;
