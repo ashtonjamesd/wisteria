@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
-import 'package:wisteria/app/utils/auth/auth_service.dart';
 import 'package:wisteria/app/utils/globals.dart';
 import 'package:wisteria/app/views/profile/utils/profile_view_controller.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
@@ -99,114 +98,89 @@ class _ProfileViewState extends State<ProfileView> {
       color: primaryGrey,
       text: "sign up with email", 
       onTap: () {
-        push(context, enterEmailScreen());
+        push(context, setEmailScreen());
       }
     );
   }
 
-  Widget enterEmailScreen() {
-    final screen = MediaQuery.sizeOf(context);
+  Widget setEmailScreen() {
+    return enterFieldScreen(
+      "enter your email", 
+      "name@example.com", 
+      controller.emailController, 
+      () {
+        if (!controller.isValidateEmail(controller.emailController.text)) {
+          return;
+        }
 
-    return Scaffold(
-      backgroundColor: primaryWhite,
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 120),
-            WisteriaText(
-              text: "enter your email",
-              size: 22,
-              isBold: true,
-            ),
-            
-            SizedBox(
-              width: screen.width - 40,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: WisteriaField(
-                  hintText: "name@example.com",
-                  controller: controller.emailController
-                ),
-              )
-            ),
-
-            const SizedBox(height: 32),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: WisteriaButton(
-                width: screen.width * 0.4,
-                color: primaryGrey,
-                text: "continue",
-                textColor: primaryWhite,
-                height: 40,
-                onTap: () {
-                  if (!controller.isValidateEmail(controller.emailController.text)) {
-                    return;
-                  }
-        
-                  push(context, enterPasswordScreen());
-                }
-              ),
-            )
-          ],
-        ),
-      ),
+        push(context, setPasswordScreen());
+      }
     );
   }
 
-  Widget enterPasswordScreen() {
-    final screen = MediaQuery.sizeOf(context);
+  Widget setPasswordScreen() {
+    return enterFieldScreen(
+      "set a password", 
+      "min. 8 characters", 
+      controller.passwordController, 
+      () {
+        if (!controller.isValidPassword(controller.passwordController.text)) {
+          return;
+        }
 
-    return Scaffold(
-      backgroundColor: primaryWhite,
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 120),
-            WisteriaText(
-              text: "set a password",
-              size: 22,
-              isBold: true,
-            ),
-            
-            SizedBox(
-              width: screen.width - 40,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: WisteriaField(
-                  hintText: "min. 8 characters",
-                  controller: controller.passwordController
-                ),
-              )
-            ),
-
-            const SizedBox(height: 32),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: WisteriaButton(
-                width: screen.width * 0.4,
-                color: primaryGrey,
-                text: "continue",
-                textColor: primaryWhite,
-                height: 40,
-                onTap: () {
-                  if (!controller.isValidPassword(controller.passwordController.text)) {
-                    return;
-                  }
-
-                  push(context, enterUsernameScreen());
-                }
-              ),
-            )
-          ],
-        ),
-      ),
+        push(context, enterUsernameScreen());
+      }
     );
   }
 
   Widget enterUsernameScreen() {
+    return enterFieldScreen(
+      "how should we address you?", 
+      "john_doe (min. 3 characters)", 
+      controller.usernameController, 
+      () async {
+        if (!controller.isValidPassword(controller.passwordController.text)) {
+          return;
+        }
+
+        final result = await controller.registerUser();
+        // final user = await controller.loginUser();
+
+        if (result.isSuccess) {
+          push(
+            context, 
+            infoScreen(
+              "account created successfully", "welcome ${controller.usernameController.text}", 
+              () {
+                  pop(context);
+                  pop(context);
+                  pop(context);
+                  pop(context);
+              }
+            ),
+          );
+
+          return;
+        }
+
+        push(
+          context, 
+          infoScreen(
+            "unable to create account", "please try again later or raise an error with support", 
+            () {
+              pop(context);
+              pop(context);
+              pop(context);
+            }
+          ),
+        );
+
+        return;
+      }
+    );
+  }
+
+  Widget infoScreen(String header, String description, Function onTapOkay) {
     final screen = MediaQuery.sizeOf(context);
 
     return Scaffold(
@@ -216,7 +190,89 @@ class _ProfileViewState extends State<ProfileView> {
           children: [
             const SizedBox(height: 120),
             WisteriaText(
-              text: "how should we address you?",
+              text: header,
+              size: 22,
+              isBold: true,
+            ),
+
+            const SizedBox(height: 32),
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: WisteriaButton(
+                width: screen.width * 0.4,
+                color: primaryGrey,
+                text: "okay",
+                textColor: primaryWhite,
+                height: 40,
+                onTap: () async {
+                  await onTapOkay();
+                }
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget enterEmailScreen() {
+    return enterFieldScreen(
+      "enter your email", 
+      "name@example.com", 
+      controller.emailController, 
+      () {
+        if (!controller.isValidateEmail(controller.emailController.text)) {
+          return;
+        }
+
+        push(context, enterPasswordScreen());
+      }
+    );
+  }
+
+  Widget enterPasswordScreen() {
+    return enterFieldScreen(
+      "enter your password", 
+      "", 
+      controller.passwordController, 
+      () async {
+        final result = await controller.loginUser();
+        
+        if (!result.isSuccess) {
+          push(
+            context, 
+            infoScreen(
+              "invalid credentials", "incorrect email or password", 
+              () {
+                pop(context);
+                pop(context);
+                pop(context);
+              }
+            ),
+          );
+
+          return;
+        }
+
+        pop(context);
+        pop(context);
+      }
+    );
+  }
+
+
+  Widget enterFieldScreen(String header, String hintText, TextEditingController textController, Function onTap, {String buttonText = "continue"}) {
+    final screen = MediaQuery.sizeOf(context);
+
+    return Scaffold(
+      backgroundColor: primaryWhite,
+      body: Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 120),
+            WisteriaText(
+              text: header,
               size: 22,
               isBold: true,
             ),
@@ -226,8 +282,8 @@ class _ProfileViewState extends State<ProfileView> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: WisteriaField(
-                  hintText: "john_doe (min. 3 characters)",
-                  controller: controller.usernameController
+                  hintText: hintText,
+                  controller: textController
                 ),
               )
             ),
@@ -239,15 +295,11 @@ class _ProfileViewState extends State<ProfileView> {
               child: WisteriaButton(
                 width: screen.width * 0.4,
                 color: primaryGrey,
-                text: "continue",
+                text: buttonText,
                 textColor: primaryWhite,
                 height: 40,
-                onTap: () {
-                  if (!controller.isValidPassword(controller.passwordController.text)) {
-                    return;
-                  }
-
-
+                onTap: () async {
+                  await onTap();
                 }
               ),
             )
@@ -271,7 +323,7 @@ class _ProfileViewState extends State<ProfileView> {
           const SizedBox(width: 12),
           GestureDetector(
             onTap: () {
-
+              push(context, enterEmailScreen());
             },
             child: WisteriaText(
               color: primaryTextColor,
