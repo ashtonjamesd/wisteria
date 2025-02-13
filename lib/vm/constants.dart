@@ -32,11 +32,14 @@ const CMP_REG_LIT_OP = 15;
 const CMP_REG_REG_OP = 16;
 const JNE_OP = 17;
 const JE_OP = 18;
-const NEG_OP = 19;
-
-const AND_OP = 20;
-const OR_OP = 21;
-const XOR_OP = 22;
-const NOT_OP = 23;
+const JG_OP = 19;
+const JL_OP = 20;
+const JLE_OP = 21;
+const JGE_OP = 22;
+const NEG_OP = 23;
+const AND_OP = 24;
+const OR_OP = 25;
+const XOR_OP = 26;
+const NOT_OP = 27;
 
 const OUT_OP = 255;

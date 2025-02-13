@@ -91,6 +91,10 @@ final class VirtualMachine {
       NEG_OP: _neg,
       JNE_OP: _jne,
       JE_OP: _je,
+      JGE_OP: _jge,
+      JG_OP: _jg,
+      JLE_OP: _jle,
+      JL_OP: _jl,
       AND_OP: _andLiteral,
       OR_OP: _orLiteral,
       XOR_OP: _xorLiteral,
@@ -305,7 +309,12 @@ final class VirtualMachine {
 
     final b = memory[pc];
 
-    zf = a == b;
+    final result = a - b;
+
+    if (result == 0) zf = true;
+    if (result != 0) zf = false;
+    if (result < 0) sf = true;
+    if (result > 0) sf = false;
   }
 
   void _cmpRegReg() {
@@ -328,6 +337,42 @@ final class VirtualMachine {
 
   void _je() {
     if (zf) {
+      final destination = memory[pc];
+      pc = destination;
+    }
+
+    _update();
+  }
+
+  void _jg() {
+    if (!zf && !sf) {
+      final destination = memory[pc];
+      pc = destination;
+    }
+
+    _update();
+  }
+
+  void _jl() {
+    if (sf) {
+      final destination = memory[pc];
+      pc = destination;
+    }
+
+    _update();
+  }
+
+  void _jle() {
+    if (zf || sf) {
+      final destination = memory[pc];
+      pc = destination;
+    }
+
+    _update();
+  }
+
+  void _jge() {
+    if (zf || !sf) {
       final destination = memory[pc];
       pc = destination;
     }
@@ -388,6 +433,7 @@ final class VirtualMachine {
   // this is used as a location to jump to when a label is found
   void _nop() {
     pc--;
+    _update();
   }
 
   void _tick() {
