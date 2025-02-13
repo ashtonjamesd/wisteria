@@ -135,7 +135,7 @@ class _VmViewState extends State<VmView> {
       padding: const EdgeInsets.only(left: 24),
       child: WisteriaText(
         text: "virtual machine",
-        color: textColor, 
+        color: primaryTextColor, 
         size: 24
       ),
     );
@@ -234,7 +234,7 @@ class _VmViewState extends State<VmView> {
             ),
             child: Icon(
               SimpleIcons.github,
-              color: textColor,
+              color: primaryTextColor,
               size: 24,
             ),
           ),
@@ -549,6 +549,11 @@ class _VmViewState extends State<VmView> {
       child: GestureDetector(
         onTap: () {
           controller.onProgramCounterTapped();
+          if (!controller.programCounterSelected) {
+            setState(() {});
+            return;
+          }
+
           setInfoWidget(programCounterInfoWidget());
         },
         child: WisteriaBox(

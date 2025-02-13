@@ -41,7 +41,7 @@ class _HelpButtonState extends State<HelpButton> {
                   padding: const EdgeInsets.all(8),
                   child: WisteriaText(
                     text: "Welcome to Wisteria", 
-                    color: textColor, 
+                    color: primaryTextColor, 
                     size: 15
                   ),
                 ),
@@ -51,7 +51,7 @@ class _HelpButtonState extends State<HelpButton> {
                 padding: const EdgeInsets.all(8),
                 child: WisteriaText(
                   text: helpMessage, 
-                  color: textColor, 
+                  color: primaryTextColor, 
                   size: 12
                 ),
               ),

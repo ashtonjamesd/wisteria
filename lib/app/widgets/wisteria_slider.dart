@@ -33,7 +33,7 @@ class _WisteriaSliderState extends State<WisteriaSlider> {
       children: [
         WisteriaText(
           text: "No", 
-          color: textColor, 
+          color: primaryTextColor, 
           size: 14,
         ),
         Switch(
@@ -47,12 +47,12 @@ class _WisteriaSliderState extends State<WisteriaSlider> {
           },
           activeColor: primaryWhite,
           inactiveThumbColor: primaryGrey,
-          activeTrackColor: textColor,
-          inactiveTrackColor: textColor,
+          activeTrackColor: primaryTextColor,
+          inactiveTrackColor: primaryTextColor,
         ),
         WisteriaText(
           text: "Yes", 
-          color: textColor, 
+          color: primaryTextColor, 
           size: 14,
         ),
       ],

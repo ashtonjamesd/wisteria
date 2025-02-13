@@ -11,7 +11,9 @@ class WisteriaButton extends StatefulWidget {
     required this.color,
     this.text,
     this.showBorder = false,
+    this.borderColor = const Color.fromARGB(255, 76, 76, 76),
     required this.onTap,
+    this.textColor = primaryWhite
   });
 
   final double width;
@@ -21,6 +23,8 @@ class WisteriaButton extends StatefulWidget {
   final IconData? icon;
   final VoidCallback onTap;
   final bool showBorder;
+  final Color textColor;
+  final Color borderColor;
 
   @override
   State<WisteriaButton> createState() => _WisteriaButtonState();
@@ -59,12 +63,12 @@ class _WisteriaButtonState extends State<WisteriaButton> {
           decoration: BoxDecoration(
             color: _getButtonColor(),
             borderRadius: BorderRadius.circular(boxBorderRadius),
-            border: widget.showBorder ? Border.all(color: const Color.fromARGB(255, 76, 76, 76)) : null,
+            border: widget.showBorder ? Border.all(color: widget.borderColor) : null,
           ),
           child: Center(
             child: widget.icon == null ? WisteriaText(
               text: widget.text!,
-              color: Colors.white,
+              color: widget.textColor,
               size: 14,
             ) : Icon(
               widget.icon!,

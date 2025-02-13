@@ -11,6 +11,7 @@ class WisteriaBox extends StatelessWidget {
     this.header,
     this.showBorder = false,
     this.color = primaryWhite,
+    this.borderColor = primaryTextColor,
     required this.child
   });
 
@@ -20,6 +21,7 @@ class WisteriaBox extends StatelessWidget {
   final String? header;
   final bool showBorder;
   final Widget child;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class WisteriaBox extends StatelessWidget {
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.circular(boxBorderRadius),
-              border: showBorder ? Border.all(color: const Color.fromARGB(255, 72, 72, 72)) : null,
+              border: showBorder ? Border.all(color: borderColor) : null,
             ),
             child: child,
           ),

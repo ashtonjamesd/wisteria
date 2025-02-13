@@ -29,7 +29,7 @@ class _ExercisesViewState extends State<ExercisesView> {
           padding: const EdgeInsets.only(left: 32),
           child: WisteriaText(
             text: "exercises", 
-            color: textColor,
+            color: primaryTextColor,
             size: 24,
           ),
         ),

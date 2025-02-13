@@ -25,6 +25,13 @@ const String programCounterDescription =
 The program counter (PC) tracks the address of the next instruction to execute, ensuring the CPU processes instructions in the correct sequence.
 """;
 
+const String supportMessage = 
+"""
+If you need help, check our official documentation on the GitHub repository. If you think you have encountered a bug, please report it. 
+
+You can contact us through the email on our GitHub profile.
+""";
+
 // 10th fibonacci counter
 const String exampleProgramOne = 
 """
@@ -65,7 +72,8 @@ const double boxBorderRadius = 2;
 
 const Color primaryGrey = Color.fromARGB(255, 219, 219, 219);
 const Color primaryWhite = Colors.white;
-const Color textColor = Color.fromARGB(255, 95, 95, 95);
+const Color primaryTextColor = Color.fromARGB(255, 95, 95, 95);
+const Color secondaryTextColor = Color.fromARGB(255, 131, 131, 131);
 
 const Color selectedIconColor = Color.fromARGB(255, 53, 53, 53);
 

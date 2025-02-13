@@ -134,7 +134,7 @@ final class VirtualMachine {
     output("executing program..");
     
     while (isRunning) {
-      await delay(250);
+      await delay(100);
 
       while (isPaused) {
         await delay(1000);
