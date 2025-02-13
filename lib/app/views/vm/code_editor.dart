@@ -34,15 +34,17 @@ class _StackCodeEditorState extends State<StackCodeEditor> {
 
   @override
   Widget build(BuildContext context) {
+    final screen = MediaQuery.sizeOf(context);
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
         child: Container(
-          height: 340,
-          width: 600,
+          height: screen.height * 0.7,
+          width: screen.width * 0.8,
           decoration: BoxDecoration(
-            color: primaryGrey,
-            borderRadius: BorderRadius.circular(4),
+            color: primaryWhite,
+            borderRadius: BorderRadius.circular(boxBorderRadius),
           ),
           child: Stack(
             children: [
@@ -57,7 +59,7 @@ class _StackCodeEditorState extends State<StackCodeEditor> {
                         child: Container(
                           width: 60,
                           padding: const EdgeInsets.all(8.0),
-                          color: primaryGrey,
+                          color: primaryWhite,
                           child: SingleChildScrollView(
                             controller: _scrollController,
                             child: TextField(
@@ -76,15 +78,22 @@ class _StackCodeEditorState extends State<StackCodeEditor> {
                       Expanded(
                         child: SingleChildScrollView(
                           controller: _scrollController,
-                          child: TextField(
-                            controller: widget.controller,
-                            maxLines: null,
-                            cursorColor: Colors.grey,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.all(8.0),
-                              isDense: true,
-                              hintText: 'Enter code here...',
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: TextField(
+                              controller: widget.controller,
+                              maxLines: null,
+                              cursorColor: Colors.grey,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding: const EdgeInsets.all(8.0),
+                                isDense: true,
+                                hintText: 'write code here..',
+                                hintStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: primaryGrey
+                                )
+                              ),
                             ),
                           ),
                         ),
@@ -96,7 +105,7 @@ class _StackCodeEditorState extends State<StackCodeEditor> {
               Padding(
                 padding: const EdgeInsets.only(left: 8, top: 8),
                 child: Text(
-                  "editor",
+                  "assembly editor",
                 ),
               ),
               Positioned(

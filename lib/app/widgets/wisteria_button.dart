@@ -10,6 +10,7 @@ class WisteriaButton extends StatefulWidget {
     this.icon,
     required this.color,
     this.text,
+    this.textSize = 14,
     this.showBorder = false,
     this.borderColor = const Color.fromARGB(255, 76, 76, 76),
     required this.onTap,
@@ -25,6 +26,7 @@ class WisteriaButton extends StatefulWidget {
   final bool showBorder;
   final Color textColor;
   final Color borderColor;
+  final double textSize;
 
   @override
   State<WisteriaButton> createState() => _WisteriaButtonState();

@@ -8,6 +8,8 @@ import 'package:wisteria/app/widgets/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/utils/app_controller.dart';
 
+import '../../widgets/wisteria_window.dart';
+
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
 
@@ -67,14 +69,18 @@ class _SettingsViewState extends State<SettingsView> {
           basicSetting(
             "Terms and Conditions", Icons.file_copy,
             () {
-
+              showDialog(context: context, builder: (context) {
+                return termsAndConditions();
+              });
             }
           ),
 
           basicSetting(
             "Privacy Policy", Icons.lock,
             () {
-              
+              showDialog(context: context, builder: (context) {
+                return privacyPolicy();
+              });
             }
           ),
           basicSetting(
@@ -113,57 +119,41 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
+  Widget termsAndConditions() {
+    return WisteriaWindow(
+      header: "Terms and Conditions", 
+      width: 280, 
+      height: 240,
+      messageWidget: WisteriaText(
+        text: termsAndConditionsMessage
+      ),
+    );
+  }
+
+  Widget privacyPolicy() {
+    return WisteriaWindow(
+      header: "Privacy Policy", 
+      width: 280, 
+      height: 240,
+      messageWidget: WisteriaText(
+        text: privacyPolicyMessage
+      ),
+    );
+  }
+
   Widget helpDialogue() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        WisteriaBox(
-          width: 280, 
-          height: 240, 
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: WisteriaText(
-                    text: "Need Support?", 
-                    color: primaryTextColor, 
-                    size: 15
-                  ),
-                ),
-              ),
-              
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: WisteriaText(
-                  text: supportMessage, 
-                  color: primaryTextColor, 
-                  size: 12
-                ),
-              ),
-
-              const Spacer(),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  WisteriaButton(
-                    width: 80, 
-                    color: primaryGrey, 
-                    text: "okay", 
-                    onTap: () {
-                      Navigator.pop(context);
-                    }
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16)
-            ],
-          )
+    return WisteriaWindow(
+      header: "Need Support?", 
+      messageWidget: Padding(
+        padding: const EdgeInsets.all(8),
+        child: WisteriaText(
+          text: supportMessage, 
+          color: primaryTextColor, 
+          size: 12
         ),
-      ],
+      ), 
+      width: 280, 
+      height: 240
     );
   }
 

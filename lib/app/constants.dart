@@ -32,6 +32,16 @@ If you need help, check our official documentation on the GitHub repository. If 
 You can contact us through the email on our GitHub profile.
 """;
 
+const String termsAndConditionsMessage = 
+"""
+
+""";
+
+const String privacyPolicyMessage = 
+"""
+
+""";
+
 // 10th fibonacci counter
 const String exampleProgramOne = 
 """
