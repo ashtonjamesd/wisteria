@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_icons/simple_icons.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
-import 'package:wisteria/app/widgets/wisteria_button.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
 import 'package:wisteria/app/widgets/wisteria_slider.dart';
 import 'package:wisteria/app/widgets/wisteria_text.dart';
@@ -27,35 +26,36 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Widget settingsView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 40),
-
-        Padding(
-          padding: const EdgeInsets.only(left: 32),
-          child: WisteriaText(
-            text: "settings", 
-            color: primaryTextColor,
-            size: 24,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 40),
+      
+          Padding(
+            padding: const EdgeInsets.only(left: 32),
+            child: WisteriaText(
+              text: "settings", 
+              color: primaryTextColor,
+              size: 24,
+            ),
           ),
-        ),
-
-        const SizedBox(height: 28),
-
-        Center(
-          child: settingsBox()
-        ),
-      ],
+      
+          const SizedBox(height: 28),
+          settingsBox(),
+        ],
+      ),
     );
   }
 
   Widget settingsBox() {
-    return SizedBox(
-      height: MediaQuery.sizeOf(context).height - 220,
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          userSettings(),
+          const SizedBox(height: 24),
+            
           settingsHeader("App Settings", hasTopPadding: false),
           trueOrFalseSetting(
             "Show help dialogues", 
@@ -74,7 +74,7 @@ class _SettingsViewState extends State<SettingsView> {
               });
             }
           ),
-
+            
           basicSetting(
             "Privacy Policy", Icons.lock,
             () {
@@ -91,7 +91,7 @@ class _SettingsViewState extends State<SettingsView> {
               });
             }
           ),
-
+            
           settingsHeader("Share"),
           basicSetting(
             "View the code", SimpleIcons.github,
@@ -111,11 +111,24 @@ class _SettingsViewState extends State<SettingsView> {
               
             }
           ),
-
-          const Spacer(),
+            
+          // const Spacer(),
           copyrightNotice()
         ],
       ),
+    );
+  }
+
+  Widget userSettings() {
+    if (AppController.instance.user == null) {
+      return SizedBox();
+    }
+
+    return Column(
+      children: [
+        infoSetting("email", AppController.instance.user!.email),
+        infoSetting("username", AppController.instance.user!.username),
+      ],
     );
   }
 
@@ -226,6 +239,41 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
+  Widget infoSetting(String header, String value) {
+    final screen = MediaQuery.sizeOf(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(width: 12, height: 12),
+
+        WisteriaText(
+          text: header,
+          isBold: true,
+          size: 15,
+        ),
+
+        WisteriaBox(
+          width: screen.width - 40, 
+          height: 50,
+          color: primaryWhite,
+          showBorder: true,
+          borderColor: primaryGrey,
+          child: Row(
+            children: [
+              const SizedBox(width: 12),
+        
+              WisteriaText(
+                text: value,
+                size: 15,
+              ),
+            ],
+          )
+        ),
+      ],
+    );
+  }
+
   Widget basicSetting(String text, IconData icon, Function onTap) {
     final screen = MediaQuery.sizeOf(context);
 
@@ -257,19 +305,6 @@ class _SettingsViewState extends State<SettingsView> {
           ],
         )
       ),
-    );
-
-    return WisteriaButton(
-      width: screen.width - 40,
-      height: 40,
-      color: primaryWhite,
-      text: text,
-      showBorder: true,
-      borderColor: primaryGrey,
-      textColor: primaryTextColor,
-      onTap: () {
-
-      }
     );
   }
 }
