@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
+import 'package:wisteria/app/utils/app_controller.dart';
 import 'package:wisteria/app/utils/globals.dart';
 import 'package:wisteria/app/views/profile/utils/profile_view_controller.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
@@ -42,9 +43,7 @@ class _ProfileViewState extends State<ProfileView> {
 
         const SizedBox(height: 28),
 
-        Center(
-          child: profileBox()
-        ),
+        profileBox(),
       ],
     );
   }
@@ -52,23 +51,92 @@ class _ProfileViewState extends State<ProfileView> {
   Widget profileBox() {
     return SizedBox(
       height: MediaQuery.sizeOf(context).height - 230,
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 120),
-            saveYourProgress(),
+      child: AppController.instance.user == null ? notLoggedInScreen() : loggedInScreen(),
+    );
+  }
 
-            const Spacer(),
+  Widget loggedInScreen() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 24),
+        welcomeText(),
 
-            signUpWithEmailButton(),
-            const SizedBox(height: 12),
-            loginButton(),
+        const SizedBox(height: 24),
 
-            const SizedBox(height: 32),
-            
-            agreeTsAndCs()
-          ],
-        )
+        userField("username", AppController.instance.user!.username),
+        const SizedBox(height: 16),
+
+        userField("exercises complete", AppController.instance.user!.exercisesComplete.toString()),
+        const SizedBox(height: 16),
+
+      ],
+    );
+  }
+
+  Widget userField(String field, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          WisteriaText(
+            text: field,
+            color: primaryTextColor,
+            size: 16,
+            isBold: true,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: WisteriaText(
+              text: value,
+              color: secondaryTextColor,
+              size: 16,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget welcomeText() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Row(
+        children: [
+          WisteriaText(
+            text: "welcome, ",
+            color: primaryTextColor,
+            size: 28,
+          ),
+          WisteriaText(
+            text: "${AppController.instance.user!.username}!",
+            color: secondaryTextColor,
+            size: 32,
+            isBold: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget notLoggedInScreen() {
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(height: 120),
+          saveYourProgress(),
+      
+          const Spacer(),
+      
+          signUpWithEmailButton(),
+          const SizedBox(height: 12),
+          loginButton(),
+      
+          const SizedBox(height: 32),
+          
+          agreeTsAndCs()
+        ],
       ),
     );
   }
@@ -122,7 +190,8 @@ class _ProfileViewState extends State<ProfileView> {
     return enterFieldScreen(
       "set a password", 
       "min. 8 characters", 
-      controller.passwordController, 
+      controller.passwordController,
+      isPassword: true,
       () {
         if (!controller.isValidPassword(controller.passwordController.text)) {
           return;
@@ -236,6 +305,7 @@ class _ProfileViewState extends State<ProfileView> {
       "enter your password", 
       "", 
       controller.passwordController, 
+      isPassword: true,
       () async {
         final result = await controller.loginUser();
         
@@ -257,12 +327,16 @@ class _ProfileViewState extends State<ProfileView> {
 
         pop(context);
         pop(context);
+
+        setState(() {
+          AppController.instance.user = result.value;
+        });
       }
     );
   }
 
 
-  Widget enterFieldScreen(String header, String hintText, TextEditingController textController, Function onTap, {String buttonText = "continue"}) {
+  Widget enterFieldScreen(String header, String hintText, TextEditingController textController, Function onTap, {String buttonText = "continue", bool isPassword = false}) {
     final screen = MediaQuery.sizeOf(context);
 
     return Scaffold(
@@ -282,6 +356,7 @@ class _ProfileViewState extends State<ProfileView> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: WisteriaField(
+                  obscure: isPassword,
                   hintText: hintText,
                   controller: textController
                 ),

@@ -21,8 +21,15 @@ final class DbService {
     return null;
   }
 
-  Future<void> createUser(String uid, String username, String email) async {
-    final user = WisteriaUser(uid: uid, username: username, email: email);
+  Future<void> createUser(String uid, String username, String email, int exercisesComplete) async {
+    final user = WisteriaUser(
+      uid: uid, 
+      username: username, 
+      email: email,
+      exercisesComplete: exercisesComplete,
+      createdAt: DateTime.now()
+    );
+
     await users.doc(uid).set(user.toMap());
   }
 }

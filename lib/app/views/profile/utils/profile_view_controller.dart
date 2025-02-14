@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:wisteria/app/utils/auth/models/wisteria_user.dart';
 
 import '../../../utils/auth/auth_service.dart';
 import '../../../utils/result.dart';
@@ -25,13 +26,14 @@ final class ProfileViewController {
     }
   }
 
-  Future<Result<bool>> loginUser() async {
+  Future<Result<WisteriaUser?>> loginUser() async {
     try {
       final result = await authService.login(
         emailController.text, 
         passwordController.text
       );
 
+      
       return result;
     } catch (exception) {
       print(exception);

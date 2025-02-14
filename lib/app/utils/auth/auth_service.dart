@@ -7,13 +7,13 @@ final class AuthService {
   final _db = DbService();
   final _auth = FirebaseAuth.instance;
 
-  Future<Result<bool>> login(String email, String password) async {
+  Future<Result<WisteriaUser?>> login(String email, String password) async {
     final credential = await _auth.signInWithEmailAndPassword(
       email: email, password: password
     );
 
     if (credential.user == null) {
-      return Result.success(false);
+      return Result.success(null);
     }
 
     final user = await _db.getUser(email);
@@ -23,7 +23,7 @@ final class AuthService {
       return Result.failure(false);
     }
 
-    return Result.success(true);
+    return Result.success(user);
   }
 
   Future<Result<bool>> register(String username, String email, String password) async {
@@ -36,7 +36,7 @@ final class AuthService {
       return Result.success(false);
     }
 
-    await _db.createUser(credential.user!.uid, username, email);
+    await _db.createUser(credential.user!.uid, username, email, 0);
     return Result.success(true);
   }
 }
