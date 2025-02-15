@@ -25,7 +25,7 @@ class _LoggedInViewState extends State<LoggedInView> {
 
   Widget loggedInScreen() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 24),
         welcomeText(),
@@ -46,20 +46,30 @@ class _LoggedInViewState extends State<LoggedInView> {
   Widget statBox(String stat, String value) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: WisteriaBox(
-        width: 120,
-        height: 120,
-        borderColor: primaryTextColor,
-        showBorder: true,
-        color: primaryWhite,
-        child: Center(
-          child: WisteriaText(
-            text: value,
-            size: 32,
+      child: Column(
+        children: [
+          WisteriaText(
+            text: stat,
+            size: 14,
             isBold: true,
             color: primaryTextColor,
           ),
-        )
+          WisteriaBox(
+            width: 170,
+            height: 50,
+            borderColor: primaryTextColor,
+            showBorder: true,
+            color: primaryWhite,
+            child: Center(
+              child: WisteriaText(
+                text: value,
+                size: 24,
+                isBold: true,
+                color: primaryTextColor,
+              ),
+            )
+          ),
+        ],
       ),
     );
   }

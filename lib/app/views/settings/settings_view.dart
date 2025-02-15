@@ -141,6 +141,24 @@ class _SettingsViewState extends State<SettingsView> {
       onTap: () async {
         await authService.logout();
         setState(() {});
+
+        showDialog(context: context, builder: (context) {
+          return WisteriaWindow(
+            header: "", 
+            messageWidget: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Center(
+                child: WisteriaText(
+                  text: "Logged Out",
+                  size: 18,
+                  isBold: true,
+                ),
+              ),
+            ), 
+            width: 240, 
+            height: 140
+          );
+        });
       }
     );
   }
