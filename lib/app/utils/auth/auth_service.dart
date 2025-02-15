@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisteria/app/utils/auth/models/wisteria_user.dart';
 import 'package:wisteria/app/utils/db/db_service.dart';
+import '../app_controller.dart';
 import '../result.dart';
 
 final class AuthService {
@@ -23,6 +25,9 @@ final class AuthService {
       return Result.failure(false);
     }
 
+    AppController.instance.user = user;
+    await _saveLoginDetails(email, password);
+
     return Result.success(user);
   }
 
@@ -38,5 +43,21 @@ final class AuthService {
 
     await _db.createUser(credential.user!.uid, username, email, 0);
     return Result.success(true);
+  }
+
+  Future<void> logout() async {
+    final preferences = await SharedPreferences.getInstance();
+
+    await preferences.remove("email");
+    await preferences.remove("password");
+
+    AppController.instance.user = null;
+  }
+
+  Future<void> _saveLoginDetails(String email, String password) async {
+    final preferences = await SharedPreferences.getInstance();
+
+    await preferences.setString("email", email);
+    await preferences.setString("password", password);
   }
 }

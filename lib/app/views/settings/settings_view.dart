@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:simple_icons/simple_icons.dart';
+import 'package:wisteria/app/utils/auth/auth_service.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
+import 'package:wisteria/app/widgets/wisteria_button.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
 import 'package:wisteria/app/widgets/wisteria_slider.dart';
 import 'package:wisteria/app/widgets/wisteria_text.dart';
@@ -17,6 +19,8 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
+  final authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,11 +115,33 @@ class _SettingsViewState extends State<SettingsView> {
               
             }
           ),
+
+          const SizedBox(height: 32),
+
+          logoutButton(),
             
           // const Spacer(),
           copyrightNotice()
         ],
       ),
+    );
+  }
+
+  Widget logoutButton() {
+    if (AppController.instance.user == null) {
+      return SizedBox();
+    }
+
+    return WisteriaButton(
+      width: MediaQuery.sizeOf(context).width - 40, 
+      color: primaryGrey,
+      text: "Logout",
+      textSize: 18,
+      height: 40,
+      onTap: () async {
+        await authService.logout();
+        setState(() {});
+      }
     );
   }
 

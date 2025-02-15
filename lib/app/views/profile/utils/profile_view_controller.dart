@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:wisteria/app/utils/auth/models/wisteria_user.dart';
 
+import '../../../utils/app_controller.dart';
 import '../../../utils/auth/auth_service.dart';
 import '../../../utils/result.dart';
 
@@ -32,7 +33,6 @@ final class ProfileViewController {
         emailController.text, 
         passwordController.text
       );
-
       
       return result;
     } catch (exception) {

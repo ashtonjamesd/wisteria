@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wisteria/app/utils/auth/auth_service.dart';
 
 import 'app/constants.dart';
 import 'app/views/exercises/exercises_view.dart';
@@ -14,6 +16,8 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
+  final authService = AuthService();
+
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [

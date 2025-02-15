@@ -49,7 +49,20 @@ class _ProfileViewState extends State<ProfileView> {
   Widget profileBox() {
     return SizedBox(
       height: MediaQuery.sizeOf(context).height - 230,
-      child: AppController.instance.user == null ? NotLoggedInView() : LoggedInView()
+      child: profile()
+    );
+  }
+
+  Widget profile() {
+    return AppController.instance.user == null ? 
+    NotLoggedInView(
+      update: () {
+        setState(() {});
+      },
+    ) : LoggedInView(
+      update: () {
+        setState(() {});
+      },
     );
   }
 }

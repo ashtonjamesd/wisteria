@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/views/profile/utils/profile_view_controller.dart';
-
 import '../../constants.dart';
-import '../../utils/app_controller.dart';
 import '../../utils/globals.dart';
 import '../../widgets/wisteria_button.dart';
 import '../../widgets/wisteria_field.dart';
 import '../../widgets/wisteria_text.dart';
 
 class NotLoggedInView extends StatefulWidget {
-  const NotLoggedInView({super.key});
+  const NotLoggedInView({
+    super.key, 
+    required this.update
+  });
+
+  final VoidCallback update;
 
   @override
   State<NotLoggedInView> createState() => _NotLoggedInViewState();
@@ -267,9 +270,8 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
         pop(context);
         pop(context);
 
-        setState(() {
-          AppController.instance.user = result.value;
-        });
+        setState(() {});
+        widget.update();
       }
     );
   }

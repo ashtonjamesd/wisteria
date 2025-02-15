@@ -6,7 +6,12 @@ import '../../utils/app_controller.dart';
 import '../../widgets/wisteria_text.dart';
 
 class LoggedInView extends StatefulWidget {
-  const LoggedInView({super.key});
+  const LoggedInView({
+    super.key, 
+    required this.update
+  });
+
+  final VoidCallback update;
 
   @override
   State<LoggedInView> createState() => _LoggedInViewState();
