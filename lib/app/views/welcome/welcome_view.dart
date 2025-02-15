@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/utils/globals.dart';
-import 'package:wisteria/app/views/vm/vm_view.dart';
-import 'package:wisteria/app/widgets/wisteria_box.dart';
+import 'package:wisteria/app_view.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
 import 'package:wisteria/app/widgets/wisteria_text.dart';
-import 'package:wisteria/app_view.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({super.key});
@@ -16,39 +14,48 @@ class WelcomeView extends StatefulWidget {
 }
 
 class _WelcomeViewState extends State<WelcomeView> {
-  int pageIndex = 0;
+  final _pageController = PageController();
+  int _currentPage = 0;
 
-  var pageMap =  {};
-
-  @override
-  void initState() {
-    pageMap = {
-      0: welcomePageOne(),
-      1: welcomePageTwo(),
-      2: welcomePageThree(),
-    };
-
-    super.initState();
-  }
+  static const double titleSize = 28;
+  static const double textSize = 16;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryWhite,
-      body: defaultPageWidget(pageMap[pageIndex]),
-    );
-  }
-
-  Widget defaultPageWidget(Widget page) {
-    return Center(
-      child: Column(
+      body: Column(
         children: [
-          page,
-          const Spacer(),
-
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
+              children: [
+                buildPage(
+                  "Learn Assembly Code",
+                  "Understand low-level programming with an interactive approach.",
+                  Icons.code
+                ),
+                buildPage(
+                  "Interactive Virtual Machine",
+                  "Simulate a CPU and see your code in action in real-time.",
+                  Icons.computer
+                ),
+                buildPage(
+                  "Programming Exercises",
+                  "Solve challenges and improve your assembly programming skills.",
+                  Icons.terminal
+                ),
+              ],
+            ),
+          ),
+          
           pageCircleSymbols(),
-          const SizedBox(height: 80),
-
+          const SizedBox(height: 40),
           letsGoButton(),
           const SizedBox(height: 80),
         ],
@@ -57,48 +64,56 @@ class _WelcomeViewState extends State<WelcomeView> {
   }
 
   Widget pageCircleSymbols() {
-    return SizedBox();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(3, (index) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: _currentPage == index ? Colors.black : Colors.grey,
+          ),
+        );
+      }),
+    );
   }
 
-  Widget welcomePageOne() {
+  Widget buildPage(String title, String desc, IconData icon) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(height: 200),
-
         WisteriaIcon(
-          icon: Icons.code,
+          icon: icon,
           size: 60,
         ),
-
         const SizedBox(height: 40),
-
         WisteriaText(
-          text: "Learn Assembly Code",
-          size: 32,
+          text: title,
+          size: titleSize,
           isBold: true,
         ),
-        WisteriaText(
-          text: "",
-          size: 18,
+        const SizedBox(height: 16),
+
+        SizedBox(
+          width: 280,
+          child: WisteriaText(
+            text: desc,
+            size: textSize,
+            align: TextAlign.center,
+          ),
         ),
       ],
     );
   }
 
-  Widget welcomePageTwo() {
-    return WisteriaText(text: "page 2");
-  }
-
-  Widget welcomePageThree() {
-    return WisteriaText(text: "page 3");
-  }
-
   Widget letsGoButton() {
     return WisteriaButton(
-      width: MediaQuery.sizeOf(context).width - 60, 
-      height: 40, 
+      width: MediaQuery.sizeOf(context).width - 60,
+      height: 40,
       color: primaryGrey,
-      text: "Lets Go!",
+      text: "Let's Go!",
       textSize: 18,
       onTap: () {
         push(context, AppView());
