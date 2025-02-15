@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:simple_icons/simple_icons.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wisteria/app/preferences.dart';
 import 'package:wisteria/app/utils/auth/auth_service.dart';
+import 'package:wisteria/app/utils/globals.dart';
+import 'package:wisteria/app/views/welcome/welcome_view.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
@@ -9,6 +12,7 @@ import 'package:wisteria/app/widgets/wisteria_slider.dart';
 import 'package:wisteria/app/widgets/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/utils/app_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/wisteria_window.dart';
 
@@ -111,22 +115,25 @@ class _SettingsViewState extends State<SettingsView> {
           settingsHeader("Share"),
           basicSetting(
             "View the code", SimpleIcons.github,
-            () {
-              
+            () async {
+              final uri = Uri.parse(githubUrl);
+              if (await canLaunchUrl(uri)){
+                  await launchUrl(uri);
+              }
             }
           ),
-          basicSetting(
-            "Follow us on Instagram", SimpleIcons.instagram,
-            () {
+          // basicSetting(
+          //   "Follow us on Instagram", SimpleIcons.instagram,
+          //   () {
               
-            }
-          ),
-          basicSetting(
-            "Follow us on Twitter", SimpleIcons.twitter,
-            () {
+          //   }
+          // ),
+          // basicSetting(
+          //   "Follow us on Twitter", SimpleIcons.twitter,
+          //   () {
               
-            }
-          ),
+          //   }
+          // ),
 
           const SizedBox(height: 32),
 
@@ -154,9 +161,12 @@ class _SettingsViewState extends State<SettingsView> {
         await authService.logout();
         setState(() {});
 
-        showDialog(context: context, builder: (context) {
-          return basicDialogue("Logged Out");
-        });
+        // showDialog(context: context, builder: (context) {
+        //   return basicDialogue("Logged Out");
+        // });
+
+        await AppController.instance.resetPreferences();
+        push(context, WelcomeView());
       }
     );
   }

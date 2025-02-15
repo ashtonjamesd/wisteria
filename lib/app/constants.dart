@@ -5,7 +5,9 @@ const String helpMessage =
 """  
 Wisteria helps you learn assembly and understand CPU operations through a virtual machine that runs machine code like a real processor.  
 
-Experiment, practice, and compete in programming exercises to sharpen your skills. Start with the exercises tab to begin learning assembly code.
+Experiment, practice, and compete in programming exercises to sharpen your skills. 
+
+Start with the exercises tab to begin learning assembly code.
 """;  
 
 

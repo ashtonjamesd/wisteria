@@ -703,7 +703,7 @@ class _VmViewState extends State<VmView> {
       children: [
         WisteriaBox(
           width: 240, 
-          height: 320, 
+          height: 330, 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -719,7 +719,7 @@ class _VmViewState extends State<VmView> {
               ),
               
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(16),
                 child: WisteriaText(
                   text: helpMessage, 
                   color: primaryTextColor, 
