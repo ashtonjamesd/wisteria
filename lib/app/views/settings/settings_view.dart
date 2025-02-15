@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_icons/simple_icons.dart';
+import 'package:wisteria/app/preferences.dart';
 import 'package:wisteria/app/utils/auth/auth_service.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
@@ -66,6 +67,17 @@ class _SettingsViewState extends State<SettingsView> {
             "Show information about components when tapped", 
             (value) {
               AppController.instance.settings.showInfoDialogs = value;
+            }
+          ),
+
+          const SizedBox(height: 8),
+          basicSetting(
+            "Reset Tutorial", Icons.menu,
+            () {
+              showDialog(context: context, builder: (context) {
+                AppController.instance.setPreference(shownInitialHelpDialoguePref, "false");
+                return basicDialogue("Reset Tutorial");
+              });
             }
           ),
       
@@ -143,23 +155,27 @@ class _SettingsViewState extends State<SettingsView> {
         setState(() {});
 
         showDialog(context: context, builder: (context) {
-          return WisteriaWindow(
-            header: "", 
-            messageWidget: Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: Center(
-                child: WisteriaText(
-                  text: "Logged Out",
-                  size: 18,
-                  isBold: true,
-                ),
-              ),
-            ), 
-            width: 240, 
-            height: 140
-          );
+          return basicDialogue("Logged Out");
         });
       }
+    );
+  }
+
+  Widget basicDialogue(String message) {
+    return WisteriaWindow(
+      header: "", 
+      messageWidget: Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Center(
+          child: WisteriaText(
+            text: message,
+            size: 16,
+            isBold: true,
+          ),
+        ),
+      ), 
+      width: 240, 
+      height: 140
     );
   }
 

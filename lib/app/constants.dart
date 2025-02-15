@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
-const String helpMessage = 
-"""
-Wisteria is an app designed to help you learn assembly code and the inner workings of a CPU.
+const String helpMessage =  
+"""  
+Wisteria helps you learn assembly and understand CPU operations through a virtual machine that runs machine code like a real processor.  
 
-The app will allow you to experiment with a virtual machine that reads assembly and executes machine code just like a real processor.
+Experiment, practice, and compete in programming exercises to sharpen your skills. Start with the exercises tab to begin learning assembly code.
+""";  
 
-A good place to start would be the exercises tab.
-""";
 
 const String registerDescription = 
 """

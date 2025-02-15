@@ -1,14 +1,16 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_icons/simple_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:wisteria/app/utils/app_controller.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
 import 'package:wisteria/app/widgets/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
-import 'package:wisteria/app/views/vm/help_button.dart';
 import 'package:wisteria/app/views/vm/stdout_box.dart';
 import 'package:wisteria/app/views/vm/utils/vm_view_controller.dart';
 import 'package:wisteria/vm/constants.dart';
 import 'package:wisteria/vm/vm.dart';
+import '../../preferences.dart';
 import 'code_editor.dart';
 
 class VmView extends StatefulWidget {
@@ -25,8 +27,28 @@ class _VmViewState extends State<VmView> {
   void initState() {
     super.initState();
     controller.vm = VirtualMachine(() {}, programString: "");
-
     initVm();
+
+    WidgetsFlutterBinding.ensureInitialized();
+    initHelpDialogue();
+  }
+
+  Future<void> initHelpDialogue() async {
+    final alreadyShown = await AppController.instance.getPreference(shownInitialHelpDialoguePref);
+    if (alreadyShown == "true") {
+      return;
+    }
+
+    await AppController.instance.setPreference(shownInitialHelpDialoguePref, "true");
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return helpDialog();
+        },
+      );
+    });
   }
 
   Future<void> initVm() async {
@@ -95,7 +117,7 @@ class _VmViewState extends State<VmView> {
               githubLinkIcon(),
               Padding(
                 padding: const EdgeInsets.only(right: 24, bottom: 8),
-                child: HelpButton(),
+                child: helpButton(),
               ),
             ],
           ),
@@ -657,6 +679,73 @@ class _VmViewState extends State<VmView> {
           text: programCounterDescription, 
           color: primaryWhite,
           size: 12
+        ),
+      ],
+    );
+  }
+
+  Widget helpButton() {
+    return WisteriaButton(
+      width: 80, 
+      color: primaryGrey, 
+      text: "help", 
+      onTap: () {
+        showDialog(context: context, builder: (context) {
+          return helpDialog();
+        });
+      }
+    );
+  }
+
+  Widget helpDialog() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        WisteriaBox(
+          width: 240, 
+          height: 320, 
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: WisteriaText(
+                    text: "Welcome to Wisteria", 
+                    color: primaryTextColor, 
+                    size: 15
+                  ),
+                ),
+              ),
+              
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: WisteriaText(
+                  text: helpMessage, 
+                  color: primaryTextColor, 
+                  size: 12
+                ),
+              ),
+
+              const Spacer(),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  WisteriaButton(
+                    width: 80, 
+                    color: primaryGrey, 
+                    text: "okay", 
+                    onTap: () {
+                      Navigator.pop(context);
+                    }
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16)
+            ],
+          )
         ),
       ],
     );

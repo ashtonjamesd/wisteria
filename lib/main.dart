@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisteria/app/constants.dart';
+import 'package:wisteria/app/preferences.dart';
 import 'package:wisteria/app/utils/app_controller.dart';
 import 'package:wisteria/app/utils/auth/auth_service.dart';
 import 'package:wisteria/app/views/welcome/welcome_view.dart';
@@ -42,6 +43,8 @@ class _AppState extends State<App> {
   @override
   void initState() {
     tryLogin();
+    // debugging
+    AppController.instance.resetPreferences();
     super.initState();
   }
 
@@ -50,10 +53,8 @@ class _AppState extends State<App> {
       isLoading = true;
     });
 
-    final preferences = await SharedPreferences.getInstance();
-    
-    final email = preferences.get("email");
-    final password = preferences.get("password");
+    final email = await AppController.instance.getPreference("email");
+    final password = await AppController.instance.getPreference("password");
 
     if (email == null || password == null) {
       setState(() {

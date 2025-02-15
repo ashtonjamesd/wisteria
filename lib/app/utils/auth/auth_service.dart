@@ -55,9 +55,7 @@ final class AuthService {
   }
 
   Future<void> _saveLoginDetails(String email, String password) async {
-    final preferences = await SharedPreferences.getInstance();
-
-    await preferences.setString("email", email);
-    await preferences.setString("password", password);
+    await AppController.instance.setPreference("email", email);
+    await AppController.instance.setPreference("password", password);
   }
 }

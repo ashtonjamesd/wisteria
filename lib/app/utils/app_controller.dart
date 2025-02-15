@@ -1,5 +1,7 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisteria/app/utils/auth/models/wisteria_user.dart';
 
+import '../preferences.dart';
 import '../views/settings/utils/settings_controller.dart';
 
 class AppController {
@@ -11,4 +13,21 @@ class AppController {
   final settings = SettingsController();
 
   WisteriaUser? user;
+
+  Future<void> resetPreferences() async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+  }
+
+  Future<void> setPreference(String key, String value) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setString(key, value);
+  }
+
+  Future<Object?> getPreference(String key) async {
+    final preferences = await SharedPreferences.getInstance();
+    
+    final preference = preferences.get(key);
+    return preference?.toString();
+  }
 }
