@@ -126,8 +126,8 @@ class _SettingsViewState extends State<SettingsView> {
 
     return Column(
       children: [
-        infoSetting("email", AppController.instance.user!.email),
-        infoSetting("username", AppController.instance.user!.username),
+        infoSetting("Email", AppController.instance.user!.email),
+        infoSetting("Username", AppController.instance.user!.username),
       ],
     );
   }
@@ -174,6 +174,8 @@ class _SettingsViewState extends State<SettingsView> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const SizedBox(height: 64),
+
         WisteriaText(
           text: "© 2025 Wisteria",
           color: primaryTextColor,

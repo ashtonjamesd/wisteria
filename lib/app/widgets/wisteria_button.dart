@@ -71,7 +71,7 @@ class _WisteriaButtonState extends State<WisteriaButton> {
             child: widget.icon == null ? WisteriaText(
               text: widget.text!,
               color: widget.textColor,
-              size: 14,
+              size: widget.textSize,
             ) : Icon(
               widget.icon!,
               size: 14,
