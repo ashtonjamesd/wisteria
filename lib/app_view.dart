@@ -3,8 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisteria/app/utils/auth/auth_service.dart';
 
 import 'app/constants.dart';
-import 'app/views/exercises/exercises_view.dart';
-import 'app/views/profile/profile_view.dart';
+import 'app/views/exercises/views/exercises_view.dart';
+import 'app/views/profile/views/profile_view.dart';
 import 'app/views/settings/settings_view.dart';
 import 'app/views/vm/vm_view.dart';
 

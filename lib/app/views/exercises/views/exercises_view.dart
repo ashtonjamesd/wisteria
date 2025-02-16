@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
+import 'package:wisteria/app/utils/globals.dart';
 import 'package:wisteria/app/views/exercises/models/exercise_model.dart';
 import 'package:wisteria/app/views/exercises/utils/exercise_view_controller.dart';
+import 'package:wisteria/app/views/exercises/views/exercise_view.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
+import 'package:wisteria/app/widgets/wisteria_loading_icon.dart';
 
-import '../../widgets/wisteria_text.dart';
+import '../../../widgets/wisteria_text.dart';
 
 class ExercisesView extends StatefulWidget {
   const ExercisesView({super.key});
@@ -19,6 +22,8 @@ class _ExercisesViewState extends State<ExercisesView> {
 
   List<ExerciseModel> exercises = [];
 
+  bool isLoading = false;
+
   @override
   void initState() {
     initExerciseView();
@@ -26,15 +31,35 @@ class _ExercisesViewState extends State<ExercisesView> {
   }
 
   Future<void> initExerciseView() async {
+    setState(() {
+      isLoading = true;
+    });
+
     exercises = await controller.getExercises();
-    setState(() {});
+    
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryWhite,
-      body: exercisesView(),
+      body: isLoading ? loadingIcon() : exercisesView(),
+    );
+  }
+
+  Widget loadingIcon() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          WisteriaLoadingIcon(
+            text: "Loading Exercises...",
+          ),
+        ],
+      ),
     );
   }
 
@@ -78,27 +103,26 @@ class _ExercisesViewState extends State<ExercisesView> {
   Widget exerciseItem(ExerciseModel model) {
     return GestureDetector(
       onTap: () {
-
+        push(context, ExerciseView(model: model));
       },
       child: WisteriaBox(
-        width: MediaQuery.sizeOf(context).width - 40,
+        width: MediaQuery.sizeOf(context).width - 20,
         height: 50,
         borderColor: primaryGrey,
         showBorder: true,
         child: Row(
           children: [
             const SizedBox(width: 24),
-            SizedBox(
-              width: 200,
-              child: WisteriaText(
-                text: model.title,
-                color: primaryTextColor,
-              ),
+            WisteriaText(
+              text: model.title,
+              color: primaryTextColor,
             ),
             const SizedBox(width: 24),
+
+            const Spacer(),
       
             WisteriaText(
-              text: "Level ${model.level.toString()}",
+              text: "Exercise ${model.level.toString()}",
               color: primaryTextColor,
               isBold: true,
             ),
@@ -107,7 +131,8 @@ class _ExercisesViewState extends State<ExercisesView> {
             WisteriaIcon(
               icon: Icons.arrow_forward,
               size: 22,
-            )
+            ),
+            const SizedBox(width: 12),
           ],
         )
       ),

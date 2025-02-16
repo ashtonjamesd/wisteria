@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 
-import '../../constants.dart';
-import '../../utils/app_controller.dart';
-import '../../widgets/wisteria_text.dart';
+import '../../../constants.dart';
+import '../../../utils/app_controller.dart';
+import '../../../widgets/wisteria_text.dart';
 
 class LoggedInView extends StatefulWidget {
   const LoggedInView({

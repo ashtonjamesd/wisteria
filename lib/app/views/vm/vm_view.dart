@@ -346,7 +346,7 @@ class _VmViewState extends State<VmView> {
         text: "edit code",
         onTap: () {
           showDialog(context: context, builder: (context) {
-            return StackCodeEditor(
+            return CodeEditor(
               controller: controller.asmCodeController
             );
           });

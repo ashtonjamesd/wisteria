@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/utils/app_controller.dart';
-import 'package:wisteria/app/views/profile/logged_in_view.dart';
-import 'package:wisteria/app/views/profile/not_logged_in_view.dart';
+import 'package:wisteria/app/views/profile/views/logged_in_view.dart';
+import 'package:wisteria/app/views/profile/views/not_logged_in_view.dart';
 import 'package:wisteria/app/views/profile/utils/profile_view_controller.dart';
-import '../../widgets/wisteria_text.dart';
+import '../../../widgets/wisteria_text.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
