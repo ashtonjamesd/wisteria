@@ -102,7 +102,7 @@ final class Assembler {
       return labels[token.lexeme]!;
     }
 
-    return error("unknown identifier ${token.lexeme}");
+    return error("unknown identifier '${token.lexeme}'");
   }
 
   int translateLabelDefinition() {

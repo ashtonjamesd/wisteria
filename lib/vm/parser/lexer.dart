@@ -20,6 +20,7 @@ final class Lexer {
     "MOV":  TokenType.mov,
     "OUT":  TokenType.out,
     "ADD":  TokenType.add,
+    "SUB":  TokenType.sub,
     "INC":  TokenType.inc,
     "DEC":  TokenType.dec,
     "MUL":  TokenType.mul,

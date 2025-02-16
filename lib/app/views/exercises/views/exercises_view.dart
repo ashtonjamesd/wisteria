@@ -42,6 +42,10 @@ class _ExercisesViewState extends State<ExercisesView> {
     });
   }
 
+  void onSubmit() {
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,6 +82,17 @@ class _ExercisesViewState extends State<ExercisesView> {
           ),
         ),
 
+        const SizedBox(height: 24),
+
+        Padding(
+          padding: const EdgeInsets.only(left: 32),
+          child: WisteriaText(
+            text: "Here you can complete programming challenges using assembly code.", 
+            color: primaryTextColor,
+            size: 14,
+          ),
+        ),
+
         Center(
           child: exercisesBox()
         ),
@@ -89,7 +104,7 @@ class _ExercisesViewState extends State<ExercisesView> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: SizedBox(
-        height: 200,
+        height: 500,
         child: ListView.builder(
           itemCount: exercises.length,
           itemBuilder: (context, index) {

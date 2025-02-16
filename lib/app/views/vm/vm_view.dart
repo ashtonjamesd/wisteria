@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_icons/simple_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/utils/app_controller.dart';
+import 'package:wisteria/app/views/vm/console_box.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
 import 'package:wisteria/app/widgets/wisteria_text.dart';
@@ -178,7 +179,11 @@ class _VmViewState extends State<VmView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               userInterface(screen),
-              vmConsole(screen),
+              ConsoleBox(
+                vm: controller.vm, 
+                width: (screen.width / widthFactor) + boxPadding * 2,
+                showBorder: false,
+              ),
               cpuInterface(screen)
             ],
           ),
@@ -492,21 +497,6 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget vmConsole(Size screen) {
-    return WisteriaBox(
-      width: (screen.width / widthFactor) + boxPadding * 2,
-      height: consoleHeight,
-      child: Padding(
-        padding: const EdgeInsets.all(boxPadding),
-        child: WisteriaText(
-          text: controller.vm.consoleOutput.join("\n"),
-          color: const Color.fromARGB(255, 52, 52, 52),
-          size: 12,
-        ),
-      )
-    );
-  }
-
   Widget cpuInterface(Size screen) {
     return Padding(
       padding: const EdgeInsets.only(bottom: boxPadding),
@@ -537,15 +527,15 @@ class _VmViewState extends State<VmView> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        vmRegister(R1_NAME, controller.vm.r1, 50, 32),
-                        vmRegister(R2_NAME, controller.vm.r2, 50, 32),
+                        vmRegister(R1_NAME, controller.vm.ra, 50, 32),
+                        vmRegister(R2_NAME, controller.vm.rb, 50, 32),
                       ],
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        vmRegister(R3_NAME, controller.vm.r3, 50, 32),
-                        vmRegister(R4_NAME, controller.vm.r4, 50, 32),
+                        vmRegister(R3_NAME, controller.vm.rc, 50, 32),
+                        vmRegister(R4_NAME, controller.vm.rd, 50, 32),
                       ],
                     ),
                   ],

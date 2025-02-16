@@ -50,6 +50,9 @@ final class VirtualMachine {
   // will wait after completing the current instruction instead
   bool isPaused = false;
 
+  // will wait incrementally between steps if true
+  bool _hasDelays = true;
+
   // the last error to occur in the vm
   // will return at the earliest point when not null
   String? errorMessage;
@@ -57,19 +60,19 @@ final class VirtualMachine {
   // instruction set architecture
   late final Map<int, Function> isa;
 
-  int get r1 => registers[R1_INDEX];
-  set r1(int value) => registers[R1_INDEX] = value;
+  int get ra => registers[R1_INDEX];
+  set ra(int value) => registers[R1_INDEX] = value;
 
-  int get r2 => registers[R2_INDEX];
-  set r2(int value) => registers[R2_INDEX] = value;
+  int get rb => registers[R2_INDEX];
+  set rb(int value) => registers[R2_INDEX] = value;
 
-  int get r3 => registers[R3_INDEX];
-  set r3(int value) => registers[R3_INDEX] = value;
+  int get rc => registers[R3_INDEX];
+  set rc(int value) => registers[R3_INDEX] = value;
 
-  int get r4 => registers[R4_INDEX];
-  set r4(int value) => registers[R4_INDEX] = value;
+  int get rd => registers[R4_INDEX];
+  set rd(int value) => registers[R4_INDEX] = value;
 
-  VirtualMachine(this._update, {required this.programString, bool quietMode = false}) {
+  VirtualMachine(this._update, {required this.programString, bool quietMode = false, bool hasDelays = true}) {
     isa = {
       HLT_OP: _hlt,
       NO_OP: _nop,
@@ -107,6 +110,7 @@ final class VirtualMachine {
     registers = List.filled(8, 0);
 
     _quietMode = quietMode;
+    _hasDelays = hasDelays;
   }
 
   Future run() async {
@@ -175,6 +179,8 @@ final class VirtualMachine {
   }
 
   Future<void> delay(int ms) async {
+    if (!_hasDelays) return;
+
     await Future.delayed(Duration(milliseconds: ms));
   }
 
@@ -270,22 +276,22 @@ final class VirtualMachine {
   void _divLiteral() {
     final divisor = memory[pc];
 
-    final divisionResult = (r1 / divisor).floor();
-    final remainder = r1 % divisor;
+    final divisionResult = (ra / divisor).floor();
+    final remainder = ra % divisor;
 
-    r1 = divisionResult;
-    r2 = remainder;
+    ra = divisionResult;
+    rb = remainder;
   }
 
   void _divRegister() {
     final register = memory[pc];
     final divisor = registers[register];
 
-    final divisionResult = (r1 / divisor).floor();
-    final remainder = r1 % divisor;
+    final divisionResult = (ra / divisor).floor();
+    final remainder = ra % divisor;
 
-    r1 = divisionResult;
-    r2 = remainder;
+    ra = divisionResult;
+    rb = remainder;
   }
 
   void _inc() {

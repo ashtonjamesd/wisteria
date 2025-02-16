@@ -5,12 +5,24 @@ final class ExerciseModel {
   final String hint;
   final String expectedOutput;
 
+  // instructions to be executed before the users answer
+  final String preInstructions;
+  
+  // the registers must contain these values for the submission to be valid
+  final Map<String, dynamic> registerConditions;
+
+  // program must contain at least one of each instruction in this list
+  final List<dynamic> instructionConditions;
+
   ExerciseModel({
     required this.title,
     required this.description,
     required this.level,
     required this.hint,
     required this.expectedOutput,
+    required this.preInstructions,
+    required this.registerConditions,
+    required this.instructionConditions,
   });
 
   factory ExerciseModel.fromMap(Map<String, dynamic> map) {
@@ -20,7 +32,9 @@ final class ExerciseModel {
       level: map['level'] ?? -1, 
       hint: map['hint'] ?? '', 
       expectedOutput: map['expectedOutput'] ?? '',
-      
+      preInstructions: map['preInstructions'] ?? '',
+      registerConditions: map['registerConditions'] ?? {},
+      instructionConditions: map['instructionConditions'] ?? [],
     );
   }
 
@@ -30,7 +44,10 @@ final class ExerciseModel {
       'description': description,
       'level': level,
       'hint': hint,
-      'expectedOutput': expectedOutput
+      'expectedOutput': expectedOutput,
+      'preInstructions': preInstructions,
+      'registerConditions': registerConditions,
+      'instructionConditions': instructionConditions,
     };
   }
 }

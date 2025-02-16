@@ -27,10 +27,10 @@ final class VmViewController {
 
   int getRegisterValue(String name) {
     return switch (name) {
-      R1_NAME => vm.r1,
-      R2_NAME => vm.r2,
-      R3_NAME => vm.r3,
-      R4_NAME => vm.r4,
+      R1_NAME => vm.ra,
+      R2_NAME => vm.rb,
+      R3_NAME => vm.rc,
+      R4_NAME => vm.rd,
       _ => -1
     };
   }
