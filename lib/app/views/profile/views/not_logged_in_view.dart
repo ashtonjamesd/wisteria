@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/views/profile/utils/profile_view_controller.dart';
+import 'package:wisteria/app/widgets/wisteria_icon.dart';
+import 'package:wisteria/app/widgets/wisteria_window.dart';
 import '../../../constants.dart';
 import '../../../utils/globals.dart';
 import '../../../widgets/wisteria_button.dart';
@@ -52,12 +54,12 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         WisteriaText(
-          text: "save your progress", 
+          text: "Save your progress", 
           color: primaryTextColor, 
           size: 22
         ),
         WisteriaText(
-          text: "create an account to save your progress in exercises", 
+          text: "Create an account to save your progress in exercises", 
           color: secondaryTextColor, 
           size: 14
         ),
@@ -70,7 +72,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
       width: 240, 
       height: 40,
       color: primaryGrey,
-      text: "sign up with email", 
+      text: "Sign up with email", 
       onTap: () {
         push(context, setEmailScreen());
       }
@@ -115,7 +117,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
 
   Widget setEmailScreen() {
     return enterFieldScreen(
-      "enter your email", 
+      "Enter your email", 
       "name@example.com", 
       controller.emailController, 
       () {
@@ -130,7 +132,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
 
   Widget setPasswordScreen() {
     return enterFieldScreen(
-      "set a password", 
+      "Set a password", 
       "min. 8 characters", 
       controller.passwordController,
       isPassword: true,
@@ -146,7 +148,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
 
   Widget enterUsernameScreen() {
     return enterFieldScreen(
-      "how should we address you?", 
+      "How should we address you?", 
       "john_doe (min. 3 characters)", 
       controller.usernameController, 
       () async {
@@ -161,7 +163,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
           push(
             context, 
             infoScreen(
-              "account created successfully", "welcome ${controller.usernameController.text}", 
+              "Account created successfully", "Welcome ${controller.usernameController.text}", 
               () {
                   pop(context);
                   pop(context);
@@ -177,8 +179,9 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
         push(
           context, 
           infoScreen(
-            "unable to create account", "please try again later or raise an error with support", 
+            "Unable to create account", "Please try again later or raise an error with support", 
             () {
+              pop(context);
               pop(context);
               pop(context);
               pop(context);
@@ -205,8 +208,13 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
               size: 22,
               isBold: true,
             ),
+            const SizedBox(height: 16),
 
-            const SizedBox(height: 32),
+            WisteriaText(
+              text: description,
+              size: 16,
+            ),
+            const SizedBox(height: 48),
 
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -229,9 +237,13 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
 
   Widget enterEmailScreen() {
     return enterFieldScreen(
-      "enter your email", 
+      "Enter your email", 
       "name@example.com", 
       controller.emailController, 
+      onBack: () {
+        controller.emailController.clear();
+        controller.passwordController.clear();
+      },
       () {
         if (!controller.isValidateEmail(controller.emailController.text)) {
           return;
@@ -244,7 +256,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
 
   Widget enterPasswordScreen() {
     return enterFieldScreen(
-      "enter your password", 
+      "Enter your password", 
       "", 
       controller.passwordController, 
       isPassword: true,
@@ -255,11 +267,14 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
           push(
             context, 
             infoScreen(
-              "invalid credentials", "incorrect email or password", 
+              "Invalid credentials", "Incorrect email or password", 
               () {
                 pop(context);
                 pop(context);
                 pop(context);
+
+                controller.emailController.clear();
+                controller.passwordController.clear();
               }
             ),
           );
@@ -276,7 +291,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
     );
   }
 
-  Widget enterFieldScreen(String header, String hintText, TextEditingController textController, Function onTap, {String buttonText = "continue", bool isPassword = false}) {
+  Widget enterFieldScreen(String header, String hintText, TextEditingController textController, Function onTap, {String buttonText = "continue", bool isPassword = false, Function? onBack}) {
     final screen = MediaQuery.sizeOf(context);
 
     return Scaffold(
@@ -285,6 +300,30 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
         child: Column(
           children: [
             const SizedBox(height: 120),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 32),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (onBack != null) {
+                        onBack();
+                      }
+                      pop(context);
+                    },
+                    child: WisteriaIcon(
+                      icon: Icons.arrow_back,
+                      size: 24,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
             WisteriaText(
               text: header,
               size: 22,
