@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 const String helpMessage =  
 """  
-Wisteria helps you learn assembly and understand CPU operations through a virtual machine that runs machine code like a real processor.  
+Wisteria is an interactive app designed to teach assembly language and low-level programming through a virtual machine that simulates real CPU execution.
 
-Experiment, practice, and compete in programming exercises to sharpen your skills. 
+Practice and experiment with guided exercises while gaining experience in writing and debugging assembly.
 
-Start with the exercises tab to begin learning assembly code.
+Head to the exercises tab to start learning assembly programming or experiment with the vm sandbox.
 """;  
 
 
@@ -28,9 +28,9 @@ The program counter (PC) tracks the address of the next instruction to execute, 
 
 const String supportMessage = 
 """
-If you need help, check our official documentation on the GitHub repository. If you think you have encountered a bug, please report it. 
+If you need help, check our official documentation on the GitHub repository. If you think you have encountered a bug, please report it.
 
-You can contact us through the email on our GitHub profile.
+This is an early release, so you may encounter bugs. We appreciate your patience and encourage you to report any issues via the email on our GitHub page. Thank you!
 """;
 
 const String termsAndConditionsMessage = 

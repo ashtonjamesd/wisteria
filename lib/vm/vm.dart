@@ -138,10 +138,15 @@ final class VirtualMachine {
     output("executing program..");
     
     while (isRunning) {
-      await delay(100);
+      // without this delay the app slows down (crashes) with intense instruction execution, such as:
+      //
+      // label:
+      //   out ra
+      //   jump label
+      await Future.delayed(Duration(milliseconds: 1));
 
       while (isPaused) {
-        await delay(1000);
+        await Future.delayed(Duration(milliseconds: 1000));
       }
 
       _execute();
@@ -149,6 +154,17 @@ final class VirtualMachine {
 
       _tick();
     }
+
+    // mov ra 4
+    // mov rb 3
+
+    // loop:
+    //   add rd ra
+    //   dec rb
+    //   cmp rb 0
+    //   jne loop
+
+    // out rd
 
     if (!_quietMode) {
       print("program execution finished");

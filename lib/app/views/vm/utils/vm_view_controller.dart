@@ -38,10 +38,10 @@ final class VmViewController {
   Future<void> onHalt() async {
     if (!vm.isRunning) return;
 
+    vm.isRunning = false;
+
     vm.output("virtual machine forcibly halted. all processes stopped.");
     await vm.delay(500);
-
-    vm.isRunning = false;
   }
 
   String decimalToHex(int decimal) {
@@ -70,6 +70,7 @@ final class VmViewController {
     vm = VirtualMachine(() {
       setState(() {});
     },
+      hasDelays: AppController.instance.settings.simulateVmDelays,
       programString: asmCodeController.text
     );
 

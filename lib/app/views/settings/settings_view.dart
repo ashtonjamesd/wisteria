@@ -67,20 +67,27 @@ class _SettingsViewState extends State<SettingsView> {
             
           settingsHeader("App Settings", hasTopPadding: false),
           trueOrFalseSetting(
-            "Show help dialogues", 
-            "Show information about components when tapped", 
+            "Show Help Dialogues", 
+            "Show information about components when tapped.", 
             (value) {
               AppController.instance.settings.showInfoDialogs = value;
+            }
+          ),
+          trueOrFalseSetting(
+            "Simulate VM Delays",
+            "The VM will execute instructions with simulative delays",
+            (value) {
+              AppController.instance.settings.simulateVmDelays = value;
             }
           ),
 
           const SizedBox(height: 8),
           basicSetting(
-            "Reset Tutorial", Icons.menu,
+            "Reset Dialogues", Icons.menu,
             () {
               showDialog(context: context, builder: (context) {
                 AppController.instance.setPreference(shownInitialHelpDialoguePref, "false");
-                return basicDialogue("Reset Tutorial");
+                return basicDialogue("Dialogues have been reset");
               });
             }
           ),
@@ -234,9 +241,9 @@ class _SettingsViewState extends State<SettingsView> {
           color: primaryTextColor, 
           size: 12
         ),
-      ), 
+      ),
       width: 280, 
-      height: 240
+      height: 280
     );
   }
 
@@ -281,32 +288,35 @@ class _SettingsViewState extends State<SettingsView> {
     final screen = MediaQuery.sizeOf(context);
     bool value = AppController.instance.settings.showInfoDialogs;
 
-    return Container(
-      width: screen.width / widthFactor ,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 240, 240, 240),
-        borderRadius: BorderRadius.circular(boxBorderRadius),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          WisteriaText(
-            text: name, 
-            color: primaryTextColor, 
-            size: 16,
-          ),
-          WisteriaText(
-            text: desc, 
-            color: primaryTextColor.withOpacity(0.8),
-            size: 12,
-          ),
-    
-          const SizedBox(height: 16),
-          WisteriaSlider(value: value, onChanged: (value) {
-            onChanged(value);
-          }),
-        ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Container(
+        width: screen.width / widthFactor ,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 240, 240, 240),
+          borderRadius: BorderRadius.circular(boxBorderRadius),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            WisteriaText(
+              text: name, 
+              color: primaryTextColor, 
+              size: 16,
+            ),
+            WisteriaText(
+              text: desc, 
+              color: primaryTextColor.withOpacity(0.8),
+              size: 12,
+            ),
+      
+            const SizedBox(height: 16),
+            WisteriaSlider(value: value, onChanged: (value) {
+              onChanged(value);
+            }),
+          ],
+        ),
       ),
     );
   }

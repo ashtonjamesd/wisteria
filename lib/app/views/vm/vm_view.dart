@@ -116,10 +116,6 @@ class _VmViewState extends State<VmView> {
               const Spacer(),
 
               githubLinkIcon(),
-              Padding(
-                padding: const EdgeInsets.only(right: 24, bottom: 8),
-                child: helpButton(),
-              ),
             ],
           ),
               
@@ -674,26 +670,13 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget helpButton() {
-    return WisteriaButton(
-      width: 80, 
-      color: primaryGrey, 
-      text: "help", 
-      onTap: () {
-        showDialog(context: context, builder: (context) {
-          return helpDialog();
-        });
-      }
-    );
-  }
-
   Widget helpDialog() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         WisteriaBox(
-          width: 240, 
-          height: 330, 
+          width: 270, 
+          height: 350, 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
