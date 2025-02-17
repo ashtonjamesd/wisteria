@@ -16,6 +16,7 @@ final class ExerciseViewController {
   }
 
   Result validateSubmission(ExerciseModel model, final VirtualMachine vm) {
+    print(model.instructionConditions.length);
     for (var instr in model.instructionConditions) {
       if (!vm.programString.toLowerCase().contains(instr.toLowerCase())) {
         return Result.failure("Submission must use the '$instr' instruction");
