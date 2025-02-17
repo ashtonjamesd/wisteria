@@ -94,13 +94,6 @@ class _ExerciseViewState extends State<ExerciseView> {
       return;
     }
 
-    if (vm.stdout.last != widget.model.expectedOutput) {
-      showDialog(context: context, builder: (context) {
-        return failedDialogue();
-      });
-      return;
-    }
-
     onCompletion();
   }
 
@@ -314,9 +307,11 @@ class _ExerciseViewState extends State<ExerciseView> {
       showBorder: true,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: WisteriaText(
-          text: widget.model.hint,
-          color: primaryTextColor,
+        child: SingleChildScrollView(
+          child: WisteriaText(
+            text: widget.model.hint,
+            color: primaryTextColor,
+          ),
         ),
       )
     );

@@ -155,17 +155,6 @@ final class VirtualMachine {
       _tick();
     }
 
-    // mov ra 4
-    // mov rb 3
-
-    // loop:
-    //   add rd ra
-    //   dec rb
-    //   cmp rb 0
-    //   jne loop
-
-    // out rd
-
     if (!_quietMode) {
       print("program execution finished");
     }

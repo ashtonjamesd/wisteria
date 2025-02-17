@@ -3,7 +3,7 @@ final class ExerciseModel {
   final String description;
   final int level;
   final String hint;
-  final String expectedOutput;
+  final List<dynamic> expectedOutputs;
 
   // instructions to be executed before the users answer
   final String preInstructions;
@@ -19,7 +19,7 @@ final class ExerciseModel {
     required this.description,
     required this.level,
     required this.hint,
-    required this.expectedOutput,
+    required this.expectedOutputs,
     required this.preInstructions,
     required this.registerConditions,
     required this.instructionConditions,
@@ -31,7 +31,7 @@ final class ExerciseModel {
       description: map['description'] ?? '', 
       level: map['level'] ?? -1, 
       hint: map['hint'] ?? '', 
-      expectedOutput: map['expectedOutput'] ?? '',
+      expectedOutputs: map['expectedOutputs'] ?? [],
       preInstructions: map['preInstructions'] ?? '',
       registerConditions: map['registerConditions'] ?? {},
       instructionConditions: map['instructionConditions'] ?? [],
@@ -44,7 +44,7 @@ final class ExerciseModel {
       'description': description,
       'level': level,
       'hint': hint,
-      'expectedOutput': expectedOutput,
+      'expectedOutput': expectedOutputs,
       'preInstructions': preInstructions,
       'registerConditions': registerConditions,
       'instructionConditions': instructionConditions,

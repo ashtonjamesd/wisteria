@@ -10,6 +10,7 @@ final class ExerciseViewController {
 
   Future<List<ExerciseModel>> getExercises() async {
     final exercises = await _db.getExercises();
+    exercises.sort((a, b) => a.level.compareTo(b.level));
 
     return exercises;
   }
@@ -18,6 +19,16 @@ final class ExerciseViewController {
     for (var instr in model.instructionConditions) {
       if (!vm.programString.toLowerCase().contains(instr.toLowerCase())) {
         return Result.failure("Submission must use the '$instr' instruction");
+      }
+    }
+
+    if (vm.stdout.length < model.expectedOutputs.length) {
+      return Result.failure("Incorrect values in the standard output.");
+    }
+
+    for (int i = 0; i < model.expectedOutputs.length; i++) {
+      if (vm.stdout[i] != model.expectedOutputs[i]) {
+        return Result.failure("Incorrect values in the standard output.");
       }
     }
 
