@@ -14,6 +14,9 @@ final class ExerciseModel {
   // program must contain at least one of each instruction in this list
   final List<dynamic> instructionConditions;
 
+  // instructions the program prohibits the use of
+  final List<dynamic> bannedInstructions;
+
   ExerciseModel({
     required this.title,
     required this.description,
@@ -23,6 +26,7 @@ final class ExerciseModel {
     required this.preInstructions,
     required this.registerConditions,
     required this.instructionConditions,
+    required this.bannedInstructions,
   });
 
   factory ExerciseModel.fromMap(Map<String, dynamic> map) {
@@ -35,6 +39,8 @@ final class ExerciseModel {
       preInstructions: map['preInstructions'] ?? '',
       registerConditions: map['registerConditions'] ?? {},
       instructionConditions: map['instructionConditions'] ?? [],
+      bannedInstructions: map['bannedInstructions'] ?? []
+      
     );
   }
 
@@ -48,6 +54,7 @@ final class ExerciseModel {
       'preInstructions': preInstructions,
       'registerConditions': registerConditions,
       'instructionConditions': instructionConditions,
+      'bannedInstructions': bannedInstructions
     };
   }
 }

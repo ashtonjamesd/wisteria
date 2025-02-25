@@ -16,7 +16,12 @@ final class ExerciseViewController {
   }
 
   Result validateSubmission(ExerciseModel model, final VirtualMachine vm) {
-    print(model.instructionConditions.length);
+    for (var bannedInstr in model.bannedInstructions) {
+      if (vm.programString.toLowerCase().contains(bannedInstr.toLowerCase())) {
+        return Result.failure("The instruction '$bannedInstr' is not allowed for this exercise.");
+      }
+    }
+
     for (var instr in model.instructionConditions) {
       if (!vm.programString.toLowerCase().contains(instr.toLowerCase())) {
         return Result.failure("Submission must use the '$instr' instruction");
