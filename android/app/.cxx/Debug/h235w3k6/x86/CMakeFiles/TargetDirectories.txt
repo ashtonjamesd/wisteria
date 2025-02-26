@@ -1,0 +1,2 @@
+C:/Users/rxgqq/projects/wisteria/android/app/.cxx/Debug/h235w3k6/x86/CMakeFiles/edit_cache.dir
+C:/Users/rxgqq/projects/wisteria/android/app/.cxx/Debug/h235w3k6/x86/CMakeFiles/rebuild_cache.dir

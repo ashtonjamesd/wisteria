@@ -15,15 +15,19 @@ final class ExerciseViewController {
     return exercises;
   }
 
-  Result validateSubmission(ExerciseModel model, final VirtualMachine vm) {
+  Result validateSubmission(final ExerciseModel model, final VirtualMachine vm) {
+    // removes the preInstructions string
+    // if this were kept in, it would pick up banned instructions and return a failure.
+    var cleanedVmProgramString = vm.programString.substring(model.preInstructions.length + 1);
+
     for (var bannedInstr in model.bannedInstructions) {
-      if (vm.programString.toLowerCase().contains(bannedInstr.toLowerCase())) {
+      if (cleanedVmProgramString.toLowerCase().contains(bannedInstr.toLowerCase())) {
         return Result.failure("The instruction '$bannedInstr' is not allowed for this exercise.");
       }
     }
 
     for (var instr in model.instructionConditions) {
-      if (!vm.programString.toLowerCase().contains(instr.toLowerCase())) {
+      if (!cleanedVmProgramString.toLowerCase().contains(instr.toLowerCase())) {
         return Result.failure("Submission must use the '$instr' instruction");
       }
     }
