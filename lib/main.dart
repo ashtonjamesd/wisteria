@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisteria/app/constants.dart';
-import 'package:wisteria/app/preferences.dart';
+import 'package:wisteria/app/utils/preferences.dart';
 import 'package:wisteria/app/utils/app_controller.dart';
 import 'package:wisteria/app/utils/auth/auth_service.dart';
 import 'package:wisteria/app/views/welcome/welcome_view.dart';
@@ -38,20 +38,25 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   final authService = AuthService();
 
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
     tryLogin();
-    // debugging
-    // AppController.instance.resetPreferences();
+    initPreferences();
     super.initState();
   }
 
+  Future<void> initPreferences() async {
+    var showDialog = await AppController.instance.getPreference(showHelpDialoguesPref);
+    AppController.instance.settings.showInfoDialogs = showDialog?.toString() == "true";
+
+    var simulateVmDelays = await AppController.instance.getPreference(simulateVmDelaysPref);
+    AppController.instance.settings.simulateVmDelays = simulateVmDelays?.toString() == "true";
+  }
+
   Future<void> tryLogin() async {
-    setState(() {
-      isLoading = true;
-    });
+    setState(() {});
 
     final email = await AppController.instance.getPreference("email");
     final password = await AppController.instance.getPreference("password");
@@ -64,8 +69,7 @@ class _AppState extends State<App> {
     }
 
     await authService.login(
-      email as String, 
-      password as String
+      email, password
     );
 
     setState(() {

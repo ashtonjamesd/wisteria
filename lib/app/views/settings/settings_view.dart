@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simple_icons/simple_icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:wisteria/app/preferences.dart';
+import 'package:wisteria/app/utils/preferences.dart';
 import 'package:wisteria/app/utils/auth/auth_service.dart';
 import 'package:wisteria/app/utils/globals.dart';
 import 'package:wisteria/app/views/welcome/welcome_view.dart';
@@ -71,14 +71,18 @@ class _SettingsViewState extends State<SettingsView> {
             "Show information about components when tapped.", 
             (value) {
               AppController.instance.settings.showInfoDialogs = value;
-            }
+              AppController.instance.setPreference(showHelpDialoguesPref, value.toString());
+            },
+            AppController.instance.settings.showInfoDialogs
           ),
           trueOrFalseSetting(
             "Simulate VM Delays",
             "The VM will execute instructions with simulative delays",
             (value) {
               AppController.instance.settings.simulateVmDelays = value;
-            }
+              AppController.instance.setPreference(simulateVmDelaysPref, value.toString());
+            },
+            AppController.instance.settings.simulateVmDelays
           ),
 
           const SizedBox(height: 8),
@@ -284,9 +288,8 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  Widget trueOrFalseSetting(String name, String desc, Function(bool) onChanged) {
+  Widget trueOrFalseSetting(String name, String desc, Function(bool) onChanged, bool value) {
     final screen = MediaQuery.sizeOf(context);
-    bool value = AppController.instance.settings.showInfoDialogs;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),

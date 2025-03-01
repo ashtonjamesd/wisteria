@@ -25,7 +25,7 @@ class AppController {
     await preferences.setString(key, value);
   }
 
-  Future<Object?> getPreference(String key) async {
+  Future<String?> getPreference(String key) async {
     final preferences = await SharedPreferences.getInstance();
     
     final preference = preferences.get(key);

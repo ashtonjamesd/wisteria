@@ -11,7 +11,7 @@ import 'package:wisteria/app/views/vm/stdout_box.dart';
 import 'package:wisteria/app/views/vm/utils/vm_view_controller.dart';
 import 'package:wisteria/vm/constants.dart';
 import 'package:wisteria/vm/vm.dart';
-import '../../preferences.dart';
+import '../../utils/preferences.dart';
 import 'code_editor.dart';
 
 class VmView extends StatefulWidget {

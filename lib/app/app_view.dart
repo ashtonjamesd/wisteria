@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisteria/app/utils/app_controller.dart';
 import 'package:wisteria/app/utils/auth/auth_service.dart';
-import 'package:wisteria/app/views/docs/docs_view.dart';
-
 import 'constants.dart';
 import 'views/exercises/views/exercises_view.dart';
 import 'views/profile/views/profile_view.dart';
