@@ -1,7 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisteria/app/utils/auth/models/wisteria_user.dart';
 
-import '../preferences.dart';
 import '../views/settings/utils/settings_controller.dart';
 
 class AppController {
@@ -13,6 +12,8 @@ class AppController {
   final settings = SettingsController();
 
   WisteriaUser? user;
+
+  int pageIndex = 0;
 
   Future<void> resetPreferences() async {
     final preferences = await SharedPreferences.getInstance();

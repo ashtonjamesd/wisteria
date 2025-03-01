@@ -10,6 +10,7 @@ import 'package:wisteria/app/widgets/wisteria_button.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
 import 'package:wisteria/app/widgets/wisteria_loading_icon.dart';
 
+import '../../../utils/app_controller.dart';
 import '../../../widgets/wisteria_text.dart';
 
 class ExercisesView extends StatefulWidget {
@@ -99,6 +100,8 @@ class _ExercisesViewState extends State<ExercisesView> {
           child: exercisesBox()
         ),
 
+        const Spacer(),
+
         docsButton()
       ],
     );
@@ -160,12 +163,12 @@ class _ExercisesViewState extends State<ExercisesView> {
 
   Widget docsButton() {
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0),
+      padding: const EdgeInsets.only(left: 8.0, bottom: 8),
       child: WisteriaButton(
-        width: 200, 
+        width: 170, 
         height: 40,
         color: primaryGrey, 
-        text: "documentation",
+        text: "view documentation",
         onTap: () {
           push(context, DocsView());
         }
