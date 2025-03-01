@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/utils/globals.dart';
+import 'package:wisteria/app/views/docs/docs_view.dart';
 import 'package:wisteria/app/views/exercises/models/exercise_model.dart';
 import 'package:wisteria/app/views/exercises/utils/exercise_view_controller.dart';
 import 'package:wisteria/app/views/exercises/views/exercise_view.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
+import 'package:wisteria/app/widgets/wisteria_button.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
 import 'package:wisteria/app/widgets/wisteria_loading_icon.dart';
 
@@ -96,6 +98,8 @@ class _ExercisesViewState extends State<ExercisesView> {
         Center(
           child: exercisesBox()
         ),
+
+        docsButton()
       ],
     );
   }
@@ -150,6 +154,21 @@ class _ExercisesViewState extends State<ExercisesView> {
             const SizedBox(width: 12),
           ],
         )
+      ),
+    );
+  }
+
+  Widget docsButton() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: WisteriaButton(
+        width: 200, 
+        height: 40,
+        color: primaryGrey, 
+        text: "documentation",
+        onTap: () {
+          push(context, DocsView());
+        }
       ),
     );
   }

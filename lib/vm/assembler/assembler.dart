@@ -60,7 +60,7 @@ final class Assembler {
       TokenType.add  => translateTwoOpInstruction(ADD_LIT_OP, ADD_REG_OP),
       TokenType.sub  => translateTwoOpInstruction(SUB_LIT_OP, SUB_REG_OP),
       TokenType.mul  => translateTwoOpInstruction(MUL_LIT_OP, MUL_REG_OP),
-      TokenType.div  => translateTwoOpInstruction(DIV_LIT_OP, DIV_REG_OP),
+      TokenType.div  => translateDiv(),
       TokenType.inc  => INC_OP,
       TokenType.dec  => DEC_OP,
       TokenType.jump => JUMP_OP,
@@ -79,6 +79,14 @@ final class Assembler {
       TokenType.out  => OUT_OP,
       _ => error("unknown mnemonic ${mnemonic.lexeme}")
     };
+  }
+
+  int translateDiv() {
+    if (peek().type == TokenType.register) {
+      return DIV_REG_OP;
+    }
+
+    return DIV_LIT_OP;
   }
 
   int translateRegister(Token register) {
