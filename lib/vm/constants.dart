@@ -41,5 +41,8 @@ const AND_OP = 24;
 const OR_OP = 25;
 const XOR_OP = 26;
 const NOT_OP = 27;
+const STORE_LIT_OP = 28;
+const STORE_REG_OP = 30;
+const LOAD_LIT_OP = 29;
 
 const OUT_OP = 255;

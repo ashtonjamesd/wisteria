@@ -7,7 +7,7 @@ import 'package:wisteria/app/preferences.dart';
 import 'package:wisteria/app/utils/app_controller.dart';
 import 'package:wisteria/app/utils/auth/auth_service.dart';
 import 'package:wisteria/app/views/welcome/welcome_view.dart';
-import 'package:wisteria/app_view.dart';
+import 'package:wisteria/app/app_view.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -44,7 +44,7 @@ class _AppState extends State<App> {
   void initState() {
     tryLogin();
     // debugging
-    AppController.instance.resetPreferences();
+    // AppController.instance.resetPreferences();
     super.initState();
   }
 

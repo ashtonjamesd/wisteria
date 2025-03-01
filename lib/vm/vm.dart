@@ -102,6 +102,9 @@ final class VirtualMachine {
       OR_OP: _orLiteral,
       XOR_OP: _xorLiteral,
       NOT_OP: _notLiteral,
+      STORE_LIT_OP: _storeLiteral,
+      STORE_REG_OP: _storeRegister,
+      LOAD_LIT_OP: _loadLiteral,
       OUT_OP: _out
     };
 
@@ -429,6 +432,30 @@ final class VirtualMachine {
   void _notLiteral() {
     final register = memory[pc];
     registers[register] = ~registers[register];
+  }
+
+  // store 10 10
+  void _storeLiteral() { 
+    final literal = memory[pc++];
+    final address = memory[pc];
+
+    memory[address] = literal;
+  }
+
+  // store 10 ra
+  void _storeRegister() { 
+    final address = memory[pc++];
+    final register = memory[pc];
+
+    memory[address] = registers[register];
+  }
+
+  // load rb 10
+  void _loadLiteral() {
+    final register = memory[pc++];
+    final address = memory[pc];
+
+    registers[register] = memory[address];
   }
 
   void _hlt() {

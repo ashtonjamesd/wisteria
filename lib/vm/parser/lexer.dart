@@ -38,6 +38,8 @@ final class Lexer {
     "OR":   TokenType.or,
     "XOR":  TokenType.xor,
     "NOT":  TokenType.not,
+    "STORE": TokenType.store,
+    "LOAD": TokenType.load,
   };
 
   final symbolMap = {

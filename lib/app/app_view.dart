@@ -4,11 +4,11 @@ import 'package:wisteria/app/utils/app_controller.dart';
 import 'package:wisteria/app/utils/auth/auth_service.dart';
 import 'package:wisteria/app/views/docs/docs_view.dart';
 
-import 'app/constants.dart';
-import 'app/views/exercises/views/exercises_view.dart';
-import 'app/views/profile/views/profile_view.dart';
-import 'app/views/settings/settings_view.dart';
-import 'app/views/vm/vm_view.dart';
+import 'constants.dart';
+import 'views/exercises/views/exercises_view.dart';
+import 'views/profile/views/profile_view.dart';
+import 'views/settings/settings_view.dart';
+import 'views/vm/vm_view.dart';
 
 class AppView extends StatefulWidget {
   const AppView({super.key});
@@ -25,7 +25,6 @@ class _AppViewState extends State<AppView> {
     const ExercisesView(),
     const ProfileView(),
     const SettingsView(),
-    const DocsView(),
   ];
 
   void _onItemTapped(int index) {

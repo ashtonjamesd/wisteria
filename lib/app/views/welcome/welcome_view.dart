@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/utils/globals.dart';
-import 'package:wisteria/app_view.dart';
+import 'package:wisteria/app/app_view.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
 import 'package:wisteria/app/widgets/wisteria_text.dart';

@@ -38,6 +38,8 @@ enum TokenType {
   or,
   xor,
   not,
+  store,
+  load,
   
   register,
 

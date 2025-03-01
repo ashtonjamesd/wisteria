@@ -97,6 +97,9 @@ class _DocsViewState extends State<DocsView> {
           instruction("OR  <register>  <arg>", "Performs logical or on the register with the given argument and stores the result in the given register."),
           instruction("XOR  <register>  <arg>", "Performs logical xor on the register with the given argument and stores the result in the given register."),
           instruction("NOT  <register>", "Performs logical not on the register and stores the result in the given register."),
+
+          instruction("STORE  <address>  <arg>", "Stores a value in a given memory address"),
+          instruction("LOAD  <register>  <address>", "Loads the value at the given address into the given register."),
         ],
       ),
     );
