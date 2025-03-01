@@ -16,6 +16,22 @@ const String registerDescription =
 General-purpose registers are fast, small storage locations in the CPU that hold intermediate data during execution, supporting operations like arithmetic, logic, and memory addressing to speed up processing.
 """;
 
+const String machineCodeDesc = 
+"""
+Machine code is the low-level binary representation of a program that the CPU directly executes. It consists of sequences of 0s and 1s that correspond to specific instructions, making it the most fundamental language a computer understands.
+""";
+
+const String asmDesc = 
+"""
+Assembly language is a human-readable, low-level programming language that corresponds closely to machine code. It uses mnemonics and symbols to represent instructions, making it easier to write and understand compared to raw binary code.
+""";
+
+const String flagDescription = 
+"""
+Flags are special registers that store status information about the CPU's operations. They help control conditional execution by indicating results such as zero, carry, sign, and overflow, enabling decision-making in programs.
+""";
+
+
 const String memoryDescription = 
 """
 Memory stores data and instructions for the CPU, providing temporary storage for active processes and enabling quick access to information during execution.

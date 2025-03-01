@@ -1,6 +1,6 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_icons/simple_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wisteria/app/utils/app_controller.dart';
 import 'package:wisteria/app/views/vm/console_box.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
@@ -221,34 +221,15 @@ class _VmViewState extends State<VmView> {
   Widget githubLinkIcon() {
     return Row(
       children: [
-        // Padding(
-        //   padding: const EdgeInsets.only(
-        //     bottom: boxPadding * 2, 
-        //     right: boxPadding
-        //   ),
-        //   child: Row(
-        //     children: [
-        //       WisteriaText(
-        //         text: "view code ", 
-        //         color: textColor, 
-        //         size: 12
-        //       ),
-        //       Icon(
-        //         Icons.arrow_right_alt,
-        //         size: 14,
-        //       )
-        //     ],
-        //   ),
-        // ),
         GestureDetector(
-          onTap: () {
-            // final Uri url = Uri.parse(githubUrl);
+          onTap: () async {
+            final Uri url = Uri.parse(githubUrl);
             
-            // if (await canLaunchUrl(url)) {
-            //   await launchUrl(url, mode: LaunchMode.externalApplication);
-            // } else {
-            //   throw 'Could not launch $githubUrl';
-            // }
+            if (await canLaunchUrl(url)) {
+              await launchUrl(url, mode: LaunchMode.externalApplication);
+            } else {
+              throw 'Could not launch $githubUrl';
+            }
           },
           child: Padding(
             padding: const EdgeInsets.only(
@@ -357,27 +338,41 @@ class _VmViewState extends State<VmView> {
   }
 
   Widget asmBox() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: boxPadding,
-          bottom: boxPadding,
-          top: boxPadding
-        ),
-        child: WisteriaBox(
-          header: "assembly",
-          width: asmBoxWidth,
-          height: 70,
-          color: primaryGrey,
-          child: Padding(
-            padding: const EdgeInsets.all(boxPadding),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: WisteriaText(
-                text: controller.asmCodeController.text,
-                color: primaryWhite,
-                size: 12,
+    return GestureDetector(
+      onTap: () {
+        controller.onComponentTapped("asm");
+        if (controller.selectedComponentName == "") {
+          setState(() {});
+          return;
+        }
+
+        controller.selectedComponentName = "asm";
+
+        setInfoWidget(asmInfoWidget());
+      },
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: boxPadding,
+            bottom: boxPadding,
+            top: boxPadding
+          ),
+          child: WisteriaBox(
+            showBorder: controller.selectedComponentName == "asm",
+            header: "assembly",
+            width: asmBoxWidth,
+            height: 70,
+            color: primaryGrey,
+            child: Padding(
+              padding: const EdgeInsets.all(boxPadding),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: WisteriaText(
+                  text: controller.asmCodeController.text,
+                  color: primaryWhite,
+                  size: 12,
+                ),
               ),
             ),
           ),
@@ -387,28 +382,42 @@ class _VmViewState extends State<VmView> {
   }
 
   Widget machineCodeBox(Size screen) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        right: boxPadding,
-        bottom: boxPadding,
-        top: boxPadding
-      ),
-      child: WisteriaBox(
-        header: "machine code",
-        width: (screen.width / widthFactor - asmBoxWidth) - boxPadding * 4,
-        height: 70,
-        color: primaryGrey,
-        child: Padding(
-          padding: const EdgeInsets.all(boxPadding),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: WisteriaText(
-              text: controller.vm.program.map((e) => e.toRadixString(2).padLeft(8, '0')).join(" "),
-              color: primaryWhite,
-              size: 12,
+    return GestureDetector(
+      onTap: () {
+        controller.onComponentTapped("machine code");
+        if (controller.selectedComponentName == "") {
+          setState(() {});
+          return;
+        }
+
+        controller.selectedComponentName = "machine code";
+
+        setInfoWidget(machineCodeInfoWidget());
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(
+          right: boxPadding,
+          bottom: boxPadding,
+          top: boxPadding
+        ),
+        child: WisteriaBox(
+          showBorder: controller.selectedComponentName == "machine code",
+          header: "machine code",
+          width: (screen.width / widthFactor - asmBoxWidth) - boxPadding * 4,
+          height: 70,
+          color: primaryGrey,
+          child: Padding(
+            padding: const EdgeInsets.all(boxPadding),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: WisteriaText(
+                text: controller.vm.program.map((e) => e.toRadixString(2).padLeft(8, '0')).join(" "),
+                color: primaryWhite,
+                size: 12,
+              ),
             ),
-          ),
-        )
+          )
+        ),
       ),
     );
   }
@@ -418,8 +427,8 @@ class _VmViewState extends State<VmView> {
       padding: const EdgeInsets.only(bottom: boxPadding),
       child: GestureDetector(
         onTap: () {
-          controller.onRegisterClicked(name);
-          if (controller.selectedRegisterName == "") {
+          controller.onComponentTapped(name);
+          if (controller.selectedComponentName == "") {
             setState(() {});
             return;
           }
@@ -430,7 +439,7 @@ class _VmViewState extends State<VmView> {
           width: width,
           height: height,
           header: name,
-          showBorder: controller.selectedRegisterName == name,
+          showBorder: controller.selectedComponentName == name,
           color: primaryGrey,
           child: Center(
             child: WisteriaText(
@@ -514,7 +523,15 @@ class _VmViewState extends State<VmView> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                programCounter(),
+                Column(
+                  children: [
+                    flagBox("zf", controller.vm.zf),
+                    flagBox("sf", controller.vm.sf),
+                    const SizedBox(height: 2),
+
+                    programCounter(),
+                  ],
+                ),
       
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -616,19 +633,84 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget registerInfoWidget() {
+  Widget flagInfoWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         WisteriaText(
-          text: "Register ${controller.selectedRegisterName}", 
+          text: "Flag ${controller.selectedComponentName}", 
           color: primaryWhite,
           size: 18
         ),
         const SizedBox(height: 16),
 
         WisteriaText(
-          text: "Register Value ${controller.getRegisterValue(controller.selectedRegisterName)}", 
+          text: "State ${controller.getFlagValue(controller.selectedComponentName)}", 
+          color: primaryWhite,
+          size: 14
+        ),
+
+        const SizedBox(height: 16),
+        WisteriaText(
+          text: flagDescription, 
+          color: primaryWhite,
+          size: 12
+        ),
+      ],
+    );
+  }
+
+  Widget asmInfoWidget() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        WisteriaText(
+          text: "Assembly Language", 
+          color: primaryWhite,
+          size: 18
+        ),
+        const SizedBox(height: 16),
+        WisteriaText(
+          text: asmDesc, 
+          color: primaryWhite,
+          size: 12
+        ),
+      ],
+    );
+  }
+
+  Widget machineCodeInfoWidget() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        WisteriaText(
+          text: "Machine Code", 
+          color: primaryWhite,
+          size: 18
+        ),
+        const SizedBox(height: 16),
+        WisteriaText(
+          text: machineCodeDesc, 
+          color: primaryWhite,
+          size: 12
+        ),
+      ],
+    );
+  }
+
+  Widget registerInfoWidget() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        WisteriaText(
+          text: "Register ${controller.selectedComponentName}", 
+          color: primaryWhite,
+          size: 18
+        ),
+        const SizedBox(height: 16),
+
+        WisteriaText(
+          text: "Register Value ${controller.getRegisterValue(controller.selectedComponentName)}", 
           color: primaryWhite,
           size: 14
         ),
@@ -640,6 +722,34 @@ class _VmViewState extends State<VmView> {
           size: 12
         ),
       ],
+    );
+  }
+
+  Widget flagBox(String name, bool value) {
+    return GestureDetector(
+      onTap: () {
+        controller.onComponentTapped(name);
+        if (controller.selectedComponentName == "") {
+          setState(() {});
+          return;
+        }
+    
+        setInfoWidget(flagInfoWidget());
+      },
+      child: WisteriaBox(
+        width: 40,
+        height: 20,
+        header: name,
+        showBorder: controller.selectedComponentName == name,
+        color: primaryGrey,
+        child: Center(
+          child: WisteriaText(
+            text: (value ? 1 : 0).toString(),
+            color: Colors.white,
+            size: 13,
+          ),
+        )
+      ),
     );
   }
 

@@ -10,7 +10,7 @@ final class VmViewController {
   final asmCodeController = TextEditingController();
 
   int selectedMemoryIdx = -1;
-  String selectedRegisterName = "";
+  String selectedComponentName = "";
   bool programCounterSelected = false;
 
   // the reset button can be pressed many times in quick succession.
@@ -31,6 +31,14 @@ final class VmViewController {
       R2_NAME => vm.rb,
       R3_NAME => vm.rc,
       R4_NAME => vm.rd,
+      _ => -1
+    };
+  }
+
+  int getFlagValue(String name) {
+    return switch (name) {
+      "zf" => vm.zf ? 1 : 0,
+      "sf" => vm.sf ? 1 : 0,
       _ => -1
     };
   }
@@ -88,7 +96,7 @@ final class VmViewController {
 
   void resetSelectedItems() {
     selectedMemoryIdx = -1;
-    selectedRegisterName = "";
+    selectedComponentName = "";
     programCounterSelected = false;
   }
 
@@ -104,16 +112,16 @@ final class VmViewController {
     selectedMemoryIdx = index;
   }
 
-  void onRegisterClicked(String name) {
-    if (selectedRegisterName == name) {
+  void onComponentTapped(String name) {
+    if (selectedComponentName == name) {
       infoWidget = const SizedBox();
-      selectedRegisterName = "";
+      selectedComponentName = "";
       return;
     }
 
     resetSelectedItems();
     
-    selectedRegisterName = name;
+    selectedComponentName = name;
   }
 
   void onProgramCounterTapped() {

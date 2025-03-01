@@ -38,9 +38,6 @@ final class VirtualMachine {
   // zero flag
   bool zf = false;
 
-  // parity flag
-  bool pf = false;
-
   // execution flag for the virtual machine
   bool isRunning = true;
 
