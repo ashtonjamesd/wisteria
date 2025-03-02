@@ -329,7 +329,7 @@ class _VmViewState extends State<VmView> {
         onTap: () {
           showDialog(context: context, builder: (context) {
             return CodeEditor(
-              controller: controller.asmCodeController
+              controller: AppController.instance.codeController
             );
           });
         }
@@ -369,7 +369,7 @@ class _VmViewState extends State<VmView> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: WisteriaText(
-                  text: controller.asmCodeController.text,
+                  text: AppController.instance.codeController.text,
                   color: primaryWhite,
                   size: 12,
                 ),

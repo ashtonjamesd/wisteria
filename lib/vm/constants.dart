@@ -44,5 +44,6 @@ const NOT_OP = 27;
 const STORE_LIT_OP = 28;
 const STORE_REG_OP = 30;
 const LOAD_LIT_OP = 29;
+const WAIT_OP = 30;
 
 const OUT_OP = 255;

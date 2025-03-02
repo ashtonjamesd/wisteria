@@ -39,7 +39,7 @@ final class VirtualMachine {
   bool zf = false;
 
   // execution flag for the virtual machine
-  bool isRunning = true;
+  bool isRunning = false;
 
   // will display no messages if true
   bool _quietMode = true;
@@ -102,6 +102,7 @@ final class VirtualMachine {
       STORE_LIT_OP: _storeLiteral,
       STORE_REG_OP: _storeRegister,
       LOAD_LIT_OP: _loadLiteral,
+      WAIT_OP: _wait,
       OUT_OP: _out
     };
 
@@ -114,6 +115,8 @@ final class VirtualMachine {
   }
 
   Future run() async {
+    isRunning = true;
+
     output("parsing assembly code.");
     await delay(1500);
     
@@ -149,7 +152,7 @@ final class VirtualMachine {
         await Future.delayed(Duration(milliseconds: 1000));
       }
 
-      _execute();
+      await _execute();
       _update();
 
       _tick();
@@ -168,7 +171,7 @@ final class VirtualMachine {
     }
   }
 
-  void _execute() {
+  Future<void> _execute() async {
     ir = memory[pc];
     _tick();
 
@@ -180,13 +183,21 @@ final class VirtualMachine {
     }
 
     final instruction = isa[ir]!;
-    instruction();
+
+    var result = instruction();
+    if (result is Future) {
+      await result;
+    }
   }
 
   Future<void> delay(int ms) async {
     if (!_hasDelays) return;
-
     await Future.delayed(Duration(milliseconds: ms));
+  }
+
+  Future<void> _wait() async {
+    final time = memory[pc];
+    await Future.delayed(Duration(seconds: time));
   }
 
   void output(String message) {

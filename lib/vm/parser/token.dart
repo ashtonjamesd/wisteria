@@ -40,6 +40,7 @@ enum TokenType {
   not,
   store,
   load,
+  wait,
   
   register,
 

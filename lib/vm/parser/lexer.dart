@@ -40,6 +40,7 @@ final class Lexer {
     "NOT":  TokenType.not,
     "STORE": TokenType.store,
     "LOAD": TokenType.load,
+    "WAIT": TokenType.wait,
   };
 
   final symbolMap = {

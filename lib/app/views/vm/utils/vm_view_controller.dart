@@ -7,8 +7,6 @@ import '../../../../vm/vm.dart';
 final class VmViewController {
   late VirtualMachine vm;
 
-  final asmCodeController = TextEditingController();
-
   int selectedMemoryIdx = -1;
   String selectedComponentName = "";
   bool programCounterSelected = false;
@@ -66,7 +64,7 @@ final class VmViewController {
     vm = VirtualMachine(() {
       setState(() {});
     },
-      programString: asmCodeController.text
+      programString: AppController.instance.codeController.text
     );
 
     initVm();
@@ -79,7 +77,7 @@ final class VmViewController {
       setState(() {});
     },
       hasDelays: AppController.instance.settings.simulateVmDelays,
-      programString: asmCodeController.text
+      programString: AppController.instance.codeController.text
     );
 
     vm.run();

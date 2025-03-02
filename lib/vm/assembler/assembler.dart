@@ -77,6 +77,7 @@ final class Assembler {
       TokenType.xor  => XOR_OP,
       TokenType.not  => NOT_OP,
       TokenType.out  => OUT_OP,
+      TokenType.wait => WAIT_OP,
       TokenType.store => translateTwoOpInstruction(STORE_LIT_OP, STORE_REG_OP),
       TokenType.load => LOAD_LIT_OP,
       _ => error("unknown mnemonic ${mnemonic.lexeme}")

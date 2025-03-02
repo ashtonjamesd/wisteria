@@ -49,4 +49,8 @@ final class DbService {
 
     await _users.doc(uid).set(user.toMap());
   }
+
+  Future<void> createSubmission() async {
+    
+  }
 }
