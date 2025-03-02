@@ -290,7 +290,7 @@ class _ExerciseViewState extends State<ExerciseView> {
   Widget unrevealedHintBox(Size screen) {
     return WisteriaBox(
       width: MediaQuery.sizeOf(context).width - 40,
-      height: 50,
+      height: 100,
       showBorder: true,
       child: Center(
         child: WisteriaText(
@@ -303,7 +303,7 @@ class _ExerciseViewState extends State<ExerciseView> {
   Widget revealedHintBox(Size screen) {
     return WisteriaBox(
       width: MediaQuery.sizeOf(context).width - 40,
-      height: 50,
+      height: 100,
       showBorder: true,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
