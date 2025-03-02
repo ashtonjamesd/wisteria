@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wisteria/app/utils/app_controller.dart';
+import 'package:wisteria/app/utils/preferences.dart';
 
 import '../../constants.dart';
 
@@ -109,7 +111,8 @@ class _CodeEditorBoxState extends State<CodeEditorBox> {
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
+                await AppController.instance.setPreference(asmCodePref, AppController.instance.codeController.text);
                 Navigator.pop(context);
               },
               child: const Icon(

@@ -53,6 +53,9 @@ class _AppState extends State<App> {
 
     var simulateVmDelays = await AppController.instance.getPreference(simulateVmDelaysPref);
     AppController.instance.settings.simulateVmDelays = simulateVmDelays?.toString() == "true";
+
+    var asmCode = await AppController.instance.getPreference(asmCodePref);
+    AppController.instance.codeController.text = asmCode ?? "";
   }
 
   Future<void> tryLogin() async {
