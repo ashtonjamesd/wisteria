@@ -154,7 +154,7 @@ class _ExerciseViewState extends State<ExerciseView> {
           width: MediaQuery.sizeOf(context).width - 40,
         ),
 
-        StdoutBox(screen: screen, vm: vm),
+        StdoutBox(screen: screen, vm: vm, isExercise: true),
         const SizedBox(height: 16),
 
         revealHintBox(screen),
