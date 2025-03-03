@@ -1,3 +1,3 @@
 # wisteria
 
-A new Flutter project.
+Wisteria is an education and learning app designed to teach low-level programming and computation.
