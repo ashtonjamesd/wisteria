@@ -84,6 +84,8 @@ fib:
 """;
 
 const String githubUrl = "https://github.com/rxgq/wisteria";
+const String privacyPolicyUrl= "$githubUrl/blob/main/privacy_policy.md";
+const String termsAndConditionsUrl = "$githubUrl/blob/main/terms_and_conditions.md";
 
 const double consoleHeight = 120;
 const double userInterfaceHeight = 130;

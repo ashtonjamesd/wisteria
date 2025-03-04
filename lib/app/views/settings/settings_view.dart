@@ -99,19 +99,16 @@ class _SettingsViewState extends State<SettingsView> {
           settingsHeader("Contact"),
           basicSetting(
             "Terms and Conditions", Icons.file_copy,
-            () {
-              showDialog(context: context, builder: (context) {
-                return termsAndConditions();
-              });
+            () async {
+              final uri = Uri.parse(termsAndConditionsUrl);
+              if (await canLaunchUrl(uri)) await launchUrl(uri);
             }
           ),
-            
           basicSetting(
             "Privacy Policy", Icons.lock,
-            () {
-              showDialog(context: context, builder: (context) {
-                return privacyPolicy();
-              });
+            () async {
+              final uri = Uri.parse(privacyPolicyUrl);
+              if (await canLaunchUrl(uri)) await launchUrl(uri);
             }
           ),
           basicSetting(
@@ -128,9 +125,7 @@ class _SettingsViewState extends State<SettingsView> {
             "View the code", SimpleIcons.github,
             () async {
               final uri = Uri.parse(githubUrl);
-              if (await canLaunchUrl(uri)){
-                  await launchUrl(uri);
-              }
+              if (await canLaunchUrl(uri)) await launchUrl(uri);
             }
           ),
           // basicSetting(
