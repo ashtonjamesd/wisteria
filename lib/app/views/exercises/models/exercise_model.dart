@@ -1,4 +1,5 @@
 final class ExerciseModel {
+  final String id;
   final String title;
   final String description;
   final int level;
@@ -18,6 +19,7 @@ final class ExerciseModel {
   final List<dynamic> bannedInstructions;
 
   ExerciseModel({
+    required this.id,
     required this.title,
     required this.description,
     required this.level,
@@ -29,8 +31,9 @@ final class ExerciseModel {
     required this.bannedInstructions,
   });
 
-  factory ExerciseModel.fromMap(Map<String, dynamic> map) {
+  factory ExerciseModel.fromMap(Map<String, dynamic> map, String? id) {
     return ExerciseModel(
+      id: id ?? '',
       title: map['title'] ?? '',
       description: map['description'] ?? '', 
       level: map['level'] ?? -1, 

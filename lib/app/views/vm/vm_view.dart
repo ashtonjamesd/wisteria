@@ -227,14 +227,12 @@ class _VmViewState extends State<VmView> {
             
             if (await canLaunchUrl(url)) {
               await launchUrl(url, mode: LaunchMode.externalApplication);
-            } else {
-              throw 'Could not launch $githubUrl';
             }
           },
           child: Padding(
             padding: const EdgeInsets.only(
               bottom: boxPadding * 4,
-              right: boxPadding * 4
+              right: boxPadding * 4 + 4
             ),
             child: Icon(
               SimpleIcons.github,

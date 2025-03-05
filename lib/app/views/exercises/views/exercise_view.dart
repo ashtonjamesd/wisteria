@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:wisteria/app/utils/app_controller.dart';
+import 'package:wisteria/app/utils/db/db_service.dart';
 import 'package:wisteria/app/utils/globals.dart';
 import 'package:wisteria/app/views/vm/code_editor_box.dart';
 import 'package:wisteria/app/views/vm/console_box.dart';
@@ -17,10 +19,12 @@ import '../utils/exercise_view_controller.dart';
 class ExerciseView extends StatefulWidget {
   const ExerciseView({
     super.key, 
-    required this.model
+    required this.model,
+    required this.setState,
   });
 
   final ExerciseModel model;
+  final Function setState;
 
   @override
   State<ExerciseView> createState() => _ExerciseViewState();
@@ -28,6 +32,7 @@ class ExerciseView extends StatefulWidget {
 
 class _ExerciseViewState extends State<ExerciseView> {
   final controller = ExerciseViewController();
+  final db = DbService();
 
   final codeController = TextEditingController();
   bool hintRevealed = false;
@@ -41,13 +46,20 @@ class _ExerciseViewState extends State<ExerciseView> {
     programString: codeController.text
   );
 
-  void onCompletion() {
+  Future<void> onCompletion() async {
+    final user = AppController.instance.user;
+    if (user != null) {
+      await db.createSubmission(user.uid, widget.model.id, codeController.text, DateTime.now());
+    }
+
     showDialog(
       context: context, 
       builder: (context) {
         return completionDialogue();
       }
     );
+
+    widget.setState();
   }
 
   Future<void> onRunCode() async {
@@ -154,7 +166,7 @@ class _ExerciseViewState extends State<ExerciseView> {
                 codeEditor(),
             
                 ConsoleBox(
-                  vm: vm, 
+                  vm: vm,
                   showBorder: true,
                   width: MediaQuery.sizeOf(context).width - 40,
                 ),
@@ -252,6 +264,10 @@ class _ExerciseViewState extends State<ExerciseView> {
   }
 
   Widget completionDialogue() {
+    bool isLoggedIn = AppController.instance.user != null;
+
+    var loggedInMessage = isLoggedIn ? "" : "To save your progress, sign in with an account.";
+
     return WisteriaWindow(
       header: "Exercise Complete", 
       onTapOkay: () {
@@ -260,15 +276,25 @@ class _ExerciseViewState extends State<ExerciseView> {
       messageWidget: Center(
         child: SizedBox(
           width: 200,
-          child: WisteriaText(
-            align: TextAlign.center,
-            text: "Well Done! You passed this exercise.",
-            size: 13,
+          child: Column(
+            children: [
+              WisteriaText(
+                align: TextAlign.center,
+                text: "Well Done! You passed this exercise.",
+                size: 13,
+              ),
+              if (!isLoggedIn) const SizedBox(height: 20),
+              if (!isLoggedIn) WisteriaText(
+                align: TextAlign.center,
+                text: loggedInMessage,
+                size: 13,
+              ),
+            ],
           ),
         ),
       ),
       width: 240, 
-      height: 160
+      height: isLoggedIn ? 160 : 200
     );
   }
 

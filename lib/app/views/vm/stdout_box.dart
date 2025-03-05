@@ -56,7 +56,7 @@ class _StdoutBoxState extends State<StdoutBox> {
               scrollDirection: Axis.vertical,
               child: WisteriaText(
                 text: widget.vm.stdout.join("\n"),
-                color: primaryWhite,
+                color: Colors.black,
                 size: 12,
               ),
             ),

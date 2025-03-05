@@ -1,6 +1,7 @@
 import 'package:wisteria/app/utils/db/db_service.dart';
 import 'package:wisteria/app/utils/result.dart';
 import 'package:wisteria/app/views/exercises/models/exercise_model.dart';
+import 'package:wisteria/app/views/exercises/models/submission_model.dart';
 import 'package:wisteria/vm/vm.dart';
 
 import '../../../../vm/constants.dart';
@@ -13,6 +14,12 @@ final class ExerciseViewController {
     exercises.sort((a, b) => a.level.compareTo(b.level));
 
     return exercises;
+  }
+
+  Future<List<SubmissionModel>> getSubmissions(String uid) async {
+    final submissions = await _db.getSubmissions(uid);
+
+    return submissions;
   }
 
   Result validateSubmission(final ExerciseModel model, final VirtualMachine vm) {

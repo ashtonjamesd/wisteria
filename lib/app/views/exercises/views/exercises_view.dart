@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
+import 'package:wisteria/app/utils/app_controller.dart';
 import 'package:wisteria/app/utils/globals.dart';
 import 'package:wisteria/app/views/docs/docs_view.dart';
 import 'package:wisteria/app/views/exercises/models/exercise_model.dart';
+import 'package:wisteria/app/views/exercises/models/submission_model.dart';
 import 'package:wisteria/app/views/exercises/utils/exercise_view_controller.dart';
 import 'package:wisteria/app/views/exercises/views/exercise_view.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
 import 'package:wisteria/app/widgets/wisteria_loading_icon.dart';
-
-import '../../../utils/app_controller.dart';
 import '../../../widgets/wisteria_text.dart';
 
 class ExercisesView extends StatefulWidget {
@@ -24,6 +24,7 @@ class _ExercisesViewState extends State<ExercisesView> {
   final controller = ExerciseViewController();
 
   List<ExerciseModel> exercises = [];
+  List<SubmissionModel> submissions = [];
 
   bool isLoading = false;
 
@@ -39,14 +40,15 @@ class _ExercisesViewState extends State<ExercisesView> {
     });
 
     exercises = await controller.getExercises();
+
+    final user = AppController.instance.user;
+    if (user != null) {
+      submissions = await controller.getSubmissions(user.uid);
+    }
     
     setState(() {
       isLoading = false;
     });
-  }
-
-  void onSubmit() {
-    
   }
 
   @override
@@ -122,10 +124,23 @@ class _ExercisesViewState extends State<ExercisesView> {
     );
   }
 
+  bool isComplete(ExerciseModel model) {
+    if (submissions.map((x) => x.exerciseId).contains(model.id)) {
+      return true;
+    }
+
+    return false;
+  }
+
   Widget exerciseItem(ExerciseModel model) {
     return GestureDetector(
       onTap: () {
-        push(context, ExerciseView(model: model));
+        push(context, ExerciseView(
+          model: model,
+          setState: () async {
+            await initExerciseView();
+          },
+        ));
       },
       child: WisteriaBox(
         width: MediaQuery.sizeOf(context).width - 20,
@@ -142,6 +157,12 @@ class _ExercisesViewState extends State<ExercisesView> {
             const SizedBox(width: 24),
 
             const Spacer(),
+
+            if (isComplete(model)) 
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: WisteriaIcon(icon: Icons.check),
+              ),
       
             WisteriaText(
               text: "Exercise ${model.level.toString()}",

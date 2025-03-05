@@ -1,8 +1,13 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:wisteria/app/utils/db/db_service.dart';
+import 'package:wisteria/app/views/exercises/models/exercise_model.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 
 import '../../../constants.dart';
 import '../../../utils/app_controller.dart';
+import '../../../widgets/wisteria_loading_icon.dart' show WisteriaLoadingIcon;
 import '../../../widgets/wisteria_text.dart';
 
 class LoggedInView extends StatefulWidget {
@@ -18,9 +23,55 @@ class LoggedInView extends StatefulWidget {
 }
 
 class _LoggedInViewState extends State<LoggedInView> {
+  final db = DbService();
+
+  int exercisesComplete = 0;
+  List<ExerciseModel> exercises = []; 
+
+  final user = AppController.instance.user!;
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    initProfile();
+    super.initState();
+  }
+
+  Future<void> initProfile() async {
+    var submissions = await db.getSubmissions(user.uid);
+
+    var table = HashSet();
+    table.addAll(submissions);
+    exercisesComplete = table.length;
+
+    exercises = await db.getExercises();
+
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return loggedInScreen();
+    return isLoading ? loadingIcon() : loggedInScreen();
+  }
+
+  Widget loadingIcon() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 80),
+            child: WisteriaLoadingIcon(
+              text: "Loading Profile...",
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget loggedInScreen() {
@@ -31,14 +82,7 @@ class _LoggedInViewState extends State<LoggedInView> {
         welcomeText(),
 
         const SizedBox(height: 24),
-        statBox("exercises complete", AppController.instance.user!.exercisesComplete.toString()),
-
-        // userField("username", AppController.instance.user!.username),
-        // const SizedBox(height: 16),
-
-        // userField("exercises complete", AppController.instance.user!.exercisesComplete.toString()),
-        // const SizedBox(height: 16),
-
+        statBox("exercises complete", "${exercisesComplete.toString()} / ${exercises.length}"),
       ],
     );
   }
