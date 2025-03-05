@@ -8,12 +8,10 @@ import 'package:wisteria/app/auth/auth_service.dart';
 import 'package:wisteria/app/views/welcome/welcome_view.dart';
 import 'package:wisteria/app/app_view.dart';
 import 'firebase_options.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
   try {
-    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+    WidgetsFlutterBinding.ensureInitialized();
 
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -49,8 +47,6 @@ class _AppState extends State<App> {
   }
 
   Future<void> initPreferences() async {
-    FlutterNativeSplash.remove();
-
     var showDialog = await AppController.instance.getPreference(showHelpDialoguesPref);
     AppController.instance.settings.showInfoDialogs = showDialog?.toString() == "true";
 
