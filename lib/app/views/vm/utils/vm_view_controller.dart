@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wisteria/app/utils/app_controller.dart';
+import 'package:wisteria/app/app_controller.dart';
 
 import '../../../../vm/constants.dart';
 import '../../../../vm/vm.dart';

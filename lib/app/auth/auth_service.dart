@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wisteria/app/utils/auth/models/wisteria_user.dart';
-import 'package:wisteria/app/utils/db/db_service.dart';
+import 'package:wisteria/app/auth/models/wisteria_user.dart';
+import 'package:wisteria/app/db/db_service.dart';
 import '../app_controller.dart';
-import '../result.dart';
+import '../utils/result.dart';
 
 final class AuthService {
   final _db = DbService();
@@ -35,7 +35,6 @@ final class AuthService {
     final credential = await _auth.createUserWithEmailAndPassword(
       email: email, password: password
     );
-
 
     if (credential.user == null) {
       return Result.success(false);

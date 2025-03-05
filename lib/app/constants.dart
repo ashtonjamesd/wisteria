@@ -44,19 +44,9 @@ The program counter (PC) tracks the address of the next instruction to execute, 
 
 const String supportMessage = 
 """
-If you need help, check our official documentation on the GitHub repository. If you think you have encountered a bug, please report it.
+If you need help with the coding, check our documentation on the exercises tab. If you think you have encountered a bug, please report it.
 
 This is an early release, so you may encounter bugs. We appreciate your patience and encourage you to report any issues via the email on our GitHub page. Thank you!
-""";
-
-const String termsAndConditionsMessage = 
-"""
-
-""";
-
-const String privacyPolicyMessage = 
-"""
-
 """;
 
 // 10th fibonacci counter

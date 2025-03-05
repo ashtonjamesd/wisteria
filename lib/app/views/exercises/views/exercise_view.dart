@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:wisteria/app/utils/app_controller.dart';
-import 'package:wisteria/app/utils/db/db_service.dart';
+import 'package:wisteria/app/app_controller.dart';
+import 'package:wisteria/app/db/db_service.dart';
 import 'package:wisteria/app/utils/globals.dart';
 import 'package:wisteria/app/views/vm/code_editor_box.dart';
 import 'package:wisteria/app/views/vm/console_box.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
-import 'package:wisteria/app/utils/app_controller.dart';
+import 'package:wisteria/app/app_controller.dart';
 import 'package:wisteria/app/utils/globals.dart';
 import 'package:wisteria/app/views/docs/docs_view.dart';
 import 'package:wisteria/app/views/exercises/models/exercise_model.dart';

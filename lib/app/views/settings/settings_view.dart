@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simple_icons/simple_icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wisteria/app/utils/preferences.dart';
-import 'package:wisteria/app/utils/auth/auth_service.dart';
+import 'package:wisteria/app/auth/auth_service.dart';
 import 'package:wisteria/app/utils/globals.dart';
 import 'package:wisteria/app/views/welcome/welcome_view.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
@@ -11,7 +11,7 @@ import 'package:wisteria/app/widgets/wisteria_icon.dart';
 import 'package:wisteria/app/widgets/wisteria_slider.dart';
 import 'package:wisteria/app/widgets/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
-import 'package:wisteria/app/utils/app_controller.dart';
+import 'package:wisteria/app/app_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/wisteria_window.dart';
@@ -205,28 +205,6 @@ class _SettingsViewState extends State<SettingsView> {
         infoSetting("Email", AppController.instance.user!.email),
         infoSetting("Username", AppController.instance.user!.username),
       ],
-    );
-  }
-
-  Widget termsAndConditions() {
-    return WisteriaWindow(
-      header: "Terms and Conditions", 
-      width: 280, 
-      height: 240,
-      messageWidget: WisteriaText(
-        text: termsAndConditionsMessage
-      ),
-    );
-  }
-
-  Widget privacyPolicy() {
-    return WisteriaWindow(
-      header: "Privacy Policy", 
-      width: 280, 
-      height: 240,
-      messageWidget: WisteriaText(
-        text: privacyPolicyMessage
-      ),
     );
   }
 

@@ -1,7 +1,7 @@
 import 'package:simple_icons/simple_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wisteria/app/utils/app_controller.dart';
+import 'package:wisteria/app/app_controller.dart';
 import 'package:wisteria/app/views/vm/console_box.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';

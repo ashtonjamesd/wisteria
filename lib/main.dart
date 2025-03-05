@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/utils/preferences.dart';
-import 'package:wisteria/app/utils/app_controller.dart';
-import 'package:wisteria/app/utils/auth/auth_service.dart';
+import 'package:wisteria/app/app_controller.dart';
+import 'package:wisteria/app/auth/auth_service.dart';
 import 'package:wisteria/app/views/welcome/welcome_view.dart';
 import 'package:wisteria/app/app_view.dart';
 import 'firebase_options.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
   try {
-    WidgetsFlutterBinding.ensureInitialized();
+    WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -48,6 +49,8 @@ class _AppState extends State<App> {
   }
 
   Future<void> initPreferences() async {
+    FlutterNativeSplash.remove();
+
     var showDialog = await AppController.instance.getPreference(showHelpDialoguesPref);
     AppController.instance.settings.showInfoDialogs = showDialog?.toString() == "true";
 
@@ -68,6 +71,7 @@ class _AppState extends State<App> {
       setState(() {
         isLoading = false;
       });
+
       return;
     }
 

@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:wisteria/app/utils/auth/models/wisteria_user.dart';
+import 'package:wisteria/app/auth/models/wisteria_user.dart';
 
-import '../../../utils/app_controller.dart';
-import '../../../utils/auth/auth_service.dart';
+import '../../../app_controller.dart';
+import '../../../auth/auth_service.dart';
 import '../../../utils/result.dart';
 
 final class ProfileViewController {

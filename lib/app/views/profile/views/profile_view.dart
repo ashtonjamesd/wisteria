@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/constants.dart';
-import 'package:wisteria/app/utils/app_controller.dart';
+import 'package:wisteria/app/app_controller.dart';
 import 'package:wisteria/app/views/profile/views/logged_in_view.dart';
 import 'package:wisteria/app/views/profile/views/not_logged_in_view.dart';
 import 'package:wisteria/app/views/profile/utils/profile_view_controller.dart';

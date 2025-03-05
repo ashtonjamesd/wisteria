@@ -1,4 +1,4 @@
-import 'package:wisteria/app/utils/db/db_service.dart';
+import 'package:wisteria/app/db/db_service.dart';
 import 'package:wisteria/app/utils/result.dart';
 import 'package:wisteria/app/views/exercises/models/exercise_model.dart';
 import 'package:wisteria/app/views/exercises/models/submission_model.dart';

@@ -1,12 +1,12 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:wisteria/app/utils/db/db_service.dart';
+import 'package:wisteria/app/db/db_service.dart';
 import 'package:wisteria/app/views/exercises/models/exercise_model.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 
 import '../../../constants.dart';
-import '../../../utils/app_controller.dart';
+import '../../../app_controller.dart';
 import '../../../widgets/wisteria_loading_icon.dart' show WisteriaLoadingIcon;
 import '../../../widgets/wisteria_text.dart';
 
