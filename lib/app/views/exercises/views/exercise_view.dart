@@ -135,23 +135,32 @@ class _ExerciseViewState extends State<ExerciseView> {
       children: [
         const SizedBox(height: 16),
 
-        Padding(
-          padding: const EdgeInsets.only(left: 32, right: 32),
-          child: WisteriaText(
-            text: widget.model.description,
-            size: 16,
-            color: primaryTextColor,
+        SizedBox(
+          height: screen.height - 400,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 32, right: 32),
+                  child: WisteriaText(
+                    text: widget.model.description,
+                    size: 16,
+                    color: primaryTextColor,
+                  ),
+                ),
+            
+                const SizedBox(height: 24),
+            
+                codeEditor(),
+            
+                ConsoleBox(
+                  vm: vm, 
+                  showBorder: true,
+                  width: MediaQuery.sizeOf(context).width - 40,
+                ),
+              ],
+            ),
           ),
-        ),
-
-        const SizedBox(height: 24),
-
-        codeEditor(),
-
-        ConsoleBox(
-          vm: vm, 
-          showBorder: true,
-          width: MediaQuery.sizeOf(context).width - 40,
         ),
 
         StdoutBox(screen: screen, vm: vm, isExercise: true),
