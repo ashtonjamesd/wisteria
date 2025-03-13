@@ -115,7 +115,7 @@ class _VmViewState extends State<VmView> {
 
               const Spacer(),
 
-              githubLinkIcon(),
+              // githubLinkIcon(),
             ],
           ),
               

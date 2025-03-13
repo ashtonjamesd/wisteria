@@ -120,14 +120,14 @@ class _SettingsViewState extends State<SettingsView> {
             }
           ),
             
-          settingsHeader("Share"),
-          basicSetting(
-            "View the code", SimpleIcons.github,
-            () async {
-              final uri = Uri.parse(githubUrl);
-              if (await canLaunchUrl(uri)) await launchUrl(uri);
-            }
-          ),
+          // settingsHeader("Share"),
+          // basicSetting(
+          //   "View the code", SimpleIcons.github,
+          //   () async {
+          //     final uri = Uri.parse(githubUrl);
+          //     if (await canLaunchUrl(uri)) await launchUrl(uri);
+          //   }
+          // ),
           // basicSetting(
           //   "Follow us on Instagram", SimpleIcons.instagram,
           //   () {
