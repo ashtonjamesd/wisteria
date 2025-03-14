@@ -1,0 +1,2 @@
+C:/Users/rxgqq/projects/wisteria/android/app/.cxx/RelWithDebInfo/1uy15g35/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/rxgqq/projects/wisteria/android/app/.cxx/RelWithDebInfo/1uy15g35/armeabi-v7a/CMakeFiles/rebuild_cache.dir
