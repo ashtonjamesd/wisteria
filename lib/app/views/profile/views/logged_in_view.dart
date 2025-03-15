@@ -45,8 +45,12 @@ class _LoggedInViewState extends State<LoggedInView> {
     table.addAll(submissions);
     exercisesComplete = table.length;
 
-    exercises = await db.getExercises();
-
+    final result = await db.getExercises();
+    if (result.isSuccess) {
+      exercises = result.value!;
+    } else {
+      // handle
+    }
 
     setState(() {
       isLoading = false;

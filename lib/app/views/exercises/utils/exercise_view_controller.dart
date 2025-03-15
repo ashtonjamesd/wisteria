@@ -9,11 +9,15 @@ import '../../../../vm/constants.dart';
 final class ExerciseViewController {
   final _db = DbService();
 
-  Future<List<ExerciseModel>> getExercises() async {
-    final exercises = await _db.getExercises();
-    exercises.sort((a, b) => a.level.compareTo(b.level));
+  Future<Result<List<ExerciseModel>>> getExercises() async {
+    final result = await _db.getExercises();
 
-    return exercises;
+    if (result.isFailure) {
+      return result;
+    }
+
+    result.value!.sort((a, b) => a.level.compareTo(b.level));
+    return result;
   }
 
   Future<List<SubmissionModel>> getSubmissions(String uid) async {

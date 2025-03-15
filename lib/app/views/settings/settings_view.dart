@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:simple_icons/simple_icons.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wisteria/app/utils/preferences.dart';
 import 'package:wisteria/app/auth/auth_service.dart';
 import 'package:wisteria/app/utils/globals.dart';
@@ -13,6 +11,7 @@ import 'package:wisteria/app/widgets/wisteria_text.dart';
 import 'package:wisteria/app/constants.dart';
 import 'package:wisteria/app/app_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../widgets/wisteria_window.dart';
 
@@ -25,6 +24,19 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   final authService = AuthService();
+
+  PackageInfo? info;
+
+  @override
+  void initState() {
+    initSettings();
+    super.initState();
+  }
+
+  Future<void> initSettings() async {
+    info = await PackageInfo.fromPlatform();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,8 +157,8 @@ class _SettingsViewState extends State<SettingsView> {
 
           logoutButton(),
             
-          // const Spacer(),
-          copyrightNotice()
+          copyrightNotice(),
+          appVersionInfo(),
         ],
       ),
     );
@@ -166,10 +178,6 @@ class _SettingsViewState extends State<SettingsView> {
       onTap: () async {
         await authService.logout();
         setState(() {});
-
-        // showDialog(context: context, builder: (context) {
-        //   return basicDialogue("Logged Out");
-        // });
 
         await AppController.instance.resetPreferences();
         push(context, WelcomeView());
@@ -225,16 +233,33 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Widget copyrightNotice() {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(height: 64),
+        const SizedBox(height: 16),
 
         WisteriaText(
           text: "© 2025 Wisteria",
           color: primaryTextColor,
           size: 12,
         ),
+      ],
+    );
+  }
+
+  Widget appVersionInfo() {
+    if (info == null) return const SizedBox();
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(height: 8),
+        WisteriaText(
+          text: "${info!.version}+${info!.buildNumber}",
+          color: primaryGrey,
+          size: 12,
+        ),
+        const SizedBox(height: 12),
       ],
     );
   }

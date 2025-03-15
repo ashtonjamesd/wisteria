@@ -3,22 +3,24 @@ import 'package:wisteria/app/auth/models/wisteria_user.dart';
 import 'package:wisteria/app/views/exercises/models/exercise_model.dart';
 import 'package:wisteria/app/views/exercises/models/submission_model.dart';
 
+import '../utils/result.dart';
+
 final class DbService {
   final _users = FirebaseFirestore.instance.collection("users");
   final _exercises = FirebaseFirestore.instance.collection("exercises");
 
-  Future<List<ExerciseModel>> getExercises() async {
+  Future<Result<List<ExerciseModel>>> getExercises() async {
     try {
       final querySnapshot = await _exercises.get();
       final exerciseModels = querySnapshot.docs
         .map((x) => ExerciseModel.fromMap(x.data(), x.id)) 
         .toList();
 
-      return exerciseModels;
+      return Result.success(exerciseModels);
 
     } catch (e) {
       print("Error fetching user: $e");
-      return [];
+      return Result.failure(e);
     }
   }
 

@@ -13,22 +13,22 @@ Head to the exercises tab to start learning assembly programming or experiment w
 
 const String registerDescription = 
 """
-General-purpose registers are fast, small storage locations in the CPU that hold intermediate data during execution, supporting operations like arithmetic, logic, and memory addressing to speed up processing.
+General-purpose registers are fast storage locations in the CPU that hold intermediate data during execution, supporting operations like arithmetic and memory addressing to speed up processing.
 """;
 
 const String machineCodeDesc = 
 """
-Machine code is the low-level binary representation of a program that the CPU directly executes. It consists of sequences of 0s and 1s that correspond to specific instructions, making it the most fundamental language a computer understands.
+Machine code is the low-level binary representation of a program that the CPU directly executes. It consists of sequences of 0s and 1s that correspond to specific instructions.
 """;
 
 const String asmDesc = 
 """
-Assembly language is a human-readable, low-level programming language that corresponds closely to machine code. It uses mnemonics and symbols to represent instructions, making it easier to write and understand compared to raw binary code.
+Assembly language is a human-readable, low-level language that corresponds closely to machine code. It uses mnemonics to represent instructions, making it easier to write code.
 """;
 
 const String flagDescription = 
 """
-Flags are special registers that store status information about the CPU's operations. They help control conditional execution by indicating results such as zero, carry, sign, and overflow, enabling decision-making in programs.
+Flags are special registers that store status information about the CPU's operations. They control conditional execution by indicating results such as zero, carry, and sign, enabling decision-making.
 """;
 
 
@@ -82,7 +82,7 @@ const double userInterfaceHeight = 130;
 const double cpuInterfaceHeight = 240;
 
 const double asmBoxWidth = 70;
-const double infoWidgetHeight = 174;
+const double infoWidgetHeight = 124;
 
 const double widthFactor = 1.1;
 

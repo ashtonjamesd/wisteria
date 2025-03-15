@@ -34,6 +34,10 @@ class _VmViewState extends State<VmView> {
     initHelpDialogue();
   }
 
+  double buttonWidth(Size screen) {
+    return ((screen.width - 40) / widthFactor / 4) - boxPadding * 8;
+  }
+
   Future<void> initHelpDialogue() async {
     final alreadyShown = await AppController.instance.getPreference(shownInitialHelpDialoguePref);
     if (alreadyShown == "true") {
@@ -204,12 +208,13 @@ class _VmViewState extends State<VmView> {
             StdoutBox(screen: screen, vm: controller.vm),
         
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                executeButton(),
-                codeEditorButton(),
-                pauseButton(),
-                haltButton(),
-                resetButton()
+                executeButton(screen),
+                codeEditorButton(screen),
+                pauseButton(screen),
+                haltButton(screen),
+                resetButton(screen)
               ],
             ),
           ],
@@ -245,13 +250,14 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget resetButton() {
+
+  Widget resetButton(Size screen) {
     return Padding(
       padding: const EdgeInsets.only(
-        left: boxPadding * 2
+        right: boxPadding * 2, left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: 78,
+        width: buttonWidth(screen),
         color: primaryGrey,
         text: "reset",
         onTap: () async {
@@ -262,13 +268,13 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget haltButton() {
+  Widget haltButton(Size screen) {
     return Padding(
       padding: const EdgeInsets.only(
         left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: 80,
+        width: buttonWidth(screen),
         color: primaryGrey,
         text: "halt",
         onTap: () async {
@@ -279,13 +285,13 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget pauseButton() {
+  Widget pauseButton(Size screen) {
     return Padding(
       padding: const EdgeInsets.only(
         left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: 36,
+        width: 28,
         height: 32,
         color: primaryGrey, 
         showBorder: controller.vm.isPaused,
@@ -298,13 +304,13 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget executeButton() {
+  Widget executeButton(Size screen) {
     return Padding(
       padding: const EdgeInsets.only(
         left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: 80,
+        width: buttonWidth(screen),
         color: primaryGrey,
         text: "execute",
         onTap: () {
@@ -315,13 +321,13 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget codeEditorButton() {
+  Widget codeEditorButton(Size screen) {
     return Padding(
       padding: const EdgeInsets.only(
         left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: 80,
+        width: buttonWidth(screen),
         color: primaryGrey,
         text: "edit code",
         onTap: () {
@@ -604,22 +610,11 @@ class _VmViewState extends State<VmView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         WisteriaText(
-          text: "Memory Cell", 
+          text: "Memory Cell (${controller.decimalToHex(controller.selectedMemoryIdx)}) (${cell.toString()})", 
           color: primaryWhite,
           size: 18
         ),
-        const SizedBox(height: 16),
-
-        WisteriaText(
-          text: "Memory Value  ${cell.toString()} (${controller.decimalToHex(cell)})", 
-          color: primaryWhite,
-          size: 14
-        ),
-        WisteriaText(
-          text: "Memory Location  ${controller.decimalToHex(controller.selectedMemoryIdx)}", 
-          color: primaryWhite,
-          size: 14
-        ),
+        const SizedBox(height: 4),
 
         const SizedBox(height: 16),
         WisteriaText(
@@ -636,19 +631,12 @@ class _VmViewState extends State<VmView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         WisteriaText(
-          text: "Flag ${controller.selectedComponentName}", 
+          text: "Flag ${controller.selectedComponentName} (${controller.getFlagValue(controller.selectedComponentName)})", 
           color: primaryWhite,
           size: 18
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 4),
 
-        WisteriaText(
-          text: "State ${controller.getFlagValue(controller.selectedComponentName)}", 
-          color: primaryWhite,
-          size: 14
-        ),
-
-        const SizedBox(height: 16),
         WisteriaText(
           text: flagDescription, 
           color: primaryWhite,
@@ -701,19 +689,12 @@ class _VmViewState extends State<VmView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         WisteriaText(
-          text: "Register ${controller.selectedComponentName}", 
+          text: "Register ${controller.selectedComponentName} (${controller.getRegisterValue(controller.selectedComponentName)})", 
           color: primaryWhite,
           size: 18
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 4),
 
-        WisteriaText(
-          text: "Register Value ${controller.getRegisterValue(controller.selectedComponentName)}", 
-          color: primaryWhite,
-          size: 14
-        ),
-
-        const SizedBox(height: 16),
         WisteriaText(
           text: registerDescription, 
           color: primaryWhite,
@@ -756,19 +737,12 @@ class _VmViewState extends State<VmView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         WisteriaText(
-          text: "Program Counter", 
+          text: "Program Counter (${controller.vm.pc})", 
           color: primaryWhite,
           size: 18
         ),
-        const SizedBox(height: 16),
 
-        WisteriaText(
-          text: "Value ${controller.vm.pc}", 
-          color: primaryWhite,
-          size: 14
-        ),
-
-        const SizedBox(height: 16),
+        const SizedBox(height: 4),
         WisteriaText(
           text: programCounterDescription, 
           color: primaryWhite,

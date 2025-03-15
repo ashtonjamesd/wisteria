@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:wisteria/app/auth/models/wisteria_user.dart';
-
-import '../../../app_controller.dart';
 import '../../../auth/auth_service.dart';
 import '../../../utils/result.dart';
 
@@ -11,6 +9,12 @@ final class ProfileViewController {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
+
+  void cleanup() {
+    emailController.clear();
+    passwordController.clear();
+    usernameController.clear();
+  }
 
   Future<Result<bool>> registerUser() async {
     try {
@@ -41,7 +45,7 @@ final class ProfileViewController {
     }
   }
 
-  bool isValidateEmail(String email) {
+  bool isValidEmail(String email) {
     // i hate regex so much ew
     final bool emailValid = 
       RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")

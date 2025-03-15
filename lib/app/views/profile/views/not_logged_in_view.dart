@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wisteria/app/views/profile/utils/profile_view_controller.dart';
+import 'package:wisteria/app/views/profile/views/profile_view.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
-import 'package:wisteria/app/widgets/wisteria_window.dart';
 import '../../../constants.dart';
 import '../../../utils/globals.dart';
 import '../../../widgets/wisteria_button.dart';
@@ -121,7 +121,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
       "name@example.com", 
       controller.emailController, 
       () {
-        if (!controller.isValidateEmail(controller.emailController.text)) {
+        if (!controller.isValidEmail(controller.emailController.text)) {
           return;
         }
 
@@ -157,7 +157,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
         }
 
         final result = await controller.registerUser();
-        // final user = await controller.loginUser();
+        await controller.loginUser();
 
         if (result.isSuccess) {
           push(
@@ -173,6 +173,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
             ),
           );
 
+          controller.cleanup();
           return;
         }
 
@@ -189,6 +190,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
           ),
         );
 
+        controller.cleanup();
         return;
       }
     );
@@ -245,7 +247,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
         controller.passwordController.clear();
       },
       () {
-        if (!controller.isValidateEmail(controller.emailController.text)) {
+        if (!controller.isValidEmail(controller.emailController.text)) {
           return;
         }
 

@@ -9,6 +9,7 @@ import 'package:wisteria/app/views/exercises/utils/exercise_view_controller.dart
 import 'package:wisteria/app/views/exercises/views/exercise_view.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
+import 'package:wisteria/app/widgets/wisteria_error.dart';
 import 'package:wisteria/app/widgets/wisteria_icon.dart';
 import 'package:wisteria/app/widgets/wisteria_loading_icon.dart';
 import '../../../widgets/wisteria_text.dart';
@@ -28,6 +29,8 @@ class _ExercisesViewState extends State<ExercisesView> {
 
   bool isLoading = false;
 
+  String? error;
+
   @override
   void initState() {
     initExerciseView();
@@ -39,7 +42,12 @@ class _ExercisesViewState extends State<ExercisesView> {
       isLoading = true;
     });
 
-    exercises = await controller.getExercises();
+    final result = await controller.getExercises();
+    if (result.isFailure) {
+      error = result.error.toString();
+    } else {
+      exercises = result.value!;
+    }
 
     final user = AppController.instance.user;
     if (user != null) {
@@ -72,6 +80,15 @@ class _ExercisesViewState extends State<ExercisesView> {
     );
   }
 
+  Widget errorMessage() {
+    if (error == null) return const SizedBox();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      child: WisteriaError(error: "Sorry, the exercises are currently unavailable. We're working on fixing this issue.")
+    );
+  }
+
   Widget exercisesView() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +115,11 @@ class _ExercisesViewState extends State<ExercisesView> {
           ),
         ),
 
-        Center(
+        errorMessage(),
+
+        const SizedBox(height: 12),
+
+        if (error == null) Center(
           child: exercisesBox()
         ),
 
@@ -110,10 +131,12 @@ class _ExercisesViewState extends State<ExercisesView> {
   }
 
   Widget exercisesBox() {
+    final screen = MediaQuery.sizeOf(context);
+
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: SizedBox(
-        height: 500,
+        height: screen.height / 2,
         child: ListView.builder(
           itemCount: exercises.length,
           itemBuilder: (context, index) {
