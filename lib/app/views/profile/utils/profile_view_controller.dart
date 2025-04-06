@@ -17,32 +17,22 @@ final class ProfileViewController {
   }
 
   Future<Result<bool>> registerUser() async {
-    try {
-      final result = await authService.register(
-        usernameController.text, 
-        emailController.text, 
-        passwordController.text
-      );
+    final result = await authService.register(
+      usernameController.text, 
+      emailController.text, 
+      passwordController.text
+    );
 
-      return result;
-    } catch (exception) {
-      print(exception);
-      return Result.failure(false);
-    }
+    return result;
   }
 
   Future<Result<WisteriaUser?>> loginUser() async {
-    try {
-      final result = await authService.login(
-        emailController.text, 
-        passwordController.text
-      );
-      
-      return result;
-    } catch (exception) {
-      print(exception);
-      return Result.failure(false);
-    }
+    final result = await authService.login(
+      emailController.text, 
+      passwordController.text
+    );
+    
+    return result;
   }
 
   bool isValidEmail(String email) {

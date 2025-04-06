@@ -180,7 +180,7 @@ class _NotLoggedInViewState extends State<NotLoggedInView> {
         push(
           context, 
           infoScreen(
-            "Unable to create account", "Please try again later or raise an error with support", 
+            "Unable to create account", result.error.toString(), 
             () {
               pop(context);
               pop(context);

@@ -20,7 +20,7 @@ final class DbService {
 
     } catch (e) {
       print("Error fetching user: $e");
-      return Result.failure(e);
+      return Result.failure("");
     }
   }
 
