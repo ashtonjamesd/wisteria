@@ -208,15 +208,15 @@ class _VmViewState extends State<VmView> {
             StdoutBox(screen: screen, vm: controller.vm),
         
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                executeButton(screen),
-                codeEditorButton(screen),
-                pauseButton(screen),
-                haltButton(screen),
-                resetButton(screen)
+                Expanded(child: executeButton()),
+                Expanded(child: codeEditorButton()),
+                Expanded(child: pauseButton()),
+                Expanded(child: haltButton()),
+                Expanded(child: resetButton()),
               ],
             ),
+
           ],
         )
       ),
@@ -251,15 +251,16 @@ class _VmViewState extends State<VmView> {
   }
 
 
-  Widget resetButton(Size screen) {
+  Widget resetButton() {
     return Padding(
       padding: const EdgeInsets.only(
         right: boxPadding * 2, left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: buttonWidth(screen),
+        width: double.infinity,
         color: primaryGrey,
         text: "reset",
+        textSize: 12,
         onTap: () async {
           controller.onReset(setState);
           setState(() {});
@@ -268,15 +269,16 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget haltButton(Size screen) {
+  Widget haltButton() {
     return Padding(
       padding: const EdgeInsets.only(
         left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: buttonWidth(screen),
+        width: double.infinity,
         color: primaryGrey,
         text: "halt",
+        textSize: 12,
         onTap: () async {
           controller.onHalt();
           setState(() {});
@@ -285,13 +287,13 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget pauseButton(Size screen) {
+  Widget pauseButton() {
     return Padding(
       padding: const EdgeInsets.only(
         left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: 28,
+        width: double.infinity,
         height: 32,
         color: primaryGrey, 
         showBorder: controller.vm.isPaused,
@@ -304,32 +306,35 @@ class _VmViewState extends State<VmView> {
     );
   }
 
-  Widget executeButton(Size screen) {
+  Widget executeButton() {
     return Padding(
       padding: const EdgeInsets.only(
         left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: buttonWidth(screen),
+        width: double.infinity,
         color: primaryGrey,
         text: "execute",
+        textSize: 12,
         onTap: () {
           controller.onExecute(setState);
           setState(() {});
-        }
+        },
       ),
     );
   }
 
-  Widget codeEditorButton(Size screen) {
+
+  Widget codeEditorButton() {
     return Padding(
       padding: const EdgeInsets.only(
         left: boxPadding * 2
       ),
       child: WisteriaButton(
-        width: buttonWidth(screen),
+        width: double.infinity,
         color: primaryGrey,
         text: "edit code",
+        textSize: 12,
         onTap: () {
           showDialog(context: context, builder: (context) {
             return CodeEditor(

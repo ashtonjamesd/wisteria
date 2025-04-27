@@ -198,52 +198,56 @@ class _ExerciseViewState extends State<ExerciseView> {
   }
 
   Widget backButton() {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final buttonWidth = (screenWidth - 40 - 24) / 3;
+
     return WisteriaButton(
-      width: 100,
-      height: 40,
+      width: buttonWidth,
+      height: 48,
       color: primaryWhite,
       text: "Back",
       textColor: primaryTextColor,
       showBorder: true,
-      onTap: () async {
+      onTap: () {
         pop(context);
-      }
-    );
-  }
-
-  Widget submitButton() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20),
-      child: WisteriaButton(
-        width: 100,
-        height: 40,
-        color: primaryWhite,
-        text: "Submit",
-        textColor: primaryTextColor,
-        showBorder: true,
-        onTap: () async {
-          await onSubmit();
-        }
-      ),
+      },
     );
   }
 
   Widget runCodeButton() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20),
-      child: WisteriaButton(
-        width: 100,
-        height: 40,
-        color: primaryWhite,
-        text: isRunningCode ? "Running..." : "Run",
-        textColor: primaryTextColor,
-        showBorder: true,
-        onTap: () async {
-          await onRunCode();
-        }
-      ),
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final buttonWidth = (screenWidth - 40 - 24) / 3;
+
+    return WisteriaButton(
+      width: buttonWidth,
+      height: 48,
+      color: primaryWhite,
+      text: isRunningCode ? "Running..." : "Run",
+      textColor: primaryTextColor,
+      showBorder: true,
+      onTap: () async {
+        await onRunCode();
+      },
     );
   }
+
+  Widget submitButton() {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final buttonWidth = (screenWidth - 40 - 24) / 3;
+
+    return WisteriaButton(
+      width: buttonWidth,
+      height: 48,
+      color: primaryWhite,
+      text: "Submit",
+      textColor: primaryTextColor,
+      showBorder: true,
+      onTap: () async {
+        await onSubmit();
+      },
+    );
+  }
+
 
   Widget failedDialogue() {
     return WisteriaWindow(
