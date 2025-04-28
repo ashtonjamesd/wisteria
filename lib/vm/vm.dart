@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:wisteria/vm/assembler/assembler.dart';
 import 'package:wisteria/vm/constants.dart';
@@ -129,6 +130,11 @@ final class VirtualMachine {
 
     final assembler = Assembler(tokens: tokens);
     program = assembler.assemble();
+    if (assembler.errorMsg != null) {
+      output(assembler.errorMsg!);
+      return;
+    }
+
     _update();
 
     _load(program);
@@ -141,20 +147,19 @@ final class VirtualMachine {
     output("executing program..");
     
     while (isRunning) {
-      // without this delay the app slows down (crashes) with intense instruction execution, such as:
-      //
-      // label:
-      //   out ra
-      //   jump label
+      // without this delay the app freezes with intense instruction execution, such as:
       await Future.delayed(Duration(milliseconds: 1));
 
       while (isPaused) {
         await Future.delayed(Duration(milliseconds: 1000));
       }
 
-      await _execute();
+      try {
+        await _execute();
+      } catch (err) {
+        output("invalid source code syntax.");
+      }
       _update();
-
       _tick();
     }
 

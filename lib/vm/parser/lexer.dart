@@ -49,11 +49,6 @@ final class Lexer {
     ";": TokenType.semicolon,
   };
 
-  final keywords = {
-    "ALLOC": TokenType.alloc,
-    "SEGMENT": TokenType.segment
-  };
-
   final registers = [
     R1_NAME,
     R2_NAME,
@@ -64,10 +59,6 @@ final class Lexer {
   List<Token> tokenize() {
     while (!isEnd()) {
       while (!isEnd() && isWhiteSpaceChar(program[current])) {
-        // if (program[current] == '\n') {
-        //   tokens.add(Token(lexeme: "", type: TokenType.whitespace));
-        // }
-
         advance();
       }
 
@@ -143,10 +134,6 @@ final class Lexer {
 
     if (registers.contains(lexeme)) {
       return Token(lexeme: lexeme, type: TokenType.register);
-    }
-
-    if (keywords.containsKey(lexeme)) {
-      return Token(lexeme: lexeme, type: keywords[lexeme]!);
     }
 
     return Token(lexeme: lexeme, type: TokenType.identifier);

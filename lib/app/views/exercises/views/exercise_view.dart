@@ -148,7 +148,7 @@ class _ExerciseViewState extends State<ExerciseView> {
         const SizedBox(height: 16),
 
         SizedBox(
-          height: screen.height - 400,
+          height: screen.height - 450,
           child: SingleChildScrollView(
             child: Column(
               children: [

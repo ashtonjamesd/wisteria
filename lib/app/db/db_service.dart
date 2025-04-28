@@ -19,7 +19,7 @@ final class DbService {
       return Result.success(exerciseModels);
 
     } catch (e) {
-      print("Error fetching user: $e");
+      print("Error fetching exercises: $e");
       return Result.failure("");
     }
   }
@@ -53,7 +53,7 @@ final class DbService {
 
       await _users.doc(uid).set(user.toMap());
     } catch (e) {
-      print("Error fetching user: $e");
+      print("Error creating user: $e");
     }
   }
 

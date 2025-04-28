@@ -4,7 +4,8 @@ import '../parser/token.dart';
 final class Assembler {
   final List<Token> tokens;
   final List<int> codes = [];
-
+  
+  String? errorMsg;
   int current = 0;
   
   final Map<String, int> labels = {};
@@ -32,6 +33,8 @@ final class Assembler {
 
     while (!isEnd()) {
       final code = translateToken();
+      if (code == -1) return [];
+
       codes.add(code);
 
       advance();
@@ -157,6 +160,7 @@ final class Assembler {
 
   int error(String message) {
     print(message);
+    errorMsg = message;
     return UNKNOWN_OP;
   }
 }
