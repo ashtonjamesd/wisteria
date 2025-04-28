@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wisteria/app/utils/preferences.dart';
 import 'package:wisteria/app/auth/auth_service.dart';
 import 'package:wisteria/app/utils/globals.dart';
+import 'package:wisteria/app/views/changelog/changelog_view.dart';
 import 'package:wisteria/app/views/welcome/welcome_view.dart';
 import 'package:wisteria/app/widgets/wisteria_box.dart';
 import 'package:wisteria/app/widgets/wisteria_button.dart';
@@ -98,6 +99,13 @@ class _SettingsViewState extends State<SettingsView> {
           ),
 
           const SizedBox(height: 8),
+          basicSetting(
+            "App Changelog", Icons.label,
+            () {
+              push(context, ChangelogView());
+            }
+          ),
+
           basicSetting(
             "Reset Dialogues", Icons.menu,
             () {

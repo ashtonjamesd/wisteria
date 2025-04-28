@@ -5,4 +5,4 @@ const String passwordPref = "password";
 const String showHelpDialoguesPref = "showHelp";
 const String simulateVmDelaysPref = "simulateVmDelays";
 
-const String asmCodePref = "";
+const String asmCodePref = "asmCode";
